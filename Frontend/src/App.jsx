@@ -5,6 +5,7 @@ import {
   RouterProvider,
   createBrowserRouter,
   createRoutesFromElements,
+  redirect,
 } from "react-router-dom";
 import { Layout } from "./components/Layout";
 import { Home } from "./pages/Home";
@@ -20,7 +21,11 @@ const router = createBrowserRouter(
       <Route path="/" element={<Navigate to="/FurryBook" />} />
       <Route path="/FurryBook/login" element={<Login />} />
       <Route path="/FurryBook/signup" element={<Signup />} />
-      <Route path="/FurryBook" element={<Layout />}>
+      <Route
+        path="/FurryBook"
+        element={<Layout />}
+        loader={() => redirect("/FurryBook/Login")}
+      >
         <Route index element={<Home />} />
         <Route path=":user" element={<Profile />} />
         <Route path=":user/settings" element={<Settings />} />
