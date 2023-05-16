@@ -7,6 +7,6 @@ public class trys {
     public static void main(String[] args) {
         UserFactory factory = new UserFactory();
         User a = factory.createUser("standard");
-        a.register();
+        a.register("teojiesern@gmail.com", "1234", "Male", "teojiesern");
     }
 }

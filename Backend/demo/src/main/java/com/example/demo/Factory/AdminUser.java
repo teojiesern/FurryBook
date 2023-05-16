@@ -1,14 +1,56 @@
 package com.example.demo.Factory;
 
 public class AdminUser implements User {
+    private String name, email, password, gender;
+    private int age;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
 
     @Override
-    public void register() {
+    public void register(String email, String password, String gender, String name) {
         System.out.println("admin user registering...");
     }
 
     @Override
-    public void login() {
+    public void login(String email, String password) {
         throw new UnsupportedOperationException("Unimplemented method 'login'");
     }
 
