@@ -17,14 +17,14 @@ import { Friends } from "./pages/Friends";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="/" element={<Navigate to="/FurryBook"/>} />
+      <Route path="/" element={<Navigate to="/FurryBook" />} />
+      <Route path="/FurryBook/login" element={<Login />} />
+      <Route path="/FurryBook/signup" element={<Signup />} />
       <Route path="/FurryBook" element={<Layout />}>
         <Route index element={<Home />} />
-        <Route path="login" element={<Login />} />
-        <Route path="signup" element={<Signup />} />
         <Route path=":user" element={<Profile />} />
-        <Route path=":user/settings" element={<Settings />}/>
-        <Route path=":user/friends" element={<Friends />}/>
+        <Route path=":user/settings" element={<Settings />} />
+        <Route path=":user/friends" element={<Friends />} />
       </Route>
     </>
   )
