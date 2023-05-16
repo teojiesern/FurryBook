@@ -23,11 +23,4 @@ public class UserBuilder {
         return this;
     }
 
-    public User build(String userType){
-        if(userType.equalsIgnoreCase("standard")){
-            return new StandardUser();
-        }else if(userType.equalsIgnoreCase("admin")){
-            return new AdminUser();
-        }
-    }
 }
