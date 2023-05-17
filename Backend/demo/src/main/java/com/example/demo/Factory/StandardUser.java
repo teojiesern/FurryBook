@@ -1,8 +1,21 @@
 package com.example.demo.Factory;
 
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.annotation.Id;
+
 public class StandardUser implements User {
+    @Id
+    private String Id;
     private String name, email, password, gender;
     private int age;
+    
+    @Field("userType")
+    private final String userType = "standard";
+
+    @Override
+    public String getId() {
+        return Id;
+    }
 
     public String getPassword() {
         return password;
@@ -62,5 +75,4 @@ public class StandardUser implements User {
     public void updateProfile() {
         throw new UnsupportedOperationException("Unimplemented method 'updateProfile'");
     }
-    
 }

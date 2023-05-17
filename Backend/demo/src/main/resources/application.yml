@@ -1,0 +1,6 @@
+spring:
+    data:
+        mongodb:
+            client-implementation: com.mongodb.client.MongoClient
+            uri: mongodb+srv://junxian:123@furrydb.wjgy0qm.mongodb.net/?retryWrites=true&w=majority
+            database: FurryDB
