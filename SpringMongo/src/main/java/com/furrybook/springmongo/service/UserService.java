@@ -5,11 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.furrybook.springmongo.model.StandardUser;
-import com.furrybook.springmongo.model.User.User;
+import com.furrybook.springmongo.model.User.*;
 import com.furrybook.springmongo.repository.UserRepository;
-
-import main.java.com.furrybook.springmongo.model.User.AdminUser;
 
 @Service
 public class UserService {
