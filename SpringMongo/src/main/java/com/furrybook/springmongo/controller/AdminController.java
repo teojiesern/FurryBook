@@ -15,13 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class AdminController {
     @Autowired
     private UserService service;
-
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public User createAdminUser(@RequestBody AdminUser user) {
-        return service.addAdminUser(user);
-    }
-
+    
     @GetMapping
     public List<User> getAdminUsers() {
         return service.findAllAdmin();
@@ -30,6 +24,12 @@ public class AdminController {
     @GetMapping("/usersinfo")
     public List<User> getUsers() {
         return service.findAllUsers();
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public User createAdminUser(@RequestBody AdminUser user) {
+        return service.addAdminUser(user);
     }
 
     @DeleteMapping("/{Id}")

@@ -30,13 +30,13 @@ public class UserService {
     public List<User> findAllStUsers() {
         return repository.findAllByType("standard");
     }
+    
+    public List<User> findAllAdmin() {
+        return repository.findAllByType("admin");
+    }
 
     public List<User> findAllExcludingPassword() {
         return repository.findAllExcludingPassword();
-    }
-
-    public List<User> findAllAdmin() {
-        return repository.findAllByType("admin");
     }
 
     public User getUserbyId(String Id) {
