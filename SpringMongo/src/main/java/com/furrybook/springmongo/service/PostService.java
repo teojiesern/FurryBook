@@ -1,11 +1,14 @@
 package com.furrybook.springmongo.service;
 
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.furrybook.springmongo.model.Content.Posts;
+import com.furrybook.springmongo.model.User.User;
 import com.furrybook.springmongo.repository.PostRepository;
+import com.furrybook.springmongo.repository.UserRepository;
 import com.furrybook.springmongo.utils.PostUtils;
 
 import java.io.File;
@@ -21,12 +24,16 @@ public class PostService {
     @Autowired
     private PostRepository fileDataRepository;
 
-    private final String FOLDER_PATH = "C:/Users/User/Desktop/DS_assingment_file_storage/";
+    @Autowired
+    private UserRepository userRepository;
 
-    public String uploadImageToFileSystem(MultipartFile file) throws IOException {
+    private final String FOLDER_PATH = "C:/Users/User/Documents/full length learn on react/try/public/assets/DS_assingment_file_storage/";
+
+    public String uploadPost(String Id, MultipartFile file) throws IOException {
         String filePath = FOLDER_PATH + file.getOriginalFilename();
         String contentType = file.getContentType();
         String fileType;
+        User userById = userRepository.findById(Id).get();
 
         if (contentType.startsWith("image/")) {
             fileType = "image";
@@ -38,7 +45,9 @@ public class PostService {
         Posts fileData = fileDataRepository.save(Posts.builder()
                 .name(file.getOriginalFilename())
                 .type(fileType)
-                .filePath(filePath).build());
+                .filePath(filePath)
+                .user(userById)
+                .build());
 
         file.transferTo(new File(filePath));
 
@@ -57,8 +66,7 @@ public class PostService {
         if (optionalPost.isPresent()) {
             Posts post = optionalPost.get();
             String filePath = post.getFilePath();
-            
-            // Delete the file
+
             File file = new File(filePath);
             if (file.exists()) {
                 if (file.delete()) {
@@ -69,15 +77,30 @@ public class PostService {
             } else {
                 System.out.println("File not found.");
             }
-            
-            // Delete the post from the database
+
             fileDataRepository.deleteById(id);
-            
+
             return "Post with id: " + id + " deleted.";
         } else {
             return "Post not found.";
         }
-    }    
+    }
+
+    public String deleteAll(){
+        File folder = new File(FOLDER_PATH);
+        if (folder.exists() && folder.isDirectory()) {
+            try {
+                FileUtils.cleanDirectory(folder);
+                System.out.println("All files within the folder deleted.");
+            } catch (IOException e) {
+                System.out.println("Failed to delete files within the folder: " + e.getMessage());
+            }
+        } else {
+            System.out.println("Folder not found.");
+        }
+        fileDataRepository.deleteAll();
+        return "all the entries has been deleted";
+    }
 
     public List<Posts> findAllImages() {
         return fileDataRepository.findAllByType("image");

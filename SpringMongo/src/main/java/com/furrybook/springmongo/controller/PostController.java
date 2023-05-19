@@ -20,9 +20,10 @@ public class PostController {
     @Autowired
     private PostService service;
 
-    @PostMapping()
-    public ResponseEntity<?> uploadImageToFIleSystem(@RequestParam("post") MultipartFile file) throws IOException {
-        String uploadImage = service.uploadImageToFileSystem(file);
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @PostMapping("/{userId}")
+    public ResponseEntity<?> uploadPost(@PathVariable String userId ,@RequestParam("post") MultipartFile file) throws IOException {
+        String uploadImage = service.uploadPost(userId, file);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(uploadImage);
     }
@@ -45,5 +46,10 @@ public class PostController {
     @DeleteMapping("/{id}")
     public String deleteUser(@PathVariable String id) {
         return service.deletePostById(id);
+    }
+
+    @DeleteMapping()
+    public String clear(){
+        return service.deleteAll();
     }
 }
