@@ -15,12 +15,6 @@ public class UserController {
     @Autowired
     private UserService service;
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public User createUser(@RequestBody StandardUser user) {
-        return service.addUser(user);
-    }
-
     @GetMapping
     public List<User> getUsers() {
         return service.findAllExcludingPassword();
@@ -29,6 +23,12 @@ public class UserController {
     @GetMapping("/{Id}")
     public User getUser(@PathVariable String Id) {
         return service.getUserbyId(Id);
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public User createUser(@RequestBody StandardUser user) {
+        return service.addUser(user);
     }
 
     @PutMapping
