@@ -14,6 +14,8 @@ import { Signup } from "./pages/Signup";
 import { Profile } from "./pages/Profile";
 import { Settings } from "./pages/Settings";
 import { Friends } from "./pages/Friends";
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -24,7 +26,7 @@ const router = createBrowserRouter(
       <Route
         path="/FurryBook"
         element={<Layout />}
-        loader={() => redirect("/FurryBook/Login")}
+        // loader={() => redirect("/FurryBook/Login")}
       >
         <Route index element={<Home />} />
         <Route path=":user" element={<Profile />} />

@@ -3,6 +3,10 @@ package com.furrybook.springmongo.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.HashSet;
+import java.util.Set;
+
 import org.springframework.data.annotation.Id;
 
 @Data
@@ -14,4 +18,7 @@ public class StandardUser implements User{
     private String name, email, password, gender;
     private int age;
     private String userType = "standard";
+    private Set<String> friendsId = new HashSet<String>();
+
+
 }
