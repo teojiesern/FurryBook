@@ -9,12 +9,10 @@ import com.furrybook.springmongo.model.Content.Posts;
 import com.furrybook.springmongo.model.User.User;
 import com.furrybook.springmongo.repository.PostRepository;
 import com.furrybook.springmongo.repository.UserRepository;
-import com.furrybook.springmongo.utils.PostUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,7 +31,6 @@ public class PostService {
         String filePath = FOLDER_PATH + file.getOriginalFilename();
         String contentType = file.getContentType();
         String fileType;
-        User userById = userRepository.findById(Id).get();
 
         if (contentType.startsWith("image/")) {
             fileType = "image";
@@ -46,7 +43,8 @@ public class PostService {
                 .name(file.getOriginalFilename())
                 .type(fileType)
                 .filePath(filePath)
-                .user(userById)
+                .userId(Id)
+                .created(LocalDateTime.now())
                 .build());
 
         file.transferTo(new File(filePath));
@@ -57,8 +55,19 @@ public class PostService {
         return null;
     }
 
+    public User getUserFromPost(String postId) {
+        Posts post = fileDataRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("Post not found"));
+        String userId = post.getUserId();
+        return userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
+    }
+
     public List<Posts> findAllPosts() {
         return fileDataRepository.findAll();
+    }
+
+    public List<Posts> getPostsByUser(String userId) {
+        return fileDataRepository.findByUserId(userId);
     }
 
     public String deletePostById(String id) {
@@ -86,7 +95,7 @@ public class PostService {
         }
     }
 
-    public String deleteAll(){
+    public String deleteAll() {
         File folder = new File(FOLDER_PATH);
         if (folder.exists() && folder.isDirectory()) {
             try {

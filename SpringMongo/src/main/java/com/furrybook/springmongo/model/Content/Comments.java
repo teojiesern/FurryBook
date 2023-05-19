@@ -2,9 +2,7 @@ package com.furrybook.springmongo.model.Content;
 
 import java.time.LocalDateTime;
 
-import org.springframework.cglib.core.Local;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.AllArgsConstructor;
@@ -23,11 +21,13 @@ public class Comments {
     private LocalDateTime created;
     private LocalDateTime updated;
     private String userId;
+    private String postId;
 
-    public Comments(String body, LocalDateTime created, LocalDateTime updated, String userId){
+    public Comments(String body, LocalDateTime created, LocalDateTime updated, String userId, String postId){
         this.body = body;
         this.created = created;
         this.updated = updated;
         this.userId = userId;
+        this.postId = postId;
     }
 }

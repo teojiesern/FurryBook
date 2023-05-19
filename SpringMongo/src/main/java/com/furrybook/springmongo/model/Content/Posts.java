@@ -1,5 +1,6 @@
 package com.furrybook.springmongo.model.Content;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -25,10 +26,8 @@ public class Posts {
     private String name;
     private String type;
     private String filePath;
-
-    @DBRef
-    private User user;
-    
+    private LocalDateTime created;
+    private String userId;
     @DocumentReference
     private List<Comments> comments;
 }

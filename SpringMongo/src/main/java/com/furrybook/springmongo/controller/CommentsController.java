@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.furrybook.springmongo.model.Content.Comments;
+import com.furrybook.springmongo.model.User.User;
 import com.furrybook.springmongo.service.CommentsService;
 
 @RestController
@@ -30,6 +31,16 @@ public class CommentsController {
         return commentsService.findAllComments();
     }
 
+    @GetMapping("/{commentId}/user")
+    public ResponseEntity<User> getUserByComment(@PathVariable String commentId) {
+        User user = commentsService.getUserByComment(commentId);
+        if (user != null) {
+            return ResponseEntity.ok(user);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @PostMapping("/{userId}")
     public ResponseEntity<Comments> createComment(@RequestBody Map<String, String> payload,
             @PathVariable String userId) {
@@ -37,10 +48,11 @@ public class CommentsController {
                 commentsService.createComment(payload.get("commentBody"), payload.get("postId"), userId),
                 HttpStatus.OK);
     }
-    //this postMapping needs endpoint url of localhost:3001/comments/{userId}, and then a body of 
+    // this postMapping needs endpoint url of localhost:3001/comments/{userId}, and
+    // then a body of
     // {
-    //  "commentBody": {body},
-    //  "postId": "{postId}"
+    // "commentBody": {body},
+    // "postId": "{postId}"
     // }
 
     @PutMapping("/{commentId}")
@@ -50,9 +62,10 @@ public class CommentsController {
         commentsService.updateCommentAndSyncWithPost(commentId, newBody);
         return ResponseEntity.ok().build();
     }
-    //this putMapping needs endpoint url of localhost:3001/comments/{commentId}, and then a body of 
+    // this putMapping needs endpoint url of localhost:3001/comments/{commentId},
+    // and then a body of
     // {
-    //     "newBody": {body}
+    // "newBody": {body}
     // }
 
     @DeleteMapping("/{commentId}/posts/{postId}")
@@ -61,6 +74,15 @@ public class CommentsController {
         commentsService.deleteCommentAndRemoveFromPost(commentId, postId);
         return ResponseEntity.ok().build();
     }
-    //this deleteMapping needs endpoint url of 
+    // this deleteMapping needs endpoint url of
     // localhost:3001/comments/{commentId}/posts/{postId}
+
+    @DeleteMapping("/posts/{postId}")
+    public ResponseEntity<Void> deleteAllCommentsUnderPost(@PathVariable String postId) {
+        commentsService.deleteAllCommentsUnderPost(postId);
+        return ResponseEntity.ok().build();
+    }
+    // this deleteMapping needs endpoint url of
+    // localhost:3001/comments/posts/{postId}
+
 }

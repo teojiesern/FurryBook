@@ -13,6 +13,8 @@ public interface PostRepository extends MongoRepository<Posts, String> {
     Optional<Posts> findByName(String fileName);
     
     @Query("{type: ?0}")
-    List<Posts> findAllByType(String type); 
+    List<Posts> findAllByType(String type);
+    
+    List<Posts> findByUserId(String userId);
 }
 
