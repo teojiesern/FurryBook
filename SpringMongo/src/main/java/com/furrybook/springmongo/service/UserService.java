@@ -53,6 +53,17 @@ public class UserService {
 
     public String deleteUser(String Id) {
         repository.deleteById(Id);
-        return "User " + Id + " deleted.";
+        return "User " + Id + " is deleted.";
+    }
+
+    public void addFriend(User user, User friend) {
+        user.getFriendsId().add(friend.getId());
+        friend.getFriendsId().add(user.getId());
+        repository.save(user);
+        repository.save(friend);
+    }
+
+    public Boolean checkFriend(User user, User friend) {
+        return user.getFriendsId().contains(friend.getId());
     }
 }
