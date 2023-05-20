@@ -16,6 +16,7 @@ import { Settings } from "./pages/Settings";
 import { Friends } from "./pages/Friends";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { authentication, loginPageAuth } from "./authentication";
+import { TopNav } from "./components/TopNav";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -28,14 +29,13 @@ const router = createBrowserRouter(
                 loader={loginPageAuth}
             />
             <Route path="/FurryBook/signup" element={<Signup />} />
-            <Route
-                path="/FurryBook"
-                element={<Layout />}
-            >
-                <Route index element={<Home />} loader={authentication} />
-                <Route path=":user" element={<Profile />} />
-                <Route path=":user/settings" element={<Settings />} />
-                <Route path=":user/friends" element={<Friends />} />
+            <Route path="/" element={<Layout />}>
+                <Route path="FurryBook" element={<TopNav />}>
+                    <Route index element={<Home />} loader={authentication} />
+                    <Route path=":user" element={<Profile />} />
+                    <Route path=":user/settings" element={<Settings />} />
+                    <Route path=":user/friends" element={<Friends />} />
+                </Route>
             </Route>
         </>
     )

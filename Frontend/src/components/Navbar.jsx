@@ -93,11 +93,11 @@ export function Navbar() {
                 Settings
             </CustomNavLink>
             {/* <CustomNavLink as={Link} to="/FurryBook/login">
-        Login
-      </CustomNavLink>
-      <CustomNavLink as={Link} to="/FurryBook/signup">
-        Signup
-      </CustomNavLink> */}
+                    Login
+                </CustomNavLink>
+                <CustomNavLink as={Link} to="/FurryBook/signup">
+                    Signup
+                </CustomNavLink> */}
         </StyledNav>
     );
 }
