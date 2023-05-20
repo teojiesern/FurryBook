@@ -8,3 +8,12 @@ export async function authentication() {
     }
     return null
 }
+
+export async function loginPageAuth(){
+    const isLoggedIn = localStorage.getItem("loggedIn")
+
+    if (isLoggedIn) {
+        return redirect("/FurryBook")
+    }
+    return null
+}

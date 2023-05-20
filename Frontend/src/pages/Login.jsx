@@ -51,16 +51,10 @@ const StyledDescription = styled.p`
     font-family: "Inter", sans-serif;
 `;
 
-const StyledCardDiv = styled.div`
-    width: 200px;
-    height: 300px;
-`;
-
 const StyledImage = styled.div`
-    width: 100%;
-    height: 65%;
+    width: 200px;
+    height: 200px;
     border-radius: 10px 10px 0 0;
-    background-image: url("/assets/firstplacemen.JPG");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -70,23 +64,14 @@ const StyledImage = styled.div`
 const StyledUserInfo = styled.div`
     display: flex;
     justify-content: center;
-    width: 100%;
-    height: 15%;
+    width: 200px;
+    height: 50px;
     background-color: white;
     border-radius: 0 0 10px 10px;
     font-family: "Inter", sans-serif;
     padding: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 `;
-
-const ExampleComponent = () => {
-    return (
-        <StyledCardDiv>
-            <StyledImage />
-            <StyledUserInfo>Teo Jie Sern</StyledUserInfo>
-        </StyledCardDiv>
-    );
-};
 
 const StyledWelcome = styled(StyledH1)`
     font-size: 2rem;
@@ -135,7 +120,31 @@ const StyledErrorMessage = styled.h3`
     color: red;
     font-size: 1rem;
     align-self: center;
-`
+`;
+
+const cardsStyle = {
+    display: "grid",
+    gridTemplateColumns: "200px 200px",
+    gridGap: "50px",
+};
+
+const CardContainer = styled.div`
+    position: relative;
+`;
+
+const CloseButton = styled.button`
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 20px;
+    height: 20px;
+    background: none;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    color: #999;
+    cursor: pointer;
+`;
 
 export async function action({ request }) {
     const formData = await request.formData();
@@ -147,6 +156,14 @@ export async function action({ request }) {
             email: enteredEmail,
             password: enteredPassword,
         });
+        const pastUserIds =
+            JSON.parse(localStorage.getItem("pastUserIds")) || [];
+        const newId = response.data;
+        if (!pastUserIds.includes(newId)) {
+            pastUserIds.push(newId);
+            const updatedPastUserIds = JSON.stringify(pastUserIds);
+            localStorage.setItem("pastUserIds", updatedPastUserIds);
+        }
         localStorage.setItem("userId", response.data);
         localStorage.setItem("loggedIn", true);
         return redirect("/FurryBook");
@@ -156,13 +173,11 @@ export async function action({ request }) {
 }
 
 export function Login() {
-    const actionData = useActionData()
-
+    const actionData = useActionData();
     const LoginForm = () => {
         return (
             <StyledLoginFormDiv>
                 <StyledWelcome>Welcome Back</StyledWelcome>
-                
                 <Form style={formStyle} method="post" replace>
                     <StyledLabel for="login-email">Email</StyledLabel>
                     <StyledInput
@@ -178,7 +193,9 @@ export function Login() {
                         id="login-password"
                         placeholder="Enter your Password"
                     ></StyledInput>
-                    {actionData && <StyledErrorMessage>{actionData}</StyledErrorMessage>}
+                    {actionData && (
+                        <StyledErrorMessage>{actionData}</StyledErrorMessage>
+                    )}
                     <StyledButton>Login</StyledButton>
                 </Form>
                 <StyledDescription style={{ marginTop: "1.2rem" }}>
@@ -191,15 +208,91 @@ export function Login() {
         );
     };
 
+    const PastLoginCards = () => {
+        const [cards, setCards] = React.useState([]);
+
+        React.useEffect(() => {
+            const fetchProfilePicturePaths = async () => {
+                try {
+                    const pastLogin = JSON.parse(
+                        localStorage.getItem("pastUserIds")
+                    );
+                    const cardData = await Promise.all(
+                        pastLogin.map(async (userId) => {
+                            const response = await axios.get(
+                                `http://localhost:3001/users/${userId}/profile-picture`
+                            );
+                            const userResponse = await axios.get(
+                                `http://localhost:3001/users/${userId}`
+                            );
+                            return {
+                                userId,
+                                profilePicturePath: response.data
+                                    .split("/")
+                                    .pop(),
+                                name: userResponse.data.name,
+                            };
+                        })
+                    );
+                    setCards(cardData);
+                } catch (error) {
+                    console.error(
+                        "Error fetching profile picture paths:",
+                        error
+                    );
+                }
+            };
+
+            fetchProfilePicturePaths();
+        }, []);
+
+        const handleRemoveCard = (userId) => {
+            const updatedCards = cards.filter((card) => card.userId !== userId);
+            setCards(updatedCards);
+
+            const pastUserIds = JSON.parse(localStorage.getItem("pastUserIds"));
+            const updatedUserIds = pastUserIds.filter((id) => id !== userId);
+            localStorage.setItem("pastUserIds", JSON.stringify(updatedUserIds));
+            window.location.reload();
+        };
+
+        return (
+            <div style={cardsStyle}>
+                {cards.map((card) => (
+                    <CardContainer key={card.userId}>
+                        <CloseButton
+                            onClick={() => handleRemoveCard(card.userId)}
+                        >
+                            x
+                        </CloseButton>
+                        <StyledImage
+                            style={{
+                                backgroundImage: `url("/assets/profile pictures/${card.profilePicturePath}")`,
+                            }}
+                        />
+                        <StyledUserInfo>{card.name}</StyledUserInfo>
+                    </CardContainer>
+                ))}
+            </div>
+        );
+    };
+
     return (
         <StyledDiv>
             <StyledRecentLoginDiv>
                 <StyledLogo>FurryBook</StyledLogo>
                 <StyledMessage>Recent Logins</StyledMessage>
                 <StyledDescription>
-                    Click your picture or add an account
+                    These are all the past logins
                 </StyledDescription>
-                <ExampleComponent />
+                {JSON.parse(localStorage.getItem("pastUserIds")).length == 0 ? (
+                    <StyledLogo style={{ fontSize: "20px" }}>
+                        No recent logins yet, 🌟 Sign in now to uncover
+                        exclusive content
+                    </StyledLogo>
+                ) : (
+                    <PastLoginCards />
+                )}
             </StyledRecentLoginDiv>
             <LoginForm />
         </StyledDiv>
