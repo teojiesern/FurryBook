@@ -16,7 +16,6 @@ const LeftNavbar = styled(Navbar)`
 `;
 
 const Content = styled.div`
-  background-color: #F6F6F6;
   grid-column: 2;
   grid-row: 1;
 `;

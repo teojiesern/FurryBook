@@ -15,6 +15,7 @@ const StyledLogo = styled.div`
 `
 
 const StyledNav = styled(Nav)`
+    background-color: #FFFFFF;
     color: #153FAC;
     height: 100%;
     font-size: 20px;
