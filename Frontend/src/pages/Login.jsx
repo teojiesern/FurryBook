@@ -1,27 +1,82 @@
 import React from "react";
-import { Form, Link, useNavigate } from "react-router-dom";
+import styled from "styled-components";
+
+const StyledDiv = styled.div`
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  background-color: #fafafa;
+`;
+
+const StyledRecentLoginDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 90%;
+  width: 60%;
+  padding: 20rem 15rem;
+`;
+
+const StyledLoginFormDiv = styled.div`
+  width: 40%;
+  background-color: #ffffff;
+  padding: 2rem 2rem 2rem 2rem;
+  border-radius: 10px;
+  margin-right: 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+`;
+
+const StyledH1 = styled.h1`
+  color: #153fac;
+  font-family: "Inter", sans-serif;
+`;
+
+const StyledLogo = styled(StyledH1)`
+  font-size: 3rem;
+`;
+
+const StyledMessage = styled.h2`
+  color: black;
+  font-family: "Inter", sans-serif;
+`;
+
+const StyledDescription = styled.p`
+  color: gray;
+  font-family: "Inter", sans-serif;
+`;
+
+const StyledClickBox = styled.div`
+  width: 200px;
+  height: 200px;
+  border: none;
+  border-radius: 10px;
+`;
+
+const StyledImg = styled.img`
+width: 10rem;
+height: auto;
 
 
-export function Login(){
-    return (
-        <div className="login">
-            <div className="login-intro">
-                <h2>Logo Here</h2>
-                <h4>Welcome Back!!</h4>
-                <h1>Log In</h1>
-            </div>
-            <Form className="login-form">
-                <div className="form-input">
-                    <label for="login-email">Email</label>
-                    <input type="email" name="email" placeholder="Email" id="login-email"/>
-                </div>
-                <div className="form-input">
-                    <label for="login-password">Password</label>
-                    <input type="password" name="password" placeholder="Password" id="login-password"/>
-                </div>
-                <button className="login-signup-btn">Log In</button>
-            </Form>
-            <p>Don't have an account yet? <Link to="/FurryBook/signup">Sign Up for free</Link></p>
-        </div>
-    )
+`
+
+const StyledWelcome = styled(StyledH1)`
+  font-size: 2rem;
+`;
+
+export function Login() {
+  return (
+    <StyledDiv>
+      <StyledRecentLoginDiv>
+        <StyledLogo>FurryBook</StyledLogo>
+        <StyledMessage>Recent Logins</StyledMessage>
+        <StyledDescription>Click your picture or add an account</StyledDescription>
+        <StyledClickBox>
+            {/* <StyledImg src="/assets/profile.png"/> */}
+        </StyledClickBox>
+      </StyledRecentLoginDiv>
+      <StyledLoginFormDiv>
+        <StyledWelcome>Welcome Back</StyledWelcome>
+      </StyledLoginFormDiv>
+    </StyledDiv>
+  );
 }
