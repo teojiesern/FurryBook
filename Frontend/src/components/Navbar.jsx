@@ -1,5 +1,5 @@
 import { Nav } from "react-bootstrap";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLoaderData, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { AiFillHome } from "react-icons/ai";
@@ -63,6 +63,7 @@ const Icon = styled.div`
 `;
 
 export function Navbar() {
+    const userData = useLoaderData();
     return (
         <StyledNav defaultActiveKey="/FurryBook" className="flex-column">
             <StyledLogo as={Link} to="/FurryBook">
@@ -74,19 +75,22 @@ export function Navbar() {
                 </Icon>
                 Home
             </CustomNavLink>
-            <CustomNavLink as={Link} to="/FurryBook/someone">
+            <CustomNavLink as={Link} to={`/FurryBook/${userData.name}`}>
                 <Icon>
                     <RiProfileFill />
                 </Icon>
                 Profile
             </CustomNavLink>
-            <CustomNavLink as={Link} to="/FurryBook/someone/friends">
+            <CustomNavLink as={Link} to={`/FurryBook/${userData.name}/friends`}>
                 <Icon>
                     <FaUserFriends />
                 </Icon>
                 Friends
             </CustomNavLink>
-            <CustomNavLink as={Link} to="/FurryBook/someone/settings">
+            <CustomNavLink
+                as={Link}
+                to={`/FurryBook/${userData.name}/settings`}
+            >
                 <Icon>
                     <RiSettings3Fill />
                 </Icon>

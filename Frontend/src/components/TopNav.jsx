@@ -1,5 +1,5 @@
 import React from "react";
-import { Outlet } from "react-router-dom";
+import { Link, Outlet, useLoaderData } from "react-router-dom";
 import styled from "styled-components";
 import { BiSearch } from "react-icons/bi";
 import { RiProfileFill } from "react-icons/ri";
@@ -19,9 +19,16 @@ const StyledSearchBar = styled.input`
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), -10px 0 #153fac;
     height: 50px;
     width: 300px;
+    transition: all 0.2s ease-out;
+    outline: none;
 
     &::placeholder {
         text-align: center;
+    }
+
+    &:hover {
+        transform: scale(1.025);
+        transition: all 0.1s ease-out;
     }
 `;
 
@@ -55,7 +62,6 @@ const StyledProfilePic = styled.div`
     border-radius: 100px;
     width: 50px;
     height: 50px;
-    background-image: url("/assets/profile pictures/IMG_1749.jpg");
     background-size: cover;
     background-position: center;
     margin-right: 10px;
@@ -87,6 +93,8 @@ const StyledOption = styled.div`
     border-radius: 10px;
     cursor: pointer;
     font-size: 17px;
+    text-decoration: none;
+    color: black;
 `;
 
 const StyledOptionContainer = styled.div`
@@ -115,6 +123,8 @@ const marginRightStyle = {
 
 export function TopNav() {
     const [styling, setStyling] = React.useState("none");
+    const data = useLoaderData();
+    const bgImg = data.profilePicturePath.split("/").pop();
 
     function handleClick() {
         setStyling((prevStyle) => (prevStyle === "none" ? "" : "none"));
@@ -137,21 +147,28 @@ export function TopNav() {
                 </div>
                 <StyledDropdown>
                     <StyledPrimaryChoice onClick={handleClick}>
-                        <StyledProfilePic></StyledProfilePic>
+                        <StyledProfilePic
+                            style={{
+                                backgroundImage: `url("/assets/profile pictures/${bgImg}")`,
+                            }}
+                        ></StyledProfilePic>
                         <StyledUserInfoDiv>
-                            <StyledUserInfo>Teo Jie Sern</StyledUserInfo>
-                            <StyledUserInfo>User</StyledUserInfo>
+                            <StyledUserInfo>{data.name}</StyledUserInfo>
+                            <StyledUserInfo>{data.userType}</StyledUserInfo>
                         </StyledUserInfoDiv>
                     </StyledPrimaryChoice>
                     <StyledOptionContainer style={{ display: styling }}>
-                        <StyledOption>
+                        <StyledOption as={Link} to={`/FurryBook/${data.name}`}>
                             <StyledLeftPortion>
                                 <RiProfileFill style={marginRightStyle} />
                                 Profile
                             </StyledLeftPortion>
                             &rarr;
                         </StyledOption>
-                        <StyledOption>
+                        <StyledOption
+                            as={Link}
+                            to={`/FurryBook/${data.name}/settings`}
+                        >
                             <StyledLeftPortion>
                                 <IoSettingsSharp style={marginRightStyle} />
                                 Settings

@@ -17,7 +17,7 @@ public class StandardUser implements User{
     private String id;
     private String name, email, password, gender;
     private int age;
-    private String userType = "standard";
+    private String userType = "user";
     private String profilePicturePath;
     private String coverPhotoPath;
     private Set<String> friendsId = new HashSet<String>();

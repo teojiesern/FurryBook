@@ -75,6 +75,21 @@ public class UserService {
     }
 
     public String deleteUser(String Id) {
+        User user = repository.findById(Id).orElse(null);
+
+        if (user == null) {
+            return "User not found.";
+        }
+
+        String profilePicturePath = user.getProfilePicturePath();
+        String coverPhotoPath = user.getCoverPhotoPath();
+        if (profilePicturePath != null) {
+            deleteFile(profilePicturePath);
+        }
+        if (coverPhotoPath != null) {
+            deleteFile(coverPhotoPath);
+        }
+
         repository.deleteById(Id);
         return "User " + Id + " is deleted.";
     }
@@ -95,25 +110,6 @@ public class UserService {
 
     private final String profilePicPath = "C:/Users/User/Documents/WIA1002 DS/FurryBook/Frontend/public/assets/profile pictures/";
     private final String backgroundPicPath = "C:/Users/User/Documents/WIA1002 DS/FurryBook/Frontend/public/assets/background photos/";
-    // public String uploadProfilePicture(String userId, MultipartFile file) throws
-    // IOException {
-    // String filePath = profilePicPath + file.getOriginalFilename();
-    // file.transferTo(new File(filePath));
-
-    // repository.updateProfilePicturePath(userId, filePath);
-
-    // return "Profile picture uploaded successfully.";
-    // }
-
-    // public String uploadCoverPhoto(String userId, MultipartFile file) throws
-    // IOException {
-    // String filePath = backgroundPicPath + file.getOriginalFilename();
-    // file.transferTo(new File(filePath));
-
-    // repository.updateCoverPhotoPath(userId, filePath);
-
-    // return "Cover photo uploaded successfully.";
-    // }
 
     public String uploadProfilePicture(String userId, MultipartFile file) throws IOException {
         String filePath = profilePicPath + file.getOriginalFilename();

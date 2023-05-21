@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 public class AdminController {
     @Autowired
     private UserService service;
-    
+
     @GetMapping
     public List<User> getAdminUsers() {
         return service.findAllAdmin();
@@ -38,8 +39,21 @@ public class AdminController {
         return service.addAdminUser(user);
     }
 
+    // @DeleteMapping("/{Id}")
+    // public String deleteUser(@PathVariable String Id) {
+    // return service.deleteUser(Id);
+    // }
+
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @DeleteMapping("/{Id}")
-    public String deleteUser(@PathVariable String Id) {
-        return service.deleteUser(Id);
+    public ResponseEntity<String> deleteUser(@PathVariable String Id) {
+        String result = service.deleteUser(Id);
+
+        if (result.equals("User not found.")) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(result);
     }
+
 }
