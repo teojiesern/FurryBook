@@ -26,6 +26,12 @@ public class AdminController {
         return service.findAllUsers();
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @GetMapping("/email/{email}")
+    public User getUserByEmail(@PathVariable String email) {
+        return service.findUserByEmail(email);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User createAdminUser(@RequestBody AdminUser user) {

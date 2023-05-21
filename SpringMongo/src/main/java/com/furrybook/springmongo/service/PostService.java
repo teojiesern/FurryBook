@@ -25,7 +25,7 @@ public class PostService {
     @Autowired
     private UserRepository userRepository;
 
-    private final String FOLDER_PATH = "C:/Users/User/Documents/full length learn on react/try/public/assets/DS_assingment_file_storage/";
+    private final String FOLDER_PATH = "C:/Users/User/Documents/WIA1002 DS/FurryBook/Frontend/public/assets/post storage/";
 
     public String uploadPost(String Id, MultipartFile file) throws IOException {
         String filePath = FOLDER_PATH + file.getOriginalFilename();
