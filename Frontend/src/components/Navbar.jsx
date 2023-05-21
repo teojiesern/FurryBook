@@ -1,5 +1,5 @@
 import { Nav } from "react-bootstrap";
-import { Link, useLoaderData, useLocation } from "react-router-dom";
+import { Link, NavLink, useLoaderData, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { AiFillHome } from "react-icons/ai";
@@ -42,7 +42,8 @@ const activeStyle = {
 
 const CustomNavLink = ({ to, children }) => {
     const location = useLocation();
-    const isActive = location.pathname === to;
+    const decodedPathname = decodeURIComponent(location.pathname);
+    const isActive = decodedPathname === to;
     return (
         <StyledNavLink as={Link} to={to} style={isActive ? activeStyle : {}}>
             {children}
@@ -75,7 +76,7 @@ export function Navbar() {
                 </Icon>
                 Home
             </CustomNavLink>
-            <CustomNavLink as={Link} to={`/FurryBook/${userData.name}`}>
+            <CustomNavLink as={Link} to={`/FurryBook/own/${userData.name}`}>
                 <Icon>
                     <RiProfileFill />
                 </Icon>
