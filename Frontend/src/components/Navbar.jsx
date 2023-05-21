@@ -82,7 +82,7 @@ export function Navbar() {
                 </Icon>
                 Profile
             </CustomNavLink>
-            <CustomNavLink as={Link} to={`/FurryBook/${userData.name}/friends`}>
+            <CustomNavLink as={Link} to={`/FurryBook/friends`}>
                 <Icon>
                     <FaUserFriends />
                 </Icon>
@@ -90,7 +90,7 @@ export function Navbar() {
             </CustomNavLink>
             <CustomNavLink
                 as={Link}
-                to={`/FurryBook/${userData.name}/settings`}
+                to={`/FurryBook/settings`}
             >
                 <Icon>
                     <RiSettings3Fill />

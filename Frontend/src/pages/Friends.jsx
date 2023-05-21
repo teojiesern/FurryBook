@@ -5,7 +5,7 @@ export function Friends() {
     const params = useParams();
     return (
         <div>
-            <h1>this is {params.user}'s friends</h1>
+            <h1>this is the friends page</h1>
         </div>
     );
 }

@@ -19,6 +19,8 @@ import { currentUserData } from "./Utils/CurrentUserData";
 import { ProfileLayout } from "./components/ProfileLayout";
 import { ProfilePhotos } from "./pages/profile/ProfilePhotos";
 import { OwnLayout } from "./components/OwnLayout";
+import { Friends } from "./pages/Friends";
+import { Settings } from "./pages/Settings";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -38,6 +40,16 @@ const router = createBrowserRouter(
                     loader={currentUserData}
                 >
                     <Route index element={<Home />} loader={authentication} />
+                    <Route
+                        path="friends"
+                        element={<Friends />}
+                        loader={authentication}
+                    />
+                    <Route
+                        path="settings"
+                        element={<Settings />}
+                        loader={authentication}
+                    />
                 </Route>
             </Route>
             <Route
