@@ -18,5 +18,7 @@ public class AdminUser implements User{
     private String name, email, password, gender;
     private int age;
     private String userType = "admin";
+    private String profilePicturePath;
+    private String coverPhotoPath;
     private Set<String> friendsId = new HashSet<String>();
 }
