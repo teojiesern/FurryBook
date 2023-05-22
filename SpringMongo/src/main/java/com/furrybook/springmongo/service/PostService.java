@@ -13,6 +13,7 @@ import com.furrybook.springmongo.repository.UserRepository;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,31 +28,81 @@ public class PostService {
 
     private final String FOLDER_PATH = "C:/Users/User/Documents/WIA1002 DS/FurryBook/Frontend/public/assets/post storage/";
 
-    public String uploadPost(String Id, MultipartFile file) throws IOException {
-        String filePath = FOLDER_PATH + file.getOriginalFilename();
-        String contentType = file.getContentType();
-        String fileType;
+    // public String uploadPost(String Id, MultipartFile file) throws IOException {
+    // String filePath = FOLDER_PATH + file.getOriginalFilename();
+    // String contentType = file.getContentType();
+    // String fileType;
 
-        if (contentType.startsWith("image/")) {
-            fileType = "image";
-        } else if (contentType.startsWith("video/")) {
-            fileType = "video";
+    // if (contentType.startsWith("image/")) {
+    // fileType = "image";
+    // } else if (contentType.startsWith("video/")) {
+    // fileType = "video";
+    // } else {
+    // throw new IllegalArgumentException("Invalid file type");
+    // }
+    // Posts fileData = fileDataRepository.save(Posts.builder()
+    // .name(file.getOriginalFilename())
+    // .type(fileType)
+    // .filePath(filePath)
+    // .userId(Id)
+    // .created(LocalDateTime.now())
+    // .build());
+
+    // file.transferTo(new File(filePath));
+
+    // if (fileData != null) {
+    // return "file uploaded successfully : " + filePath;
+    // }
+    // return null;
+    // }
+
+    public String uploadPost(String userId, String caption, MultipartFile file) throws IOException {
+        if (file != null && !file.isEmpty()) {
+            String filePath = FOLDER_PATH + file.getOriginalFilename();
+            String contentType = file.getContentType();
+            String fileType;
+
+            if (contentType.startsWith("image/")) {
+                fileType = "image";
+            } else if (contentType.startsWith("video/")) {
+                fileType = "video";
+            } else {
+                throw new IllegalArgumentException("Invalid file type");
+            }
+
+            file.transferTo(new File(filePath));
+
+            Posts fileData = Posts.builder()
+                    .name(file.getOriginalFilename())
+                    .type(fileType)
+                    .filePath(filePath)
+                    .userId(userId)
+                    .caption(caption)
+                    .created(LocalDateTime.now())
+                    .build();
+
+            fileData = fileDataRepository.save(fileData);
+
+            if (fileData != null) {
+                return "File uploaded successfully: " + filePath;
+            }
         } else {
-            throw new IllegalArgumentException("Invalid file type");
-        }
-        Posts fileData = fileDataRepository.save(Posts.builder()
-                .name(file.getOriginalFilename())
-                .type(fileType)
-                .filePath(filePath)
-                .userId(Id)
-                .created(LocalDateTime.now())
-                .build());
+            Posts postData = Posts.builder()
+                    .name(null)
+                    .type(null)
+                    .filePath(null)
+                    .userId(userId)
+                    .caption(caption)
+                    .created(LocalDateTime.now())
+                    .build();
 
-        file.transferTo(new File(filePath));
+            postData = fileDataRepository.save(postData);
 
-        if (fileData != null) {
-            return "file uploaded successfully : " + filePath;
+            if (postData != null) {
+                return "Text post created successfully.";
+            }
         }
+
         return null;
     }
 
@@ -118,4 +169,24 @@ public class PostService {
     public List<Posts> findAllVideos() {
         return fileDataRepository.findAllByType("video");
     }
+
+    public void interactWithLikeButton(String postId, String userId) {
+        Posts post = fileDataRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("Post not found"));
+
+        List<String> likes = post.getLikes();
+        if (likes == null) {
+            likes = new ArrayList<>();
+        }
+
+        if (likes.contains(userId)) {
+            likes.remove(userId);
+        } else {
+            likes.add(userId);
+        }
+
+        post.setLikes(likes);
+        fileDataRepository.save(post);
+    }
+
 }

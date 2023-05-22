@@ -22,6 +22,7 @@ const StyledSearchBar = styled.input`
     width: 300px;
     transition: all 0.2s ease-out;
     outline: none;
+    margin-left: 244px;
 
     &::placeholder {
         text-align: center;
@@ -123,7 +124,15 @@ const marginRightStyle = {
     marginRight: "10px",
 };
 
-export function TopNav() {
+const StyledLogo = styled.div`
+    color: #153fac;
+    font-family: "Inter", sans-serif;
+    margin-left: 30px;
+    font-size: 30px;
+    text-decoration: none;
+`;
+
+export function OwnLayout() {
     const [styling, setStyling] = React.useState("none");
     const data = useLoaderData();
     const bgImg = data.profilePicturePath.split("/").pop();
@@ -141,6 +150,9 @@ export function TopNav() {
     return (
         <div>
             <StyledDiv>
+                <StyledLogo as={Link} to="/FurryBook">
+                    FurryBook
+                </StyledLogo>
                 <div style={{ margin: "auto" }}>
                     <StyledSearchBar type="search" placeholder="Search..." />
                     <div>
@@ -162,7 +174,7 @@ export function TopNav() {
                     <StyledOptionContainer style={{ display: styling }}>
                         <StyledOption
                             as={Link}
-                            to={`/FurryBook/profile/${data.name}`}
+                            to={`/FurryBook/own/${data.name}`}
                             onClick={handleClick}
                         >
                             <StyledLeftPortion>
