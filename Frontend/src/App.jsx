@@ -13,14 +13,15 @@ import { Login, action } from "./pages/Login";
 import { Signup } from "./pages/Signup";
 import { ProfilePosts } from "./pages/profile/ProfilePosts";
 import { ProfileFriends } from "./pages/profile/ProfileFriends";
-import { authentication, loginPageAuth } from "./authentication";
+import { authentication, loginPageAuth } from "./Utils/authentication";
 import { TopNav } from "./components/TopNav";
-import { currentUserData } from "./Utils/CurrentUserData";
 import { ProfileLayout } from "./components/ProfileLayout";
 import { ProfilePhotos } from "./pages/profile/ProfilePhotos";
 import { OwnLayout } from "./components/OwnLayout";
 import { Friends } from "./pages/Friends";
 import { Settings } from "./pages/Settings";
+import { currentUserData } from "./Utils/CurrentUserData";
+import { allPosts } from "./Utils/AllPosts";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -64,15 +65,18 @@ const router = createBrowserRouter(
                 >
                     <Route
                         index
-                        element={<ProfilePosts loader={authentication} />}
+                        element={<ProfilePosts />}
+                        loader={allPosts}
                     />
                     <Route
                         path="friends"
-                        element={<ProfileFriends loader={authentication} />}
+                        element={<ProfileFriends />}
+                        loader={authentication}
                     />
                     <Route
                         path="photos"
-                        element={<ProfilePhotos loader={authentication} />}
+                        element={<ProfilePhotos />}
+                        loader={authentication}
                     />
                 </Route>
             </Route>

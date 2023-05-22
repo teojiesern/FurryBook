@@ -12,6 +12,7 @@ const StyledUserInfoContainer = styled.div`
     background-color: white;
     margin: 20px 40px;
     border-radius: 30px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 `;
 
 const StyledBackgroundCoverPhoto = styled.div`
@@ -68,6 +69,7 @@ const StyledNavigationContainer = styled.div`
     margin: 0 40px;
     border-radius: 30px;
     background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 `;
 
 const StyledNavigation = styled.div`
@@ -167,7 +169,7 @@ export function ProfileLayout() {
                     placeholder="Search"
                 ></StyledSearchBar>
             </StyledNavigationContainer>
-            <Outlet />
+            <Outlet context={[profilePic, data.name]}/>
         </div>
     );
 }

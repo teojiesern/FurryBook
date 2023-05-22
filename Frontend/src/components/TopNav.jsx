@@ -173,7 +173,7 @@ export function TopNav() {
                         </StyledOption>
                         <StyledOption
                             as={Link}
-                            to={`/FurryBook/${data.name}/settings`}
+                            to={`/FurryBook/settings`}
                             onClick={handleClick}
                         >
                             <StyledLeftPortion>
