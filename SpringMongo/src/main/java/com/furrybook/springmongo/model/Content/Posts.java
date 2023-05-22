@@ -20,10 +20,12 @@ import lombok.NoArgsConstructor;
 public class Posts {
     @Id
     private String id;
+    private String caption;
     private String name;
     private String type;
     private String filePath;
     private LocalDateTime created;
+    private List<String> likes;
     private String userId;
     @DocumentReference
     private List<Comments> comments;
