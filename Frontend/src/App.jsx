@@ -47,38 +47,38 @@ const router = createBrowserRouter(
                         loader={authentication}
                     />
                     <Route
+                        path="profile/:user"
+                        element={<ProfileLayout />}
+                        loader={currentUserData}
+                    >
+                        {/* <Route
+                            path=":user"
+                            element={<ProfileLayout />}
+                            loader={authentication}
+                        > */}
+                            <Route
+                                index
+                                element={<ProfilePosts />}
+                                loader={allPosts}
+                            />
+                            <Route
+                                path="friends"
+                                element={<ProfileFriends />}
+                                loader={authentication}
+                            />
+                            <Route
+                                path="photos"
+                                element={<ProfilePhotos />}
+                                loader={authentication}
+                            />
+                        </Route>
+                    </Route>
+                    <Route
                         path="settings"
                         element={<Settings />}
                         loader={authentication}
                     />
-                </Route>
-            </Route>
-            <Route
-                path="/FurryBook/own"
-                element={<OwnLayout />}
-                loader={currentUserData}
-            >
-                <Route
-                    path=":user"
-                    element={<ProfileLayout />}
-                    loader={authentication}
-                >
-                    <Route
-                        index
-                        element={<ProfilePosts />}
-                        loader={allPosts}
-                    />
-                    <Route
-                        path="friends"
-                        element={<ProfileFriends />}
-                        loader={authentication}
-                    />
-                    <Route
-                        path="photos"
-                        element={<ProfilePhotos />}
-                        loader={authentication}
-                    />
-                </Route>
+                {/* </Route> */}
             </Route>
         </>
     )

@@ -76,7 +76,7 @@ export function Navbar() {
                 </Icon>
                 Home
             </CustomNavLink>
-            <CustomNavLink as={Link} to={`/FurryBook/own/${userData.name}`}>
+            <CustomNavLink as={Link} to={`/FurryBook/profile/${userData.name}`}>
                 <Icon>
                     <RiProfileFill />
                 </Icon>
