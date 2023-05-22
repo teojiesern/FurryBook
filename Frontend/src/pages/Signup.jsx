@@ -5,11 +5,31 @@ import { FaFacebook, FaGoogle, FaTwitter } from 'react-icons/fa';
 import { NavLink } from 'react-router-dom';
 
 const StyledLogo = styled.div`
+    position: absolute;
+    top: 12%;
     color: #153FAC;
     font-family: 'Inter', sans-serif;
-    width: 15%;
-    margin: 30px 30px 100px 30px;
-    font-size: 30px;
+    font-size: 3.7rem;
+`
+
+const StyledWelcome = styled.div`
+    position: absolute;
+    top: 8%;
+    color: #B1C6FB;
+    font-family: 'Inter', sans-serif;
+    font-size: 2.5rem;
+`
+
+const StyledBanner = styled.div`
+    position: absolute;
+    top: 10%;
+    left: 12%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 50em;
+    width: 40rem;
 `
 
 const StyledText = styled.div`
@@ -24,8 +44,9 @@ const StyledText = styled.div`
 `
 
 const SignUpContainer = styled.div`
-  margin-left: 60%;
-  margin-top: -5%;
+  position: absolute;
+  top: 12%;
+  left: 56%;
   font-family: 'Montserrat', sans-serif;
   background-color: #FFFFFF;
   display: flex;
@@ -161,6 +182,21 @@ const RoundButton = styled.button`
   box-shadow: 0px 8px 24px -2px rgba(69, 71, 76, 0.6);
 `;
 
+const WhiteBox = styled.div`
+  position: absolute;
+  top: 26%;
+  background-color: #FFF;
+  width: 42em;
+  height: 31em;
+  border-radius: 20px;
+`
+
+const Graphic = styled.img`
+  max-width: 100%;
+  max-height: 100%;
+  margin: auto;
+`
+
 export function Signup(){
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -188,7 +224,13 @@ export function Signup(){
 
     return (
         <div>
-            <StyledLogo>FurryBook</StyledLogo>
+            <StyledBanner>
+                <StyledWelcome>Welcome To</StyledWelcome>
+                <StyledLogo>FurryBook</StyledLogo>
+                <WhiteBox>
+                  <Graphic src="https://www.freepik.com/free-vector/targeting-isometric-template_4430154.htm#query=graphics&position=12&from_view=search&track=sph" alt="FurryBook image"/>
+                </WhiteBox>
+            </StyledBanner>
             <SignUpContainer>
                 <StyledText>Get Started.</StyledText>
                 <SignUpForm onSubmit={handleSubmit}>
