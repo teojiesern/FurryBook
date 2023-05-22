@@ -2,55 +2,5 @@ body{
     margin: 0;
     padding: 0;
     background-color: #FAFAFA;
-}
-
-/* login page */
-.login{
-    background-image: url("/assets/Cover.png");
-    background-size: cover;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    padding: 0 3rem;
-    justify-content: center;
-    align-items: center;
-}
-
-.login-form{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 50%;
-    width: 60%;
-}
-
-.login-intro{
-    width: 60%;
-}
-
-.login-intro h1{
-    font-size: 4rem;
-    margin-top: 1rem;
-}
-
-.login-signup-btn{
-    background-image: linear-gradient(315deg, #63a4ff 0%, #83eaf1 74%);
-    padding: 2rem;
-    border-radius: 2rem;
-    border: none;
-}
-
-.form-input{
-    display: flex;
-    flex-direction: column;
-}
-
-.form-input input{
-    padding: 2rem;
-    border-radius: 1rem;
-    border: 1px solid gray;
-}
-
-.form-input label{
-    padding: 0 1rem;
+    overflow: hidden;
 }

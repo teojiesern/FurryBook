@@ -17,7 +17,6 @@ import { authentication, loginPageAuth } from "./Utils/authentication";
 import { TopNav } from "./components/TopNav";
 import { ProfileLayout } from "./components/ProfileLayout";
 import { ProfilePhotos } from "./pages/profile/ProfilePhotos";
-import { OwnLayout } from "./components/OwnLayout";
 import { Friends } from "./pages/Friends";
 import { Settings } from "./pages/Settings";
 import { currentUserData } from "./Utils/CurrentUserData";
@@ -47,38 +46,32 @@ const router = createBrowserRouter(
                         loader={authentication}
                     />
                     <Route
-                        path="profile/:user"
-                        element={<ProfileLayout />}
-                        loader={currentUserData}
-                    >
-                        {/* <Route
-                            path=":user"
-                            element={<ProfileLayout />}
-                            loader={authentication}
-                        > */}
-                            <Route
-                                index
-                                element={<ProfilePosts />}
-                                loader={allPosts}
-                            />
-                            <Route
-                                path="friends"
-                                element={<ProfileFriends />}
-                                loader={authentication}
-                            />
-                            <Route
-                                path="photos"
-                                element={<ProfilePhotos />}
-                                loader={authentication}
-                            />
-                        </Route>
-                    </Route>
-                    <Route
                         path="settings"
                         element={<Settings />}
                         loader={authentication}
                     />
-                {/* </Route> */}
+                    <Route
+                        path="profile/:user"
+                        element={<ProfileLayout />}
+                        loader={authentication}
+                    >
+                        <Route
+                            index
+                            element={<ProfilePosts />}
+                            loader={allPosts}
+                        />
+                        <Route
+                            path="friends"
+                            element={<ProfileFriends />}
+                            loader={authentication}
+                        />
+                        <Route
+                            path="photos"
+                            element={<ProfilePhotos />}
+                            loader={authentication}
+                        />
+                    </Route>
+                </Route>
             </Route>
         </>
     )
