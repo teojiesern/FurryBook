@@ -8,7 +8,7 @@ const StyledPostContainer = styled.div`
     display: flex;
     flex-direction: column;
     background-color: white;
-    margin: 20px 40px;
+    margin: 20px 40px 50px 40px;
     border-radius: 30px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     padding: 20px 20px 20px 50px;
@@ -102,12 +102,12 @@ export function ProfilePosts() {
     const posts = allPost.map((post) => {
         const createdDate = new Date(post.created);
         const currentDate = new Date();
-        let displayTime
+        let displayTime;
         const timeDiff = currentDate.getTime() - createdDate.getTime();
 
         if (timeDiff < 86400000) {
             const minutes = Math.floor(timeDiff / 60000);
-            const hours = Math.floor(timeDiff / 3600000); 
+            const hours = Math.floor(timeDiff / 3600000);
 
             let formattedTime;
             if (minutes < 60) {
@@ -116,7 +116,7 @@ export function ProfilePosts() {
                 formattedTime = `${hours} hours ago`;
             }
 
-            displayTime = formattedTime
+            displayTime = formattedTime;
         } else {
             const formattedDate = createdDate.toLocaleDateString("en-US", {
                 day: "numeric",
@@ -124,11 +124,11 @@ export function ProfilePosts() {
                 year: "numeric",
             });
 
-            displayTime = formattedDate
+            displayTime = formattedDate;
         }
 
         return (
-            <StyledPostContainer>
+            <StyledPostContainer key={post.id}>
                 <StyledPostSection>
                     <StyledProfilePicture
                         style={{
