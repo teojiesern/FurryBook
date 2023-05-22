@@ -206,9 +206,9 @@ export function ProfilePosts() {
                         (like) => like !== currentLogin
                     );
                     if (post.likes.indexOf(currentLogin) === -1) {
-                        return { ...post, likes: newLikes, liked: !post.liked };
+                        return { ...post, likes: newLikes };
                     }
-                    return { ...post, likes: removedLikes, liked: !post.liked };
+                    return { ...post, likes: removedLikes };
                 }
                 return post;
             });
@@ -259,7 +259,11 @@ export function ProfilePosts() {
                 <StyledInteractionSection>
                     <StyledInteractionButton
                         onClick={() => handleLike(post.id)}
-                        style={post.liked ? likeStyle : null}
+                        style={
+                            post.likes.indexOf(currentLogin) !== -1
+                                ? likeStyle
+                                : null
+                        }
                     >
                         <BiLike style={IconStyle} />
                         <StyledInteractionText>Like</StyledInteractionText>
