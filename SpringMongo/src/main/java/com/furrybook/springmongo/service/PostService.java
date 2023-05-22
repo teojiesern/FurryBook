@@ -77,6 +77,8 @@ public class PostService {
                     .type(fileType)
                     .filePath(filePath)
                     .userId(userId)
+                    .likes(new ArrayList<>())
+                    .comments(new ArrayList<>())
                     .caption(caption)
                     .created(LocalDateTime.now())
                     .build();
@@ -92,6 +94,8 @@ public class PostService {
                     .type(null)
                     .filePath(null)
                     .userId(userId)
+                    .likes(new ArrayList<>())
+                    .comments(new ArrayList<>())
                     .caption(caption)
                     .created(LocalDateTime.now())
                     .build();
