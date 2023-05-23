@@ -134,22 +134,22 @@ const SignUpButton = styled.button`
   box-shadow: 0px 8px 24px -2px rgba(11, 47, 138, 0.6);
 `;
 
-const LineBreak = styled.div`
-  display: flex;
-  align-items: center;
-  text-align: center;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  width: 30rem;
-`;
+// const LineBreak = styled.div`
+//   display: flex;
+//   align-items: center;
+//   text-align: center;
+//   margin-top: 20px;
+//   margin-bottom: 20px;
+//   width: 30rem;
+// `;
 
-const Line = styled.hr`
-  flex-grow: 1;
-  margin-left: 10px;
-  margin-right: 10px;
-  color: #7374A7;
-  border-width: 2px;
-`;
+// const Line = styled.hr`
+//   flex-grow: 1;
+//   margin-left: 10px;
+//   margin-right: 10px;
+//   color: #7374A7;
+//   border-width: 2px;
+// `;
 
 const Text = styled.span`
   font-size: 14px;
@@ -161,26 +161,26 @@ const Warning = styled.p`
     color: red;
 `
 
-const ButtonContainer = styled.div`
-  display: flex;
-  align-items: center;
-`;
+// const ButtonContainer = styled.div`
+//   display: flex;
+//   align-items: center;
+// `;
 
-const RoundButton = styled.button`
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: #FFF;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0;
-  cursor: pointer;
-  border-width: 0;
-  font-size: 35px;
-  margin: 0 25px 25px 25px;
-  box-shadow: 0px 8px 24px -2px rgba(69, 71, 76, 0.6);
-`;
+// const RoundButton = styled.button`
+//   width: 40px;
+//   height: 40px;
+//   border-radius: 50%;
+//   background-color: #FFF;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   padding: 0;
+//   cursor: pointer;
+//   border-width: 0;
+//   font-size: 35px;
+//   margin: 0 25px 25px 25px;
+//   box-shadow: 0px 8px 24px -2px rgba(69, 71, 76, 0.6);
+// `;
 
 const WhiteBox = styled.div`
   position: absolute;
@@ -191,10 +191,17 @@ const WhiteBox = styled.div`
   border-radius: 20px;
 `
 
-const Graphic = styled.img`
-  max-width: 100%;
-  max-height: 100%;
-  margin: auto;
+const Overlay = styled.div`
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: calc(100% - 40px);
+  height: calc(100% - 40px);
+  background-image: url('/assets/banner.jpg');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.7; /* Adjust the opacity as needed */
+  border-radius: 20px;
 `
 
 export function Signup(){
@@ -228,7 +235,7 @@ export function Signup(){
                 <StyledWelcome>Welcome To</StyledWelcome>
                 <StyledLogo>FurryBook</StyledLogo>
                 <WhiteBox>
-                  <Graphic src="https://www.freepik.com/free-vector/targeting-isometric-template_4430154.htm#query=graphics&position=12&from_view=search&track=sph" alt="FurryBook image"/>
+                  <Overlay/>
                 </WhiteBox>
             </StyledBanner>
             <SignUpContainer>
@@ -236,20 +243,11 @@ export function Signup(){
                 <SignUpForm onSubmit={handleSubmit}>
                     <SignUpInput type="text" label="Name" placeholder="Name" />
                     <SignUpInput type="email" label="Email" placeholder="Email" />
+                    <SignUpInput type="text" label="Phone Number" placeholder="Phone Number" />
                     <SignUpInput type="password" label="Password" placeholder="Password" value={password} onChange={handlePasswordChange}/>
                     <SignUpInput type="password" label="Confirm Password" placeholder="Password" value={confirmPassword} onChange={handleConfirmPasswordChange}/>
                     {!passwordMatch && <Warning>Passwords do not match.</Warning>}
                     <SignUpButton type="submit">Sign Up</SignUpButton>
-                    <LineBreak>
-                        <Line />
-                        <Text>Or sign up with</Text>
-                        <Line />
-                    </LineBreak>
-                    <ButtonContainer>
-                        <RoundButton><FaGoogle/></RoundButton>
-                        <RoundButton><FaFacebook/></RoundButton>
-                        <RoundButton><FaTwitter/></RoundButton>
-                    </ButtonContainer>
                     <Text>Already have an account? <NavLink as={Link} to="/FurryBook/login">Sign In</NavLink></Text>
                 </SignUpForm>
             </SignUpContainer>
