@@ -81,6 +81,17 @@ public class CommentsService {
         }
     }
 
+    // public User getCommentByUserId(String userId) {
+    //     Optional<Comments> optionalComment = commentsRepository.findById(commentId);
+    //     if (optionalComment.isPresent()) {
+    //         Comments comment = optionalComment.get();
+    //         String userId = comment.getUserId();
+    //         return userRepository.findById(userId).orElse(null);
+    //     } else {
+    //         return null;
+    //     }
+    // }
+
     public List<Comments> findAllComments() {
         return commentsRepository.findAll();
     }
