@@ -39,11 +39,6 @@ public class AdminController {
         return service.addAdminUser(user);
     }
 
-    // @DeleteMapping("/{Id}")
-    // public String deleteUser(@PathVariable String Id) {
-    // return service.deleteUser(Id);
-    // }
-
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @DeleteMapping("/{Id}")
     public ResponseEntity<String> deleteUser(@PathVariable String Id) {

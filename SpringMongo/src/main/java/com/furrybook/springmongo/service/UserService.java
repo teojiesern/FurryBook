@@ -79,6 +79,42 @@ public class UserService {
         return repository.save(existingUser);
     }
 
+    public User updateName(String Id, String name) {
+        User user = repository.findById(Id).get();
+        user.setName(name);
+        return repository.save(user);
+    }
+
+    // public User updateEmail(String Id) {
+    //     User user = repository.findById(Id).get();
+    //     user.setName(name);
+    //     return repository.save(user);
+    // }
+
+    public User updatePassword(String Id, String password) {
+        User user = repository.findById(Id).get();
+        user.setPassword(password);
+        return repository.save(user);
+    }
+
+    public User updateGender(String Id, String gender) {
+        User user = repository.findById(Id).get();
+        user.setGender(gender);
+        return repository.save(user);
+    }
+
+    public User updatePhoneNumber(String Id, String phoneNum) {
+        User user = repository.findById(Id).get();
+        user.setPhoneNumber(phoneNum);
+        return repository.save(user);
+    }
+
+    public User updateAge(String Id, int age) {
+        User user = repository.findById(Id).get();
+        user.setAge(age);
+        return repository.save(user);
+    }
+
     public String deleteUser(String Id) {
         User user = repository.findById(Id).orElse(null);
 
