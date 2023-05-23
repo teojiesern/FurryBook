@@ -15,7 +15,7 @@ import org.springframework.data.annotation.Id;
 public class StandardUser implements User{
     @Id
     private String id;
-    private String name, email, password, gender;
+    private String name, email, password, gender, phoneNumber;
     private int age;
     private String userType = "user";
     private String profilePicturePath;

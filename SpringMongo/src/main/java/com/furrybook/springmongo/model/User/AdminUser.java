@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class AdminUser implements User{
     @Id
     private String id;
-    private String name, email, password, gender;
+    private String name, email, password, gender, phoneNumber;
     private int age;
     private String userType = "admin";
     private String profilePicturePath;

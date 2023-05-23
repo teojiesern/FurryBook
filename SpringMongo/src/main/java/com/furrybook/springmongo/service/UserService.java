@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.furrybook.springmongo.exception.ExistingEmailException;
 import com.furrybook.springmongo.model.User.*;
 import com.furrybook.springmongo.repository.UserRepository;
 
@@ -26,6 +27,10 @@ public class UserService {
     private MongoOperations mongoOperations;
 
     public User addUser(StandardUser user) {
+        User existingUser = repository.findByEmail(user.getEmail());
+        if (existingUser != null) {
+            throw new ExistingEmailException("User with the same email already exists");
+        }
         return repository.save(user);
     }
 

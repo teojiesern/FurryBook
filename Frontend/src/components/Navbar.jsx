@@ -1,5 +1,5 @@
 import { Nav } from "react-bootstrap";
-import { Link, NavLink, useLoaderData, useLocation } from "react-router-dom";
+import { Link, useLoaderData, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { AiFillHome } from "react-icons/ai";
@@ -15,6 +15,7 @@ const StyledLogo = styled.div`
 `;
 
 const StyledNav = styled(Nav)`
+    background-color: #FFF;
     color: #153fac;
     height: 100%;
     font-size: 20px;
