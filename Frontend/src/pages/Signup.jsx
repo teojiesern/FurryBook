@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { RiEyeFill, RiEyeOffFill } from 'react-icons/ri';
 import { FaFacebook, FaGoogle, FaTwitter } from 'react-icons/fa';
 import { NavLink } from 'react-router-dom';
+import { createUser } from '../api/CreateUser';
 
 const StyledLogo = styled.div`
     position: absolute;
@@ -205,10 +206,22 @@ const Overlay = styled.div`
 `
 
 export function Signup(){
+    const [formData, setFormData] = useState({
+      name: '',
+      email: '',
+      phoneNumber: '',
+    });
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [passwordMatch, setPasswordMatch] = useState(true);
-  
+    
+    const handleChange = (e) => {
+      setFormData({
+        ...formData,
+        [e.target.name]: e.target.value
+      });
+    }
+
     const handlePasswordChange = (e) => {
       setPassword(e.target.value);
     };
@@ -221,10 +234,8 @@ export function Signup(){
       e.preventDefault();
       if (password === confirmPassword) {
         setPasswordMatch(true);
-        // Passwords match, proceed with form submission
-        // ...
+        createUser(formData.name, formData.email, formData.phoneNumber, password)
       } else {
-        // Passwords don't match, handle the error
         setPasswordMatch(false);
       }
     }
@@ -241,9 +252,9 @@ export function Signup(){
             <SignUpContainer>
                 <StyledText>Get Started.</StyledText>
                 <SignUpForm onSubmit={handleSubmit}>
-                    <SignUpInput type="text" label="Name" placeholder="Name" />
-                    <SignUpInput type="email" label="Email" placeholder="Email" />
-                    <SignUpInput type="text" label="Phone Number" placeholder="Phone Number" />
+                    <SignUpInput type="text" label="Name" placeholder="Name" name="name" value={formData.name} onChange={handleChange} />
+                    <SignUpInput type="email" label="Email" placeholder="Email" name="email" value={formData.email} onChange={handleChange} />
+                    <SignUpInput type="text" label="Phone Number" placeholder="Phone Number" name="phoneNumber" value={formData.phoneNumber} onChange={handleChange} />
                     <SignUpInput type="password" label="Password" placeholder="Password" value={password} onChange={handlePasswordChange}/>
                     <SignUpInput type="password" label="Confirm Password" placeholder="Password" value={confirmPassword} onChange={handleConfirmPasswordChange}/>
                     {!passwordMatch && <Warning>Passwords do not match.</Warning>}
