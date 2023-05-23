@@ -73,7 +73,7 @@ public class PostController {
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @DeleteMapping("/{id}")
-    public String deleteUser(@PathVariable String id) {
+    public String deletePost(@PathVariable String id) {
         return service.deletePostById(id);
     }
 

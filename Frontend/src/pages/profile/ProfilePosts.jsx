@@ -3,21 +3,30 @@ import { useLoaderData, useOutletContext } from "react-router-dom";
 import { styled } from "styled-components";
 import { BiLike, BiComment } from "react-icons/bi";
 import { TbShare3 } from "react-icons/tb";
+import { HiGlobeAsiaAustralia } from "react-icons/hi2";
+import { FaBirthdayCake, FaUserFriends } from "react-icons/fa";
+import { MdOutlineDriveFileRenameOutline } from "react-icons/md";
+import { GiLovers } from "react-icons/gi";
+import { IoPersonOutline } from "react-icons/io5";
+import { LikePosts } from "../../api/LikePosts";
+import { getTimeCreated } from "../../Utils/getTimeCreated";
+import { Popup } from "../../Utils/Popup";
+import { UserData } from "../../api/UserData";
 
 const StyledPostContainer = styled.div`
     display: flex;
     flex-direction: column;
     background-color: white;
-    margin: 20px 40px;
+    margin: 20px 40px 50px 40px;
     border-radius: 30px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    padding: 20px 20px 20px 50px;
+    padding: 20px 40px 20px 40px;
 `;
 
 const StyledPostSection = styled.div`
     display: flex;
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 `;
 
 const StyledContentSection = styled.div`
@@ -29,17 +38,17 @@ const StyledContentSection = styled.div`
 
 const StyledInteractionSection = styled.div`
     display: flex;
-    align-self: flex-end;
     justify-content: space-between;
-    width: 25%;
+    width: 100%;
     height: 50px;
     margin-right: 30px;
-    color: #153fac;
+    color: gray;
+    border-top: 1px solid gray;
 `;
 
 const StyledProfilePicture = styled.div`
-    height: 90px;
-    width: 90px;
+    height: 70px;
+    width: 70px;
     background-size: cover;
     background-position: center;
     border-radius: 200px;
@@ -60,6 +69,7 @@ const StyledInteractionButton = styled.div`
     display: flex;
     align-items: center;
     font-size: 20px;
+    cursor: pointer;
 `;
 
 const StyledInteractionText = styled.p`
@@ -96,39 +106,154 @@ const StyledPosted = styled.p`
     color: gray;
 `;
 
+const StyledParentContainer = styled.div`
+    display: flex;
+    width: 100%;
+    align-items: flex-start;
+`;
+
+const changeStyle = {
+    width: "30%",
+    margin: "20px 0 50px 40px",
+    color: "gray",
+    fontFamily: "Montserrat, sans-serif",
+};
+
+const StyledInfosContainer = styled.div`
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 20px;
+`;
+
+const StyledInfo = styled.h4`
+    color: black;
+    font-size: 15px;
+    margin: 0;
+`;
+
+const StyledEditButton = styled.button`
+    background-color: #gray;
+    padding: 10px;
+    text-align: center;
+    color: black;
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+`;
+
+const StyledLikedAndCommented = styled.div`
+    display: flex;
+    justify-content: space-between;
+    color: gray;
+    // padding:
+`;
+
+const StyledLikeAndCommentCount = styled.p`
+    color: gray;
+    fontFamily: "Montserrat, sans-serif",
+    font-size: 10px;
+`;
+
+const StyledCommentsContainer = styled.div`
+    display: flex;
+    width: 75%;
+    border-radius: 20px;
+    background-color: white;
+    margin: 20px auto 0 auto;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+`;
+
+const iconStyle = {
+    marginRight: "5px",
+};
+
+const likeStyle = {
+    color: "blue",
+};
+
+const pointer = {
+    cursor: "pointer",
+};
+
 export function ProfilePosts() {
-    const allPost = useLoaderData();
-    const [profilePic, name] = useOutletContext();
-    const posts = allPost.map((post) => {
-        const createdDate = new Date(post.created);
-        const currentDate = new Date();
-        let displayTime
-        const timeDiff = currentDate.getTime() - createdDate.getTime();
+    const [profilePic, data] = useOutletContext();
+    const [allPost, setAllPost] = React.useState(useLoaderData());
+    const [isOpen, setIsOpen] = React.useState(false);
+    const [allComments, setAllComments] = React.useState([]);
+    const [details, setDetails] = React.useState([]);
+    const [isComment, setIsComment] = React.useState(false);
+    const currentLogin = localStorage.getItem("userId");
 
-        if (timeDiff < 86400000) {
-            const minutes = Math.floor(timeDiff / 60000);
-            const hours = Math.floor(timeDiff / 3600000); 
+    const togglePopup = () => {
+        setIsOpen(!isOpen);
+    };
 
-            let formattedTime;
-            if (minutes < 60) {
-                formattedTime = `${minutes} minutes ago`;
-            } else {
-                formattedTime = `${hours} hours ago`;
-            }
-
-            displayTime = formattedTime
+    function toggleComments(comments) {
+        setIsComment(true);
+        console.log(comments);
+        if (comments.length !== 0) {
+            const listOfComments = comments.map((c) => {
+                const displayTime = getTimeCreated(c);
+                return (
+                    <StyledCommentsContainer key={c.id}>
+                        <StyledPostSection>
+                            <StyledProfilePicture></StyledProfilePicture>
+                            <StyledContentSection>
+                                <StyledInformations>
+                                    <StyledName></StyledName>
+                                    <StyledPosted>{displayTime}</StyledPosted>
+                                    <StyledCaption>{c.body}</StyledCaption>
+                                </StyledInformations>
+                            </StyledContentSection>
+                        </StyledPostSection>
+                    </StyledCommentsContainer>
+                );
+            });
+            setAllComments(listOfComments);
         } else {
-            const formattedDate = createdDate.toLocaleDateString("en-US", {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
+            setAllComments([]);
+        }
+    }
+
+    function toggleDetails(data) {
+        setIsComment(false);
+    }
+
+    const friends =
+        data.friendsId.length == 0
+            ? "No Friends"
+            : `${data.friendsId.length} Friends`;
+
+    const posts = allPost.map((post) => {
+        const displayTime = getTimeCreated(post);
+
+        const handleLike = async (postId) => {
+            await LikePosts(postId);
+            const updatedPosts = allPost.map((post) => {
+                if (post.id === postId) {
+                    const newLikes = [...post.likes, currentLogin];
+                    const removedLikes = post.likes.filter(
+                        (like) => like !== currentLogin
+                    );
+                    if (post.likes.indexOf(currentLogin) === -1) {
+                        return { ...post, likes: newLikes };
+                    }
+                    return { ...post, likes: removedLikes };
+                }
+                return post;
             });
 
-            displayTime = formattedDate
-        }
+            setAllPost(updatedPosts);
+        };
+
+        function handleComment() {}
+
+        function handleShare() {}
 
         return (
-            <StyledPostContainer>
+            <StyledPostContainer key={post.id}>
                 <StyledPostSection>
                     <StyledProfilePicture
                         style={{
@@ -137,7 +262,7 @@ export function ProfilePosts() {
                     ></StyledProfilePicture>
                     <StyledContentSection>
                         <StyledInformations>
-                            <StyledName>{name}</StyledName>
+                            <StyledName>{data.name}</StyledName>
                             <StyledPosted>{displayTime}</StyledPosted>
                         </StyledInformations>
                         {post.caption ? (
@@ -152,16 +277,37 @@ export function ProfilePosts() {
                         ) : null}
                     </StyledContentSection>
                 </StyledPostSection>
+                <StyledLikedAndCommented>
+                    {post.likes?.length == 0
+                        ? "Be the first one to like this post"
+                        : `${post.likes?.length} users liked this post`}{" "}
+                    <StyledLikeAndCommentCount
+                        style={pointer}
+                        onClick={() => {
+                            togglePopup();
+                            toggleComments(post.comments);
+                        }}
+                    >
+                        {post.comments.length + " Comments"}
+                    </StyledLikeAndCommentCount>
+                </StyledLikedAndCommented>
                 <StyledInteractionSection>
-                    <StyledInteractionButton>
+                    <StyledInteractionButton
+                        onClick={() => handleLike(post.id)}
+                        style={
+                            post.likes.indexOf(currentLogin) !== -1
+                                ? likeStyle
+                                : null
+                        }
+                    >
                         <BiLike style={IconStyle} />
                         <StyledInteractionText>Like</StyledInteractionText>
                     </StyledInteractionButton>
-                    <StyledInteractionButton>
+                    <StyledInteractionButton onClick={handleComment}>
                         <BiComment style={IconStyle} />
                         <StyledInteractionText>Comment</StyledInteractionText>
                     </StyledInteractionButton>
-                    <StyledInteractionButton>
+                    <StyledInteractionButton onClick={handleShare}>
                         <TbShare3 style={IconStyle} />
                         <StyledInteractionText>Share</StyledInteractionText>
                     </StyledInteractionButton>
@@ -169,5 +315,52 @@ export function ProfilePosts() {
             </StyledPostContainer>
         );
     });
-    return <div>{posts}</div>;
+
+    return (
+        <StyledParentContainer>
+            <StyledPostContainer style={changeStyle}>
+                <StyledName style={{ marginBottom: "25px" }}>Intro</StyledName>
+                <StyledInfosContainer>
+                    <MdOutlineDriveFileRenameOutline style={iconStyle} />
+                    <StyledInfo>{data.name}</StyledInfo>
+                </StyledInfosContainer>
+                <StyledInfosContainer>
+                    <HiGlobeAsiaAustralia style={iconStyle} />
+                    <StyledInfo>{data.email}</StyledInfo>
+                </StyledInfosContainer>
+                <StyledInfosContainer>
+                    <IoPersonOutline style={iconStyle} />
+                    <StyledInfo>{data.gender}</StyledInfo>
+                </StyledInfosContainer>
+                <StyledInfosContainer>
+                    <FaBirthdayCake style={iconStyle} />
+                    <StyledInfo>{data.email}</StyledInfo>
+                </StyledInfosContainer>
+                <StyledInfosContainer>
+                    <GiLovers style={iconStyle} />
+                    <StyledInfo>{data.email}</StyledInfo>
+                </StyledInfosContainer>
+                <StyledInfosContainer>
+                    <FaUserFriends style={iconStyle} />
+                    <StyledInfo>{friends}</StyledInfo>
+                </StyledInfosContainer>
+                <StyledEditButton
+                    onClick={() => {
+                        togglePopup();
+                        toggleDetails(data);
+                    }}
+                >
+                    Edit Details
+                </StyledEditButton>
+            </StyledPostContainer>
+            <div style={{ width: "70%" }}>{posts}</div>
+            {isOpen && (
+                <Popup
+                    content={isComment ? allComments : details}
+                    handleClose={togglePopup}
+                    top={isComment ? "Comments Section" : "Edit Your Profile"}
+                />
+            )}
+        </StyledParentContainer>
+    );
 }

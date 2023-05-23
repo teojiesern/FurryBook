@@ -3,6 +3,7 @@ import { Link, Outlet, useLocation, useOutletContext } from "react-router-dom";
 import { styled } from "styled-components";
 import { IoSettingsSharp } from "react-icons/io5";
 import { Nav } from "react-bootstrap";
+import { StyledContainer } from "../Utils/StyledContainer";
 
 const StyledUserInfoContainer = styled.div`
     position: relative;
@@ -112,8 +113,8 @@ const activeStyle = {
 
 const CustomNavLink = ({ to, children }) => {
     const location = useLocation();
-    const decodedPathname = decodeURIComponent(location.pathname)
-    const isActive = decodedPathname === to ;
+    const decodedPathname = decodeURIComponent(location.pathname);
+    const isActive = decodedPathname === to;
     return (
         <StyledNavLink as={Link} to={to} style={isActive ? activeStyle : {}}>
             {children}
@@ -123,6 +124,7 @@ const CustomNavLink = ({ to, children }) => {
 
 export function ProfileLayout() {
     const data = useOutletContext();
+    console.log(data);
     const backgroundPhoto = data.coverPhotoPath.split("/").pop();
     const profilePic = data.profilePicturePath.split("/").pop();
     const friends =
@@ -131,7 +133,7 @@ export function ProfileLayout() {
             : `${data.friendsId.length} Friends`;
 
     return (
-        <div>
+        <StyledContainer>
             <StyledUserInfoContainer>
                 <StyledBackgroundCoverPhoto
                     style={{
@@ -154,13 +156,22 @@ export function ProfileLayout() {
 
             <StyledNavigationContainer>
                 <StyledNavigation>
-                    <CustomNavLink as={Link} to={`/FurryBook/own/${data.name}`}>
+                    <CustomNavLink
+                        as={Link}
+                        to={`/FurryBook/profile/${data.name}`}
+                    >
                         Posts
                     </CustomNavLink>
-                    <CustomNavLink as={Link} to={`/FurryBook/own/${data.name}/friends`}>
+                    <CustomNavLink
+                        as={Link}
+                        to={`/FurryBook/profile/${data.name}/friends`}
+                    >
                         Friends
                     </CustomNavLink>
-                    <CustomNavLink as={Link} to={`/FurryBook/own/${data.name}/photos`}>
+                    <CustomNavLink
+                        as={Link}
+                        to={`/FurryBook/profile/${data.name}/photos`}
+                    >
                         Photos
                     </CustomNavLink>
                 </StyledNavigation>
@@ -169,7 +180,7 @@ export function ProfileLayout() {
                     placeholder="Search"
                 ></StyledSearchBar>
             </StyledNavigationContainer>
-            <Outlet context={[profilePic, data.name]}/>
-        </div>
+            <Outlet context={[profilePic, data]} />
+        </StyledContainer>
     );
 }
