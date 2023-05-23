@@ -8,9 +8,12 @@ import {
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Layout } from "./components/Layout";
 import { Home } from "./pages/Home";
-import { Login, action } from "./pages/Login";
+import { Login, action as loginAction } from "./pages/Login";
 import { Signup } from "./pages/Signup";
-import { ProfilePosts } from "./pages/profile/ProfilePosts";
+import {
+    ProfilePosts,
+    action as postCommentAction,
+} from "./pages/profile/ProfilePosts";
 import { ProfileFriends } from "./pages/profile/ProfileFriends";
 import { authentication, loginPageAuth } from "./Utils/authentication";
 import { TopNav } from "./components/TopNav";
@@ -28,7 +31,7 @@ const router = createBrowserRouter(
             <Route
                 path="/FurryBook/login"
                 element={<Login />}
-                action={action}
+                action={loginAction}
                 loader={loginPageAuth}
             />
             <Route path="/FurryBook/signup" element={<Signup />} />
@@ -58,6 +61,7 @@ const router = createBrowserRouter(
                             index
                             element={<ProfilePosts />}
                             loader={AllPosts}
+                            action={postCommentAction}
                         />
                         <Route
                             path="friends"

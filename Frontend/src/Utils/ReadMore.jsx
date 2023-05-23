@@ -48,7 +48,7 @@ export function ReadMore({ maxLines = 10, children }) {
             >
                 <span ref={handleRect}>{children}</span>
             </div>
-            {lines > 10 ? (
+            {lines > maxLines ? (
                 <button onClick={handleClick} style={buttonStyle}>
                     <p style={{ padding: 0, margin: 0 }}>
                         {isExpanded ? "Read Less" : "Read More"}

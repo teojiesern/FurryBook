@@ -13,12 +13,11 @@ public interface User {
     Set<String> getFriendsId();
 
     void setName(String name);
-
     void setEmail(String email);
-
     void setPassword(String password);
-
     void setProfilePicturePath(String newPath);
-
     void setCoverPhotoPath(String newPath);
+    void setGender(String gender);
+    void setPhoneNumber(String phoneNum);
+    void setAge(int age);
 }

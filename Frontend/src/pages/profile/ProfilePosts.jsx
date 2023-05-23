@@ -1,5 +1,5 @@
 import React from "react";
-import { useLoaderData, useOutletContext } from "react-router-dom";
+import { Form, useLoaderData, useOutletContext } from "react-router-dom";
 import { styled } from "styled-components";
 import { BiLike, BiComment } from "react-icons/bi";
 import { TbShare3 } from "react-icons/tb";
@@ -12,7 +12,8 @@ import { LikePosts } from "../../api/LikePosts";
 import { getTimeCreated } from "../../Utils/getTimeCreated";
 import { Popup } from "../../Utils/Popup";
 import { UserData } from "../../api/UserData";
-import { ReadMore } from "../../ReadMore";
+import { ReadMore } from "../../Utils/ReadMore";
+import axios from "axios";
 
 const StyledPostContainer = styled.div`
     display: flex;
@@ -45,6 +46,7 @@ const StyledInteractionSection = styled.div`
     margin-right: 30px;
     color: gray;
     border-top: 1px solid gray;
+    border-bottom: 1px solid gray;
 `;
 
 const StyledProfilePicture = styled.div`
@@ -179,9 +181,48 @@ const commentContainerStyle = {
     marginBottom: "0",
 };
 
-const noMarginBottom = {
-    marginBottom: "0",
+const postCommentStyle = {
+    display: "flex",
+    justifyContent: "space-between",
+    padding: "30px 5px",
+    fontFamily: "Montserrat, sans-serif",
 };
+
+const submitButtonStyle = {
+    width: "20%",
+    border: "none",
+    borderRadius: "10px",
+    backgroundColor: "#153fac",
+    color: "white",
+};
+
+const inputStyle = {
+    width: "75%",
+    border: "none",
+    backgroundColor: "#F6F6F6",
+    padding: "10px 20px",
+    borderRadius: "10px",
+};
+
+export async function action({ request }) {
+    const formData = await request.formData();
+    const comment = formData.get("comment");
+    const postId = formData.get("postId");
+    const user = localStorage.getItem("userId");
+
+    try {
+        const response = await axios.post(
+            `http://localhost:3001/comments/${user}`,
+            {
+                commentBody: comment,
+                postId: postId,
+            }
+        );
+    } catch (error) {
+        console.log("error occured: " + error);
+    }
+    return null;
+}
 
 export function ProfilePosts() {
     const [profilePic, data] = useOutletContext();
@@ -219,9 +260,15 @@ export function ProfilePosts() {
                                             {displayTime}
                                         </StyledPosted>
                                         <StyledCaption>
-                                            <ReadMore maxLines={1}>
-                                                {c.body}
-                                            </ReadMore>
+                                            <p
+                                                style={{
+                                                    wordBreak: "break-word",
+                                                }}
+                                            >
+                                                <ReadMore maxLines={2}>
+                                                    {c.body}
+                                                </ReadMore>
+                                            </p>
                                         </StyledCaption>
                                     </StyledInformations>
                                 </StyledContentSection>
@@ -266,8 +313,6 @@ export function ProfilePosts() {
 
             setAllPost(updatedPosts);
         };
-
-        function handleComment() {}
 
         function handleShare() {}
 
@@ -324,7 +369,12 @@ export function ProfilePosts() {
                         <BiLike style={IconStyle} />
                         <StyledInteractionText>Like</StyledInteractionText>
                     </StyledInteractionButton>
-                    <StyledInteractionButton onClick={handleComment}>
+                    <StyledInteractionButton
+                        onClick={async () => {
+                            togglePopup();
+                            await toggleComments(post.comments);
+                        }}
+                    >
                         <BiComment style={IconStyle} />
                         <StyledInteractionText>Comment</StyledInteractionText>
                     </StyledInteractionButton>
@@ -333,6 +383,16 @@ export function ProfilePosts() {
                         <StyledInteractionText>Share</StyledInteractionText>
                     </StyledInteractionButton>
                 </StyledInteractionSection>
+                <Form method="post" style={postCommentStyle}>
+                    <input type="hidden" name="postId" value={post.id} />
+                    <input
+                        type="text"
+                        name="comment"
+                        style={inputStyle}
+                        placeholder="Type a comment..."
+                    ></input>
+                    <button style={submitButtonStyle}>Comment</button>
+                </Form>
             </StyledPostContainer>
         );
     });

@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,11 +27,13 @@ public class CommentsController {
     @Autowired
     private CommentsService commentsService;
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping
     public List<Comments> getAllCommets() {
         return commentsService.findAllComments();
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/{commentId}/user")
     public ResponseEntity<User> getUserByComment(@PathVariable String commentId) {
         User user = commentsService.getUserByComment(commentId);
@@ -41,6 +44,7 @@ public class CommentsController {
         }
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/{userId}")
     public ResponseEntity<Comments> createComment(@RequestBody Map<String, String> payload,
             @PathVariable String userId) {
@@ -55,6 +59,7 @@ public class CommentsController {
     // "postId": "{postId}"
     // }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PutMapping("/{commentId}")
     public ResponseEntity<Void> updateCommentAndSyncWithPost(@PathVariable String commentId,
             @RequestBody Map<String, String> payload) {
@@ -68,6 +73,7 @@ public class CommentsController {
     // "newBody": {body}
     // }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @DeleteMapping("/{commentId}/posts/{postId}")
     public ResponseEntity<Void> deleteCommentAndRemoveFromPost(@PathVariable String commentId,
             @PathVariable String postId) {
@@ -77,6 +83,7 @@ public class CommentsController {
     // this deleteMapping needs endpoint url of
     // localhost:3001/comments/{commentId}/posts/{postId}
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @DeleteMapping("/posts/{postId}")
     public ResponseEntity<Void> deleteAllCommentsUnderPost(@PathVariable String postId) {
         commentsService.deleteAllCommentsUnderPost(postId);
