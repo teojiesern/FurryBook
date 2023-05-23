@@ -8,7 +8,10 @@ import { FaBirthdayCake, FaUserFriends } from "react-icons/fa";
 import { MdOutlineDriveFileRenameOutline } from "react-icons/md";
 import { GiLovers } from "react-icons/gi";
 import { IoPersonOutline } from "react-icons/io5";
-import { LikePosts } from "../../Utils/LikePosts";
+import { LikePosts } from "../../api/LikePosts";
+import { getTimeCreated } from "../../Utils/getTimeCreated";
+import { Popup } from "../../Utils/Popup";
+import { UserData } from "../../api/UserData";
 
 const StyledPostContainer = styled.div`
     display: flex;
@@ -103,11 +106,11 @@ const StyledPosted = styled.p`
     color: gray;
 `;
 
-const containerStyle = {
-    display: "flex",
-    width: "100%",
-    alignItems: "flex-start",
-};
+const StyledParentContainer = styled.div`
+    display: flex;
+    width: 100%;
+    align-items: flex-start;
+`;
 
 const changeStyle = {
     width: "30%",
@@ -152,14 +155,71 @@ const StyledLikeAndCommentCount = styled.p`
     font-size: 10px;
 `;
 
+const StyledCommentsContainer = styled.div`
+    display: flex;
+    width: 75%;
+    border-radius: 20px;
+    background-color: white;
+    margin: 20px auto 0 auto;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+`;
+
 const iconStyle = {
     marginRight: "5px",
+};
+
+const likeStyle = {
+    color: "blue",
+};
+
+const pointer = {
+    cursor: "pointer",
 };
 
 export function ProfilePosts() {
     const [profilePic, data] = useOutletContext();
     const [allPost, setAllPost] = React.useState(useLoaderData());
+    const [isOpen, setIsOpen] = React.useState(false);
+    const [allComments, setAllComments] = React.useState([]);
+    const [details, setDetails] = React.useState([]);
+    const [isComment, setIsComment] = React.useState(false);
     const currentLogin = localStorage.getItem("userId");
+
+    const togglePopup = () => {
+        setIsOpen(!isOpen);
+    };
+
+    function toggleComments(comments) {
+        setIsComment(true);
+        console.log(comments);
+        if (comments.length !== 0) {
+            const listOfComments = comments.map((c) => {
+                const displayTime = getTimeCreated(c);
+                return (
+                    <StyledCommentsContainer key={c.id}>
+                        <StyledPostSection>
+                            <StyledProfilePicture></StyledProfilePicture>
+                            <StyledContentSection>
+                                <StyledInformations>
+                                    <StyledName></StyledName>
+                                    <StyledPosted>{displayTime}</StyledPosted>
+                                    <StyledCaption>{c.body}</StyledCaption>
+                                </StyledInformations>
+                            </StyledContentSection>
+                        </StyledPostSection>
+                    </StyledCommentsContainer>
+                );
+            });
+            setAllComments(listOfComments);
+        } else {
+            setAllComments([]);
+        }
+    }
+
+    function toggleDetails(data) {
+        setIsComment(false);
+    }
 
     const friends =
         data.friendsId.length == 0
@@ -167,35 +227,7 @@ export function ProfilePosts() {
             : `${data.friendsId.length} Friends`;
 
     const posts = allPost.map((post) => {
-        // React.useEffect(() => {
-        //     let count = post.likes.length
-        // },[])
-        const createdDate = new Date(post.created);
-        const currentDate = new Date();
-        let displayTime;
-        const timeDiff = currentDate.getTime() - createdDate.getTime();
-
-        if (timeDiff < 86400000) {
-            const minutes = Math.floor(timeDiff / 60000);
-            const hours = Math.floor(timeDiff / 3600000);
-
-            let formattedTime;
-            if (minutes < 60) {
-                formattedTime = `${minutes} minutes ago`;
-            } else {
-                formattedTime = `${hours} hours ago`;
-            }
-
-            displayTime = formattedTime;
-        } else {
-            const formattedDate = createdDate.toLocaleDateString("en-US", {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-            });
-
-            displayTime = formattedDate;
-        }
+        const displayTime = getTimeCreated(post);
 
         const handleLike = async (postId) => {
             await LikePosts(postId);
@@ -216,13 +248,10 @@ export function ProfilePosts() {
             setAllPost(updatedPosts);
         };
 
-        const likeStyle = {
-            color: "blue",
-        };
-
         function handleComment() {}
 
         function handleShare() {}
+
         return (
             <StyledPostContainer key={post.id}>
                 <StyledPostSection>
@@ -252,7 +281,13 @@ export function ProfilePosts() {
                     {post.likes?.length == 0
                         ? "Be the first one to like this post"
                         : `${post.likes?.length} users liked this post`}{" "}
-                    <StyledLikeAndCommentCount>
+                    <StyledLikeAndCommentCount
+                        style={pointer}
+                        onClick={() => {
+                            togglePopup();
+                            toggleComments(post.comments);
+                        }}
+                    >
                         {post.comments.length + " Comments"}
                     </StyledLikeAndCommentCount>
                 </StyledLikedAndCommented>
@@ -280,8 +315,9 @@ export function ProfilePosts() {
             </StyledPostContainer>
         );
     });
+
     return (
-        <div style={containerStyle}>
+        <StyledParentContainer>
             <StyledPostContainer style={changeStyle}>
                 <StyledName style={{ marginBottom: "25px" }}>Intro</StyledName>
                 <StyledInfosContainer>
@@ -308,9 +344,23 @@ export function ProfilePosts() {
                     <FaUserFriends style={iconStyle} />
                     <StyledInfo>{friends}</StyledInfo>
                 </StyledInfosContainer>
-                <StyledEditButton>Edit Details</StyledEditButton>
+                <StyledEditButton
+                    onClick={() => {
+                        togglePopup();
+                        toggleDetails(data);
+                    }}
+                >
+                    Edit Details
+                </StyledEditButton>
             </StyledPostContainer>
             <div style={{ width: "70%" }}>{posts}</div>
-        </div>
+            {isOpen && (
+                <Popup
+                    content={isComment ? allComments : details}
+                    handleClose={togglePopup}
+                    top={isComment ? "Comments Section" : "Edit Your Profile"}
+                />
+            )}
+        </StyledParentContainer>
     );
 }

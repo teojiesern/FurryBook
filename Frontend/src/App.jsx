@@ -19,8 +19,8 @@ import { ProfileLayout } from "./components/ProfileLayout";
 import { ProfilePhotos } from "./pages/profile/ProfilePhotos";
 import { Friends } from "./pages/Friends";
 import { Settings } from "./pages/Settings";
-import { currentUserData } from "./Utils/CurrentUserData";
-import { allPosts } from "./Utils/AllPosts";
+import { currentUserData } from "./api/CurrentUserData";
+import { AllPosts } from "./api/AllPosts";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -58,7 +58,7 @@ const router = createBrowserRouter(
                         <Route
                             index
                             element={<ProfilePosts />}
-                            loader={allPosts}
+                            loader={AllPosts}
                         />
                         <Route
                             path="friends"
