@@ -1,8 +1,7 @@
 import { useState, Link } from 'react';
 import styled from 'styled-components';
 import { RiEyeFill, RiEyeOffFill } from 'react-icons/ri';
-import { FaFacebook, FaGoogle, FaTwitter } from 'react-icons/fa';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { createUser } from '../api/CreateUser';
 
 const StyledLogo = styled.div`
@@ -57,6 +56,7 @@ const SignUpContainer = styled.div`
   height: 43em;
   width: 33%;
   border-radius: 20px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 `;
 
 const SignUpForm = styled.form`
@@ -190,6 +190,7 @@ const WhiteBox = styled.div`
   width: 42em;
   height: 31em;
   border-radius: 20px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 `
 
 const Overlay = styled.div`
@@ -205,7 +206,9 @@ const Overlay = styled.div`
   border-radius: 20px;
 `
 
-export function Signup(){
+export function Signup() {
+    const navigate = useNavigate();
+    const [error, setError] = useState('');
     const [formData, setFormData] = useState({
       name: '',
       email: '',
@@ -234,10 +237,18 @@ export function Signup(){
       e.preventDefault();
       if (password === confirmPassword) {
         setPasswordMatch(true);
-        createUser(formData.name, formData.email, formData.phoneNumber, password)
+        createUser(handleSuccess, handleError, formData.name, formData.email, formData.phoneNumber, password)
       } else {
         setPasswordMatch(false);
       }
+    }
+
+    const handleSuccess = () => {
+      navigate('/FurryBook/login');
+    }
+
+    const handleError = (errorResponse) => {
+        setError(errorResponse.error);
     }
 
     return (
@@ -257,6 +268,7 @@ export function Signup(){
                     <SignUpInput type="text" label="Phone Number" placeholder="Phone Number" name="phoneNumber" value={formData.phoneNumber} onChange={handleChange} />
                     <SignUpInput type="password" label="Password" placeholder="Password" value={password} onChange={handlePasswordChange}/>
                     <SignUpInput type="password" label="Confirm Password" placeholder="Password" value={confirmPassword} onChange={handleConfirmPasswordChange}/>
+                    {error && <Warning>There is an existing user with the same email.</Warning>}
                     {!passwordMatch && <Warning>Passwords do not match.</Warning>}
                     <SignUpButton type="submit">Sign Up</SignUpButton>
                     <Text>Already have an account? <NavLink as={Link} to="/FurryBook/login">Sign In</NavLink></Text>

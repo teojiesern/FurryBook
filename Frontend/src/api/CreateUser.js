@@ -1,6 +1,6 @@
 import axios from "axios"
 
-export async function createUser(nameInput, emailInput, phoneNumberInput, passwordInput) {
+export async function createUser(onSuccess, onError, nameInput, emailInput, phoneNumberInput, passwordInput) {
     try {
         const response = await axios.post("http://localhost:3001/users", {
             name: nameInput,
@@ -8,8 +8,9 @@ export async function createUser(nameInput, emailInput, phoneNumberInput, passwo
             phoneNumber: phoneNumberInput,
             password: passwordInput,
         });
-        console.log(response)
+
+        onSuccess(response.data)
     } catch (error) {
-        return error.response.data
+        onError(error.response.data)
     }
 }
