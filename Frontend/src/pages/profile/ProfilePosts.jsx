@@ -57,10 +57,10 @@ const StyledProfilePicture = styled.div`
 
 const StyledCaption = styled.p`
     font-family: "Montserrat", sans-serif;
-    font-size: 30px;
+    font-size: 20px;
     max-width: 90%;
     word-wrap: break-word;
-    max-height: 3em;
+    max-height: 6em;
     overflow: hidden;
     margin-bottom: 30px;
 `;
@@ -177,6 +177,15 @@ const pointer = {
     cursor: "pointer",
 };
 
+const commentContainerStyle = {
+    padding: "20px",
+    marginBottom: "0",
+};
+
+const noMarginBottom = {
+    marginBottom: "0",
+};
+
 export function ProfilePosts() {
     const [profilePic, data] = useOutletContext();
     const [allPost, setAllPost] = React.useState(useLoaderData());
@@ -190,27 +199,36 @@ export function ProfilePosts() {
         setIsOpen(!isOpen);
     };
 
-    function toggleComments(comments) {
+    async function toggleComments(comments) {
         setIsComment(true);
-        console.log(comments);
         if (comments.length !== 0) {
-            const listOfComments = comments.map((c) => {
-                const displayTime = getTimeCreated(c);
-                return (
-                    <StyledCommentsContainer key={c.id}>
-                        <StyledPostSection>
-                            <StyledProfilePicture></StyledProfilePicture>
-                            <StyledContentSection>
-                                <StyledInformations>
-                                    <StyledName></StyledName>
-                                    <StyledPosted>{displayTime}</StyledPosted>
-                                    <StyledCaption>{c.body}</StyledCaption>
-                                </StyledInformations>
-                            </StyledContentSection>
-                        </StyledPostSection>
-                    </StyledCommentsContainer>
-                );
-            });
+            const listOfComments = await Promise.all(
+                comments.map(async (c) => {
+                    const displayTime = getTimeCreated(c);
+                    const user = await UserData(c.userId);
+                    const profilePic = user.profilePicturePath.split("/").pop();
+                    return (
+                        <StyledCommentsContainer key={c.id}>
+                            <StyledPostSection style={commentContainerStyle}>
+                                <StyledProfilePicture
+                                    style={{
+                                        backgroundImage: `url("/assets/profile pictures/${profilePic}")`,
+                                    }}
+                                ></StyledProfilePicture>
+                                <StyledContentSection>
+                                    <StyledInformations style={noMarginBottom}>
+                                        <StyledName>{user.name}</StyledName>
+                                        <StyledPosted>
+                                            {displayTime}
+                                        </StyledPosted>
+                                        <StyledCaption>{c.body}</StyledCaption>
+                                    </StyledInformations>
+                                </StyledContentSection>
+                            </StyledPostSection>
+                        </StyledCommentsContainer>
+                    );
+                })
+            );
             setAllComments(listOfComments);
         } else {
             setAllComments([]);
@@ -283,9 +301,9 @@ export function ProfilePosts() {
                         : `${post.likes?.length} users liked this post`}{" "}
                     <StyledLikeAndCommentCount
                         style={pointer}
-                        onClick={() => {
+                        onClick={async () => {
                             togglePopup();
-                            toggleComments(post.comments);
+                            await toggleComments(post.comments);
                         }}
                     >
                         {post.comments.length + " Comments"}
@@ -356,7 +374,13 @@ export function ProfilePosts() {
             <div style={{ width: "70%" }}>{posts}</div>
             {isOpen && (
                 <Popup
-                    content={isComment ? allComments : details}
+                    content={
+                        isComment
+                            ? allComments.length === 0
+                                ? "No comments yet, be the first to comment"
+                                : allComments
+                            : details
+                    }
                     handleClose={togglePopup}
                     top={isComment ? "Comments Section" : "Edit Your Profile"}
                 />
