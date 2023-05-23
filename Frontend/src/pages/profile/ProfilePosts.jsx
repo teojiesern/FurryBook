@@ -12,6 +12,7 @@ import { LikePosts } from "../../api/LikePosts";
 import { getTimeCreated } from "../../Utils/getTimeCreated";
 import { Popup } from "../../Utils/Popup";
 import { UserData } from "../../api/UserData";
+import { ReadMore } from "../../ReadMore";
 
 const StyledPostContainer = styled.div`
     display: flex;
@@ -59,9 +60,6 @@ const StyledCaption = styled.p`
     font-family: "Montserrat", sans-serif;
     font-size: 20px;
     max-width: 90%;
-    word-wrap: break-word;
-    max-height: 6em;
-    overflow: hidden;
     margin-bottom: 30px;
 `;
 
@@ -146,7 +144,6 @@ const StyledLikedAndCommented = styled.div`
     display: flex;
     justify-content: space-between;
     color: gray;
-    // padding:
 `;
 
 const StyledLikeAndCommentCount = styled.p`
@@ -216,12 +213,16 @@ export function ProfilePosts() {
                                     }}
                                 ></StyledProfilePicture>
                                 <StyledContentSection>
-                                    <StyledInformations style={noMarginBottom}>
+                                    <StyledInformations>
                                         <StyledName>{user.name}</StyledName>
                                         <StyledPosted>
                                             {displayTime}
                                         </StyledPosted>
-                                        <StyledCaption>{c.body}</StyledCaption>
+                                        <StyledCaption>
+                                            <ReadMore maxLines={1}>
+                                                {c.body}
+                                            </ReadMore>
+                                        </StyledCaption>
                                     </StyledInformations>
                                 </StyledContentSection>
                             </StyledPostSection>
@@ -284,7 +285,9 @@ export function ProfilePosts() {
                             <StyledPosted>{displayTime}</StyledPosted>
                         </StyledInformations>
                         {post.caption ? (
-                            <StyledCaption>{post.caption}</StyledCaption>
+                            <StyledCaption>
+                                <ReadMore maxLines={5}>{post.caption}</ReadMore>
+                            </StyledCaption>
                         ) : null}
                         {post.filePath ? (
                             <StyledPost
