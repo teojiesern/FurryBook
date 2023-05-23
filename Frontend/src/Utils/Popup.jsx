@@ -18,11 +18,15 @@ const StyledBox = styled.div`
     max-height: 70vh;
     margin-top: calc(100vh - 85vh - 20px);
     background: #fff;
-    background-color: #FAFAFA;
-    border-radius: 4px;
-    padding: 20px;
+    background-color: #fafafa;
+    border-radius: 20px;
+    padding: 30px;
     border: 1px solid #999;
     overflow: auto;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
 `;
 
 const StyledClose = styled.span`
@@ -52,9 +56,7 @@ export function Popup(props) {
     return (
         <StyledPopupBox>
             <StyledBox>
-                <StyledClose onClick={props.handleClose}>
-                    x
-                </StyledClose>
+                <StyledClose onClick={props.handleClose}>&times;</StyledClose>
                 <StyledCommentsTop>{props.top}</StyledCommentsTop>
                 {props.content}
             </StyledBox>

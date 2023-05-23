@@ -124,7 +124,6 @@ const CustomNavLink = ({ to, children }) => {
 
 export function ProfileLayout() {
     const data = useOutletContext();
-    console.log(data);
     const backgroundPhoto = data.coverPhotoPath.split("/").pop();
     const profilePic = data.profilePicturePath.split("/").pop();
     const friends =
