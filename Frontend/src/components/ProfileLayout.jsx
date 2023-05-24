@@ -1,9 +1,17 @@
-import React from "react";
-import { Link, Outlet, useLocation, useOutletContext } from "react-router-dom";
+import React, { useEffect } from "react";
+import {
+    Link,
+    Outlet,
+    useLoaderData,
+    useLocation,
+    useOutletContext,
+    useParams,
+} from "react-router-dom";
 import { styled } from "styled-components";
 import { IoSettingsSharp } from "react-icons/io5";
 import { Nav } from "react-bootstrap";
 import { StyledContainer } from "../Utils/StyledContainer";
+import { profilePageData } from "../api/profilePageData";
 
 const StyledUserInfoContainer = styled.div`
     position: relative;
@@ -123,7 +131,8 @@ const CustomNavLink = ({ to, children }) => {
 };
 
 export function ProfileLayout() {
-    const data = useOutletContext();
+    const [data, setData] = React.useState(useOutletContext());
+    const { userId } = useParams();
     const backgroundPhoto = data.coverPhotoPath.split("/").pop();
     const profilePic = data.profilePicturePath.split("/").pop();
     const friends =
@@ -131,6 +140,14 @@ export function ProfileLayout() {
             ? "No Friends"
             : `${data.friendsId.length} Friends`;
 
+    console.log(userId);
+    useEffect(() => {
+        const getProfData = async () => {
+            const temp = await profilePageData(userId);
+            setData(temp);
+        };
+        getProfData();
+    }, []);
     return (
         <StyledContainer>
             <StyledUserInfoContainer>
@@ -157,7 +174,7 @@ export function ProfileLayout() {
                 <StyledNavigation>
                     <CustomNavLink
                         as={Link}
-                        to={`/FurryBook/profile/${data.name}`}
+                        to={`/FurryBook/profile/${data.id}`}
                     >
                         Posts
                     </CustomNavLink>

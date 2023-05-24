@@ -1,3 +1,11 @@
+// reference to more than one loader functions
+// loader={async () => {
+//     const authResult = await authentication();
+//     if (authResult) return authResult;
+
+//     return await profilePageData();
+// }}
+
 import {
     Navigate,
     Route,
@@ -23,6 +31,7 @@ import { Friends } from "./pages/Friends";
 import { Settings } from "./pages/Settings";
 import { currentUserData } from "./api/CurrentUserData";
 import { AllPosts } from "./api/AllPosts";
+import { profilePageData } from "./api/profilePageData";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -53,7 +62,7 @@ const router = createBrowserRouter(
                         loader={authentication}
                     />
                     <Route
-                        path="profile/:user"
+                        path="profile/:userId"
                         element={<ProfileLayout />}
                         loader={authentication}
                     >

@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Document(collection = "Comments")
-public class Comments {
+public class Comments implements Comparable<Comments> {
 
     @Id
     private String id;
@@ -23,11 +23,22 @@ public class Comments {
     private String userId;
     private String postId;
 
-    public Comments(String body, LocalDateTime created, LocalDateTime updated, String userId, String postId){
+    public Comments(String body, LocalDateTime created, LocalDateTime updated, String userId, String postId) {
         this.body = body;
         this.created = created;
         this.updated = updated;
         this.userId = userId;
         this.postId = postId;
+    }
+
+    @Override
+    public int compareTo(Comments other) {
+        if (this.updated.isAfter(other.created)) {
+            return 1;
+        } else if (this.updated.isBefore(other.updated)) {
+            return -1;
+        } else {
+            return 0;
+        }
     }
 }

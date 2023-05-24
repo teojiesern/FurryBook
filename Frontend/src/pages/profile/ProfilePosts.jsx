@@ -3,17 +3,13 @@ import { Form, useLoaderData, useOutletContext } from "react-router-dom";
 import { styled } from "styled-components";
 import { BiLike, BiComment } from "react-icons/bi";
 import { TbShare3 } from "react-icons/tb";
-import { HiGlobeAsiaAustralia } from "react-icons/hi2";
-import { FaBirthdayCake, FaUserFriends } from "react-icons/fa";
-import { MdOutlineDriveFileRenameOutline } from "react-icons/md";
-import { GiLovers } from "react-icons/gi";
-import { IoPersonOutline } from "react-icons/io5";
 import { LikePosts } from "../../api/LikePosts";
 import { getTimeCreated } from "../../Utils/getTimeCreated";
 import { Popup } from "../../Utils/Popup";
 import { UserData } from "../../api/UserData";
 import { ReadMore } from "../../Utils/ReadMore";
 import axios from "axios";
+import { UserInfo } from "../userProfilePage/UserInfo";
 
 const StyledPostContainer = styled.div`
     display: flex;
@@ -113,7 +109,6 @@ const StyledParentContainer = styled.div`
 `;
 
 const changeStyle = {
-    width: "30%",
     margin: "20px 0 50px 40px",
     color: "gray",
     fontFamily: "Montserrat, sans-serif",
@@ -229,7 +224,6 @@ export function ProfilePosts() {
     const [allPost, setAllPost] = React.useState(useLoaderData());
     const [isOpen, setIsOpen] = React.useState(false);
     const [allComments, setAllComments] = React.useState([]);
-    const [details, setDetails] = React.useState([]);
     const [isComment, setIsComment] = React.useState(false);
     const currentLogin = localStorage.getItem("userId");
 
@@ -281,10 +275,6 @@ export function ProfilePosts() {
         } else {
             setAllComments([]);
         }
-    }
-
-    function toggleDetails(data) {
-        setIsComment(false);
     }
 
     const friends =
@@ -399,41 +389,7 @@ export function ProfilePosts() {
 
     return (
         <StyledParentContainer>
-            <StyledPostContainer style={changeStyle}>
-                <StyledName style={{ marginBottom: "25px" }}>Intro</StyledName>
-                <StyledInfosContainer>
-                    <MdOutlineDriveFileRenameOutline style={iconStyle} />
-                    <StyledInfo>{data.name}</StyledInfo>
-                </StyledInfosContainer>
-                <StyledInfosContainer>
-                    <HiGlobeAsiaAustralia style={iconStyle} />
-                    <StyledInfo>{data.email}</StyledInfo>
-                </StyledInfosContainer>
-                <StyledInfosContainer>
-                    <IoPersonOutline style={iconStyle} />
-                    <StyledInfo>{data.gender}</StyledInfo>
-                </StyledInfosContainer>
-                <StyledInfosContainer>
-                    <FaBirthdayCake style={iconStyle} />
-                    <StyledInfo>{data.email}</StyledInfo>
-                </StyledInfosContainer>
-                <StyledInfosContainer>
-                    <GiLovers style={iconStyle} />
-                    <StyledInfo>{data.email}</StyledInfo>
-                </StyledInfosContainer>
-                <StyledInfosContainer>
-                    <FaUserFriends style={iconStyle} />
-                    <StyledInfo>{friends}</StyledInfo>
-                </StyledInfosContainer>
-                <StyledEditButton
-                    onClick={() => {
-                        togglePopup();
-                        toggleDetails(data);
-                    }}
-                >
-                    Edit Details
-                </StyledEditButton>
-            </StyledPostContainer>
+            <UserInfo data={data} friends={friends} />
             <div style={{ width: "70%" }}>{posts}</div>
             {isOpen && (
                 <Popup

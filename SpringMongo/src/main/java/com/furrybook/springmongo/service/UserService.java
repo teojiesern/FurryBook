@@ -2,6 +2,7 @@ package com.furrybook.springmongo.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -120,6 +121,12 @@ public class UserService {
     public User updateRelationshipStatus(String Id, String relationshipStatus) {
         User user = repository.findById(Id).get();
         user.setRelationshipStatus(relationshipStatus);
+        return repository.save(user);
+    }
+
+    public User updateBirthDate(String Id, LocalDate newBirthDate){
+        User user = repository.findById(Id).get();
+        user.setBirthdate(newBirthDate);
         return repository.save(user);
     }
 

@@ -1,5 +1,6 @@
 package com.furrybook.springmongo.model.User;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.Stack;
@@ -23,6 +24,8 @@ public interface User {
     Set<String> getFriendsId();
 
     void setName(String name);
+
+    void setBirthdate(LocalDate birthdate);
 
     void setEmail(String email);
 

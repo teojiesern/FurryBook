@@ -15,7 +15,7 @@ const StyledLogo = styled.div`
 `;
 
 const StyledNav = styled(Nav)`
-    background-color: #FFF;
+    background-color: #fff;
     color: #153fac;
     height: 100%;
     font-size: 20px;
@@ -77,7 +77,7 @@ export function Navbar() {
                 </Icon>
                 Home
             </CustomNavLink>
-            <CustomNavLink as={Link} to={`/FurryBook/profile/${userData.name}`}>
+            <CustomNavLink as={Link} to={`/FurryBook/profile/${userData.id}`}>
                 <Icon>
                     <RiProfileFill />
                 </Icon>
@@ -89,10 +89,7 @@ export function Navbar() {
                 </Icon>
                 Friends
             </CustomNavLink>
-            <CustomNavLink
-                as={Link}
-                to={`/FurryBook/settings`}
-            >
+            <CustomNavLink as={Link} to={`/FurryBook/settings`}>
                 <Icon>
                     <RiSettings3Fill />
                 </Icon>

@@ -1,7 +1,9 @@
 package com.furrybook.springmongo.model.Content;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -17,7 +19,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Document(collection = "posts")
-public class Posts {
+public class Posts implements Comparable<Posts> {
     @Id
     private String id;
     private String caption;
@@ -28,5 +30,16 @@ public class Posts {
     private List<String> likes;
     private String userId;
     @DocumentReference
-    private List<Comments> comments;
+    private ArrayList<Comments> comments;
+
+    @Override
+    public int compareTo(Posts other) {
+        if (this.created.isAfter(other.created)) {
+            return 1;
+        } else if (this.created.isBefore(other.created)) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }
 }
