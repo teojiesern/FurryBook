@@ -162,7 +162,7 @@ export function TopNav() {
                     <StyledOptionContainer style={{ display: styling }}>
                         <StyledOption
                             as={Link}
-                            to={`/FurryBook/profile/${data.name}`}
+                            to={`/FurryBook/profile/${data.id}`}
                             onClick={handleClick}
                         >
                             <StyledLeftPortion>

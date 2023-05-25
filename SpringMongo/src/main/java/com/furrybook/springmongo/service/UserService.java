@@ -2,7 +2,10 @@ package com.furrybook.springmongo.service;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -86,9 +89,9 @@ public class UserService {
     }
 
     // public User updateEmail(String Id) {
-    //     User user = repository.findById(Id).get();
-    //     user.setName(name);
-    //     return repository.save(user);
+    // User user = repository.findById(Id).get();
+    // user.setName(name);
+    // return repository.save(user);
     // }
 
     public User updatePassword(String Id, String password) {
@@ -114,6 +117,32 @@ public class UserService {
         user.setAge(age);
         return repository.save(user);
     }
+
+    public User updateRelationshipStatus(String Id, String relationshipStatus) {
+        User user = repository.findById(Id).get();
+        user.setRelationshipStatus(relationshipStatus);
+        return repository.save(user);
+    }
+
+    public User updateBirthDate(String Id, LocalDate newBirthDate){
+        User user = repository.findById(Id).get();
+        user.setBirthdate(newBirthDate);
+        return repository.save(user);
+    }
+
+    public User updateHobbies(String Id, ArrayList<String> hobbies) {
+        User user = repository.findById(Id).get();
+        user.setHobbies(hobbies);
+        return repository.save(user);
+    }
+
+    public User addJobs(String Id, String newJob) {
+        User user = repository.findById(Id).get();
+        user.getJobs().push(newJob);
+        return repository.save(user);
+    }
+
+    // public
 
     public String deleteUser(String Id) {
         User user = repository.findById(Id).orElse(null);

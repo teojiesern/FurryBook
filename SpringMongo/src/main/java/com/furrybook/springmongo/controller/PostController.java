@@ -11,6 +11,7 @@ import com.furrybook.springmongo.model.User.User;
 import com.furrybook.springmongo.service.PostService;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -68,6 +69,10 @@ public class PostController {
     @GetMapping("/user/{userId}/posts")
     public ResponseEntity<List<Posts>> getPostsByUser(@PathVariable String userId) {
         List<Posts> posts = service.getPostsByUser(userId);
+        posts.sort(Collections.reverseOrder());
+        for (Posts post : posts) {
+            post.getComments().sort(Collections.reverseOrder());
+        }
         return ResponseEntity.ok(posts);
     }
 

@@ -1,7 +1,11 @@
 package com.furrybook.springmongo.model.User;
 
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Stack;
 
 import org.springframework.data.annotation.Id;
 
@@ -12,13 +16,22 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdminUser implements User{
+public class AdminUser implements User {
     @Id
     private String id;
-    private String name, email, password, gender, phoneNumber;
+    private String name, email, password, gender, phoneNumber, relationshipStatus;
+    private LocalDate birthDate;
     private int age;
     private String userType = "admin";
     private String profilePicturePath;
     private String coverPhotoPath;
+    private ArrayList<String> hobbies = new ArrayList<>();
+    private Stack<String> jobs = new Stack<>();
     private Set<String> friendsId = new HashSet<String>();
+
+    @Override
+    public void setBirthdate(LocalDate birthdate) {
+        this.birthDate = birthdate;
+        this.age = Period.between(birthdate, LocalDate.now()).getYears();
+    }
 }
