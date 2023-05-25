@@ -18,10 +18,8 @@ import { Layout } from "./components/Layout";
 import { Home } from "./pages/Home";
 import { Login, action as loginAction } from "./pages/Login";
 import { Signup } from "./pages/Signup";
-import {
-    ProfilePosts,
-    action as postCommentAction,
-} from "./pages/profile/ProfilePosts";
+import { ProfilePosts } from "./pages/profile/ProfilePosts";
+import { action as postCommentAction } from "./pages/Posts";
 import { ProfileFriends } from "./pages/profile/ProfileFriends";
 import { authentication, loginPageAuth } from "./Utils/authentication";
 import { TopNav } from "./components/TopNav";
@@ -50,7 +48,12 @@ const router = createBrowserRouter(
                     element={<TopNav />}
                     loader={currentUserData}
                 >
-                    <Route index element={<Home />} loader={authentication} />
+                    <Route
+                        index
+                        element={<Home />}
+                        loader={authentication}
+                        action={postCommentAction}
+                    />
                     <Route
                         path="friends"
                         element={<Friends />}

@@ -11,7 +11,6 @@ import com.furrybook.springmongo.model.User.User;
 import com.furrybook.springmongo.service.PostService;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 

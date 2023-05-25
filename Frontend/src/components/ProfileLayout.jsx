@@ -12,6 +12,7 @@ import { IoSettingsSharp } from "react-icons/io5";
 import { Nav } from "react-bootstrap";
 import { StyledContainer } from "../Utils/StyledContainer";
 import { profilePageData } from "../api/profilePageData";
+import { AllPosts } from "../api/AllPosts";
 
 const StyledUserInfoContainer = styled.div`
     position: relative;
@@ -140,14 +141,14 @@ export function ProfileLayout() {
             ? "No Friends"
             : `${data.friendsId.length} Friends`;
 
-    console.log(userId);
     useEffect(() => {
         const getProfData = async () => {
             const temp = await profilePageData(userId);
             setData(temp);
         };
+
         getProfData();
-    }, []);
+    }, [userId]);
     return (
         <StyledContainer>
             <StyledUserInfoContainer>
