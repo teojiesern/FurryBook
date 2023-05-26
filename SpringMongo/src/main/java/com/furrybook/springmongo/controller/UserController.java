@@ -1,8 +1,10 @@
 package com.furrybook.springmongo.controller;
 
-import com.furrybook.springmongo.model.Login.LoginRequest;
 import com.furrybook.springmongo.model.User.StandardUser;
 import com.furrybook.springmongo.model.User.User;
+import com.furrybook.springmongo.model.extra.LoginRequest;
+import com.furrybook.springmongo.model.extra.UserUpdateRequest;
+import com.furrybook.springmongo.repository.UserRepository;
 import com.furrybook.springmongo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,9 @@ import java.util.List;
 public class UserController {
     @Autowired
     private UserService service;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping
@@ -164,5 +169,37 @@ public class UserController {
         } else {
             return ResponseEntity.ok("Not friends.");
         }
+    }
+
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @PutMapping("/update/{id}")
+    public User updateUser(@PathVariable("id") String id, @RequestBody UserUpdateRequest request) {
+        User user = service.getUserbyId(id);
+
+        if (request.getName() != null) {
+            user.setName(request.getName());
+        }
+
+        if (request.getGender() != null) {
+            user.setGender(request.getGender());
+        }
+
+        if (request.getPhoneNumber() != null) {
+            user.setPhoneNumber(request.getPhoneNumber());
+        }
+
+        if (request.getRelationshipStatus() != null) {
+            user.setRelationshipStatus(request.getRelationshipStatus());
+        }
+
+        if (request.getBirthDate() != null) {
+            user.setBirthdate(request.getBirthDate());
+        }
+
+        if (request.getHobbies() != null) {
+            user.setHobbies(request.getHobbies());
+        }
+
+        return userRepository.save(user);
     }
 }

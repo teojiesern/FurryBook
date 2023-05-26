@@ -289,15 +289,15 @@ export function Posts({ userId, profilePic, data }) {
                         ) : null}
                         {post.filePath ? (
                             post.filePath.endsWith(".mp4") ? (
-                                    <video
-                                        src={`/assets/post storage/${post.name}`}
-                                        loop
-                                        controls
-                                        style={{
-                                            height: "400px",
-                                            width: "400px",
-                                        }}
-                                    ></video>
+                                <video
+                                    src={`/assets/post storage/${post.name}`}
+                                    loop
+                                    controls
+                                    style={{
+                                        height: "400px",
+                                        width: "400px",
+                                    }}
+                                ></video>
                             ) : (
                                 <StyledPost
                                     style={{
@@ -372,7 +372,9 @@ export function Posts({ userId, profilePic, data }) {
                             : allComments
                     }
                     handleClose={togglePopup}
-                    top={"Comments Section"}
+                    topDisplay={"Comments Section"}
+                    width="50%"
+                    right="calc(25% - 30px)"
                 />
             )}
         </div>
