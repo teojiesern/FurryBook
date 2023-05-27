@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -141,8 +140,6 @@ public class UserService {
         user.getJobs().push(newJob);
         return repository.save(user);
     }
-
-    // public
 
     public String deleteUser(String Id) {
         User user = repository.findById(Id).orElse(null);

@@ -19,7 +19,6 @@ import { Home } from "./pages/Home";
 import { Login, action as loginAction } from "./pages/Login";
 import { Signup } from "./pages/Signup";
 import { ProfilePosts } from "./pages/profile/ProfilePosts";
-import { action as postCommentAction } from "./pages/Posts";
 import { ProfileFriends } from "./pages/profile/ProfileFriends";
 import { authentication, loginPageAuth } from "./Utils/authentication";
 import { TopNav } from "./components/TopNav";
@@ -29,7 +28,7 @@ import { Friends } from "./pages/Friends";
 import { Settings } from "./pages/Settings";
 import { currentUserData } from "./api/CurrentUserData";
 import { AllPosts } from "./api/AllPosts";
-import { profilePageData } from "./api/profilePageData";
+import { PostCommentAction } from "./api/PostCommentAction";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -52,7 +51,7 @@ const router = createBrowserRouter(
                         index
                         element={<Home />}
                         loader={authentication}
-                        action={postCommentAction}
+                        action={PostCommentAction}
                     />
                     <Route
                         path="friends"
@@ -72,8 +71,7 @@ const router = createBrowserRouter(
                         <Route
                             index
                             element={<ProfilePosts />}
-                            loader={AllPosts}
-                            action={postCommentAction}
+                            action={PostCommentAction}
                         />
                         <Route
                             path="friends"

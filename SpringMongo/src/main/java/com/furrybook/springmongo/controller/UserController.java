@@ -184,6 +184,10 @@ public class UserController {
             user.setGender(request.getGender());
         }
 
+        if (request.getLocation() != null) {
+            user.setLocation(request.getLocation());
+        }
+
         if (request.getPhoneNumber() != null) {
             user.setPhoneNumber(request.getPhoneNumber());
         }

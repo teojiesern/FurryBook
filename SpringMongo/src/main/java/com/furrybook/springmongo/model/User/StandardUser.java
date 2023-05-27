@@ -19,7 +19,7 @@ import org.springframework.data.annotation.Id;
 public class StandardUser implements User {
     @Id
     private String id;
-    private String name, email, password, gender, phoneNumber, relationshipStatus;
+    private String name, email, password, gender, phoneNumber, relationshipStatus, location;
     private LocalDate birthDate;
     private int age;
     private String userType = "user";

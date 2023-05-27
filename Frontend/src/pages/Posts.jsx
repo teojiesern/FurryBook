@@ -1,4 +1,5 @@
 import React from "react";
+import { useActionData } from "react-router-dom";
 import { getTimeCreated } from "../Utils/getTimeCreated";
 import { LikePosts } from "../api/LikePosts";
 import { AllPosts } from "../api/AllPosts";
@@ -9,7 +10,6 @@ import { TbShare3 } from "react-icons/tb";
 import { Form } from "react-router-dom";
 import { UserData } from "../api/UserData";
 import { Popup } from "../Utils/Popup";
-import axios from "axios";
 
 const StyledPostContainer = styled.div`
     display: flex;
@@ -160,36 +160,27 @@ const commentContainerStyle = {
     marginBottom: "0",
 };
 
-export async function action({ request }) {
-    const formData = await request.formData();
-    const comment = formData.get("comment");
-    const postId = formData.get("postId");
-    const user = localStorage.getItem("userId");
-
-    try {
-        const response = await axios.post(
-            `http://localhost:3001/comments/${user}`,
-            {
-                commentBody: comment,
-                postId: postId,
-            }
-        );
-    } catch (error) {
-        console.log("error occured: " + error);
-    }
-    return null;
-}
-
 //needs three parameter which are the userId of the user that you want to see their post, just go local storage and get this, the profilPic which uses the data.profilePicturePath.split("/").pop(), and also the data which is user object that posted these posts
-export function Posts({ userId, profilePic, data }) {
+export function Posts({ userId, profilePic, datas }) {
+    const [data, setData] = React.useState(datas);
     const [allPost, setAllPost] = React.useState([]);
     const [isOpen, setIsOpen] = React.useState(false);
     const [allComments, setAllComments] = React.useState([]);
-
     const currentLogin = localStorage.getItem("userId");
 
     const togglePopup = () => {
         setIsOpen(!isOpen);
+    };
+
+    const updateComments = (postId) => {
+        const updatedPosts = allPost.map((post) => {
+            if (post.id === postId) {
+                const newComment = [...post.comments, "mockComment"];
+                return { ...post, comments: newComment };
+            }
+            return post;
+        });
+        setAllPost(updatedPosts);
     };
 
     React.useEffect(() => {
@@ -279,7 +270,7 @@ export function Posts({ userId, profilePic, data }) {
                     ></StyledProfilePicture>
                     <StyledContentSection>
                         <StyledInformations>
-                            <StyledName>{data.name}</StyledName>
+                            <StyledName>{data?.name}</StyledName>
                             <StyledPosted>{displayTime}</StyledPosted>
                         </StyledInformations>
                         {post.caption ? (
@@ -315,8 +306,8 @@ export function Posts({ userId, profilePic, data }) {
                     <StyledLikeAndCommentCount
                         style={pointer}
                         onClick={async () => {
-                            togglePopup();
                             await toggleComments(post.comments);
+                            togglePopup();
                         }}
                     >
                         {post.comments.length + " Comments"}
@@ -356,7 +347,12 @@ export function Posts({ userId, profilePic, data }) {
                         style={inputStyle}
                         placeholder="Type a comment..."
                     ></input>
-                    <button style={submitButtonStyle}>Comment</button>
+                    <button
+                        style={submitButtonStyle}
+                        onClick={() => updateComments(post.id)}
+                    >
+                        Comment
+                    </button>
                 </Form>
             </StyledPostContainer>
         );
@@ -366,16 +362,15 @@ export function Posts({ userId, profilePic, data }) {
             <div>{posts}</div>
             {isOpen && (
                 <Popup
-                    content={
-                        allComments.length === 0
-                            ? "No comments yet, be the first to comment"
-                            : allComments
-                    }
                     handleClose={togglePopup}
                     topDisplay={"Comments Section"}
                     width="50%"
                     right="calc(25% - 30px)"
-                />
+                >
+                    {allComments.length === 0
+                        ? "No comments yet, be the first to comment"
+                        : allComments}
+                </Popup>
             )}
         </div>
     );

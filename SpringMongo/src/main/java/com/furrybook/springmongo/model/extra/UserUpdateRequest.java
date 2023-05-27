@@ -11,6 +11,7 @@ public class UserUpdateRequest {
     private String gender;
     private String phoneNumber;
     private String relationshipStatus;
+    private String location;
     private LocalDate birthDate;
     private ArrayList<String> hobbies;
 

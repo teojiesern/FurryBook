@@ -1,9 +1,9 @@
 import React from "react";
 import { useOutletContext, useParams } from "react-router-dom";
 import { styled } from "styled-components";
-
 import { UserInfo } from "../userProfilePage/UserInfo";
 import { Posts } from "../Posts";
+import axios from "axios";
 
 export const StyledParentContainer = styled.div`
     display: flex;
@@ -12,7 +12,8 @@ export const StyledParentContainer = styled.div`
 `;
 
 export function ProfilePosts() {
-    const [profilePic, data] = useOutletContext();
+    const [profilePic, datas] = useOutletContext();
+    const [data, setData] = React.useState(datas);
     const { userId } = useParams();
 
     const friends =
@@ -20,10 +21,30 @@ export function ProfilePosts() {
             ? "No Friends"
             : `${data.friendsId.length} Friends`;
 
+    async function handleSubmission(e) {
+        e.preventDefault();
+
+        // console.log(e.target.element.being.value);
+        const updatedInfo = {
+            name: e.target.elements.name.value,
+            gender: e.target.elements.gender.value,
+            phoneNumber: e.target.elements.phoneNumber.value,
+            relationshipStatus: e.target.elements.relationshipStatus.value,
+            birthDate: e.target.elements.birthDate.value,
+            location: e.target.elements.location.value,
+        };
+        const response = await axios.put(
+            `http://localhost:3001/users/update/${data.id}`,
+            updatedInfo
+        );
+        setData({ ...data, ...updatedInfo });
+        window.location.reload();
+    }
+
     return (
         <StyledParentContainer>
-            <UserInfo data={data} friends={friends} />
-            <Posts userId={userId} profilePic={profilePic} data={data} />
+            <UserInfo data={data} friends={friends} submit={handleSubmission} />
+            <Posts userId={userId} profilePic={profilePic} datas={data} />
         </StyledParentContainer>
     );
 }

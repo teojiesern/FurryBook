@@ -1,12 +1,12 @@
 import React from "react";
-import { styled } from "styled-components";
+import { css, styled } from "styled-components";
 import { HiGlobeAsiaAustralia } from "react-icons/hi2";
 import { FaBirthdayCake, FaUserFriends } from "react-icons/fa";
 import { MdOutlineDriveFileRenameOutline } from "react-icons/md";
 import { GiLovers } from "react-icons/gi";
 import { IoPersonOutline } from "react-icons/io5";
+import { TfiLocationPin } from "react-icons/tfi";
 import { Popup } from "../../Utils/Popup";
-import { Form } from "react-router-dom";
 
 const StyledPostContainer = styled.div`
     display: flex;
@@ -68,7 +68,6 @@ const StyledCoverPhoto = styled.div`
 const StyledEditDetailContainer = styled.div`
     display: flex;
     margin: 10px;
-    justify-content: space-between;
 `;
 
 const StyledProfAndCover = styled.div`
@@ -76,12 +75,6 @@ const StyledProfAndCover = styled.div`
     flex-direction: column;
     align-items: center;
     flex: 3;
-`;
-
-const StyledInformationContainer = styled.div`
-    display: grid;
-    grid-template-columns: 60px 60px;
-    flex: 6;
 `;
 
 const StyledDividerContainer = styled.div`
@@ -117,6 +110,67 @@ const StyledDescription = styled.h1`
     margin: 0;
 `;
 
+const StyledInput = styled.input`
+    width: 60%;
+    padding: 10px;
+    border: none;
+    border-bottom: 1px solid grey;
+    outline: none;
+
+    ${(props) =>
+        props.disabled &&
+        css`
+            background-color: white;
+        `}
+`;
+
+const StyledOverallContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 20px;
+    margin-top: 20px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+`;
+
+const StyledSubmitForm = styled.button`
+    background-color: #153fac;
+    color: white;
+    font-family: Montserrat, sans-serif;
+    border: none;
+    padding: 10px;
+    width: 20%;
+    align-self: flex-end;
+    border-radius: 10px;
+    margin-top: 20px;
+`;
+
+const StyledHobbiesContainer = styled.div`
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 30% 0 0;
+`;
+
+const StyledDeleteButton = styled.button`
+    border: none;
+    width: 10%;
+    border-radius: 200px;
+`;
+
+const StyledUL = styled.ul`
+    padding: 0;
+    padding-left: 20px;
+`;
+
+const StyledAddSpan = styled.span`
+    font-size: 15px;
+    margin-left: 20px;
+    color: #153fac;
+    cursor: pointer;
+    font-family: Montserrat, sans-serif;
+`;
+
 const changeStyle = {
     margin: "20px 0 50px 40px",
     color: "gray",
@@ -134,67 +188,65 @@ const fakeIconStyle = {
 const formStyle = {
     display: "grid",
     gridTemplateColumns: "1fr 1fr",
-    flex: 6,
+    gridTemplateRows: "15% 15%",
+    alignContent: "start",
+    flex: "6",
 };
 
-export function UserInfo({ data, friends }) {
+const selectStyle = {
+    background: "transparent",
+    border: "none",
+    outline: "none",
+    maxWidth: "20px",
+};
+
+const marginTop = {
+    marginTop: "10px",
+};
+
+export function UserInfo({ data, friends, submit }) {
     const [isOpen, setIsOpen] = React.useState(false);
-    const [details, setDetails] = React.useState([]);
+    const [relationshipStatus, setRelationshipStatus] = React.useState(
+        data.relationshipStatus
+    );
+    const [gender, setGender] = React.useState(data.gender);
+    const [location, setLocation] = React.useState(data.location);
+    const [hob, setHob] = React.useState(data.hobbies);
     const profilePic = data.profilePicturePath.split("/").pop();
     const coverPhoto = data.coverPhotoPath.split("/").pop();
+    const hobbies =
+        data.hobbies.length != 0
+            ? data.hobbies.map((hobby, index) => (
+                  <li key={index}>{<StyledInfo>{hobby}</StyledInfo>}</li>
+              ))
+            : null;
+
+    const hobbiesForEdit =
+        hob.length != 0
+            ? hob.map((hobby, index) => {
+                  return (
+                      <StyledHobbiesContainer key={index}>
+                          <StyledInfo>{hobby}</StyledInfo>
+                          <StyledDeleteButton
+                              onClick={(event) => {
+                                  event.preventDefault();
+                                  setHob((prevHob) =>
+                                      prevHob.filter((h) => h !== hobby)
+                                  );
+                              }}
+                          >
+                              &times;
+                          </StyledDeleteButton>
+                      </StyledHobbiesContainer>
+                  );
+              })
+            : null;
+
+    function addHobby() {}
 
     const togglePopup = () => {
         setIsOpen(!isOpen);
     };
-
-    function toggleDetails() {
-        const detailOfUser = (
-            <StyledEditDetailContainer>
-                <StyledProfAndCover>
-                    <StyledEditProfileAndCover>
-                        <StyledDescription>Profile Picture</StyledDescription>
-                        <StyledChangeText>Change</StyledChangeText>
-                    </StyledEditProfileAndCover>
-                    <StyledProfilePicture
-                        style={{
-                            backgroundImage: `url("/assets/profile pictures/${profilePic}")`,
-                        }}
-                    ></StyledProfilePicture>
-                    <StyledEditProfileAndCover>
-                        <StyledDescription>Cover Photo</StyledDescription>
-                        <StyledChangeText>Change</StyledChangeText>
-                    </StyledEditProfileAndCover>
-                    <StyledCoverPhoto
-                        style={{
-                            backgroundImage: `url("/assets/background photos/${coverPhoto}")`,
-                        }}
-                    ></StyledCoverPhoto>
-                </StyledProfAndCover>
-                <StyledDividerContainer>
-                    <StyledDividerLine></StyledDividerLine>
-                </StyledDividerContainer>
-                <Form method="post" style={formStyle}>
-                    <div>
-                        <StyledDescription>Full Name</StyledDescription>
-                        <input type="text" />
-                    </div>
-                    <div>
-                        <StyledDescription>Birth Date</StyledDescription>
-                        <input type="date" />
-                    </div>
-                    <div>
-                        <StyledDescription>Phone Number</StyledDescription>
-                        <input type="tel" />
-                    </div>
-                    <div>
-                        <StyledDescription>Full Name</StyledDescription>
-                        <input type="" />
-                    </div>
-                </Form>
-            </StyledEditDetailContainer>
-        );
-        setDetails(detailOfUser);
-    }
 
     return (
         <div style={{ width: "30%", fontFamily: "Montserrat, sans-serif" }}>
@@ -207,6 +259,10 @@ export function UserInfo({ data, friends }) {
                 <StyledInfosContainer>
                     <img src="/assets/age.png" style={fakeIconStyle} />
                     <StyledInfo>{data.age}</StyledInfo>
+                </StyledInfosContainer>
+                <StyledInfosContainer>
+                    <TfiLocationPin style={iconStyle} />
+                    <StyledInfo>{data.location}</StyledInfo>
                 </StyledInfosContainer>
                 <StyledInfosContainer>
                     <HiGlobeAsiaAustralia style={iconStyle} />
@@ -232,10 +288,15 @@ export function UserInfo({ data, friends }) {
                     <FaUserFriends style={iconStyle} />
                     <StyledInfo>{friends}</StyledInfo>
                 </StyledInfosContainer>
+                <StyledName style={{ margin: "3vh 0 20px 0" }}>
+                    Hobbies
+                </StyledName>
+                <StyledInfosContainer>
+                    <StyledUL>{hobbies}</StyledUL>
+                </StyledInfosContainer>
                 <StyledEditButton
                     onClick={() => {
                         togglePopup();
-                        toggleDetails();
                     }}
                 >
                     Edit Details
@@ -244,12 +305,234 @@ export function UserInfo({ data, friends }) {
 
             {isOpen && (
                 <Popup
-                    content={details}
                     handleClose={togglePopup}
                     topDisplay={"Edit Your Profile"}
                     width="85%"
+                    height="95%"
                     right="calc(8% - 30px)"
-                />
+                >
+                    <StyledOverallContainer>
+                        <StyledEditDetailContainer>
+                            <StyledProfAndCover>
+                                <StyledEditProfileAndCover>
+                                    <StyledDescription>
+                                        Profile Picture
+                                    </StyledDescription>
+                                    <StyledChangeText>Change</StyledChangeText>
+                                </StyledEditProfileAndCover>
+                                <StyledProfilePicture
+                                    style={{
+                                        backgroundImage: `url("/assets/profile pictures/${profilePic}")`,
+                                    }}
+                                ></StyledProfilePicture>
+                                <StyledEditProfileAndCover>
+                                    <StyledDescription>
+                                        Cover Photo
+                                    </StyledDescription>
+                                    <StyledChangeText>Change</StyledChangeText>
+                                </StyledEditProfileAndCover>
+                                <StyledCoverPhoto
+                                    style={{
+                                        backgroundImage: `url("/assets/background photos/${coverPhoto}")`,
+                                    }}
+                                ></StyledCoverPhoto>
+                            </StyledProfAndCover>
+                            <StyledDividerContainer>
+                                <StyledDividerLine></StyledDividerLine>
+                            </StyledDividerContainer>
+                            <form
+                                style={formStyle}
+                                onSubmit={async (e) => {
+                                    await submit(e);
+                                    setIsOpen(!isOpen);
+                                }}
+                                id="editDetailForm"
+                            >
+                                <div>
+                                    <StyledDescription style={marginTop}>
+                                        Full Name
+                                    </StyledDescription>
+                                    <StyledInput
+                                        type="text"
+                                        name="name"
+                                        defaultValue={data.name}
+                                    />
+                                </div>
+                                <div>
+                                    <StyledDescription style={marginTop}>
+                                        Birth Date
+                                    </StyledDescription>
+                                    <StyledInput
+                                        type="date"
+                                        name="birthDate"
+                                        defaultValue={data.birthDate}
+                                    />
+                                </div>
+                                <div>
+                                    <StyledDescription style={marginTop}>
+                                        Location
+                                    </StyledDescription>
+                                    <StyledInput
+                                        type="text"
+                                        name="location"
+                                        value={location}
+                                        disabled
+                                    />
+                                    <span>
+                                        <select
+                                            style={selectStyle}
+                                            onChange={(e) => {
+                                                setLocation(e.target.value);
+                                            }}
+                                            defaultValue={location}
+                                        >
+                                            <option value="Johor">Johor</option>
+                                            <option value="Kedah">Kedah</option>
+                                            <option value="Kelantan">
+                                                Kelantan
+                                            </option>
+                                            <option value="Kuala Lumpur">
+                                                Kuala Lumpur
+                                            </option>
+                                            <option value="Labuan">
+                                                Labuan
+                                            </option>
+                                            <option value="Melaka">
+                                                Melaka
+                                            </option>
+                                            <option value="Negeri Sembilan">
+                                                Negeri Sembilan
+                                            </option>
+                                            <option value="Pahang">
+                                                Pahang
+                                            </option>
+                                            <option value="Penang">
+                                                Penang
+                                            </option>
+                                            <option value="Perak">Perak</option>
+                                            <option value="Perlis">
+                                                Perlis
+                                            </option>
+                                            <option value="Putrajaya">
+                                                Putrajaya
+                                            </option>
+                                            <option value="Sabah">Sabah</option>
+                                            <option value="Sarawak">
+                                                Sarawak
+                                            </option>
+                                            <option value="Selangor">
+                                                Selangor
+                                            </option>
+                                            <option value="Terengganu">
+                                                Terengganu
+                                            </option>
+                                        </select>
+                                    </span>
+                                </div>
+                                <div>
+                                    <StyledDescription style={marginTop}>
+                                        Gender
+                                    </StyledDescription>
+                                    <StyledInput
+                                        type=""
+                                        name="gender"
+                                        value={gender}
+                                        disabled
+                                    />
+                                    <span>
+                                        <select
+                                            style={selectStyle}
+                                            defaultValue={gender}
+                                            onChange={(e) => {
+                                                setGender(e.target.value);
+                                            }}
+                                        >
+                                            <option value="Male">Male</option>
+                                            <option value="Female">
+                                                Female
+                                            </option>
+                                            <option value="Prefer not to say">
+                                                Prefer not to say
+                                            </option>
+                                        </select>
+                                    </span>
+                                </div>
+                                <div>
+                                    <StyledDescription style={marginTop}>
+                                        Phone Number
+                                    </StyledDescription>
+                                    <StyledInput
+                                        type="tel"
+                                        defaultValue={data.phoneNumber}
+                                        name="phoneNumber"
+                                        pattern="[0-9]{3}-[0-9]{7,8}"
+                                    />
+                                </div>
+                                <div>
+                                    <StyledDescription style={marginTop}>
+                                        Relationship Status
+                                    </StyledDescription>
+                                    <StyledInput
+                                        type=""
+                                        name="relationshipStatus"
+                                        value={relationshipStatus}
+                                        disabled
+                                    />
+                                    <span>
+                                        <select
+                                            style={selectStyle}
+                                            defaultValue={relationshipStatus}
+                                            onChange={(e) => {
+                                                setRelationshipStatus(
+                                                    e.target.value
+                                                );
+                                            }}
+                                        >
+                                            <option value="In a relationship">
+                                                In a Relationship
+                                            </option>
+                                            <option value="Complicated">
+                                                Complicated
+                                            </option>
+                                            <option value="Single">
+                                                Single
+                                            </option>
+                                            <option value="Prefer not to say">
+                                                Prefer not to say
+                                            </option>
+                                        </select>
+                                    </span>
+                                </div>
+                                <div style={marginTop}>
+                                    <StyledDescription style={marginTop}>
+                                        Hobbies
+                                    </StyledDescription>
+                                    {hobbiesForEdit}
+                                    <div
+                                        style={{
+                                            display: "flex",
+                                            alignItems: "end",
+                                        }}
+                                    >
+                                        <StyledInput type="text" />
+                                        <StyledAddSpan onClick={addHobby}>
+                                            Add
+                                        </StyledAddSpan>
+                                    </div>
+                                </div>
+                                <div style={marginTop}>
+                                    <StyledDescription style={marginTop}>
+                                        Jobs
+                                    </StyledDescription>
+                                    <StyledInput type="text" />
+                                </div>
+                            </form>
+                        </StyledEditDetailContainer>
+                        <StyledSubmitForm type="submit" form="editDetailForm">
+                            Save Changes
+                        </StyledSubmitForm>
+                    </StyledOverallContainer>
+                </Popup>
             )}
         </div>
     );

@@ -27,6 +27,8 @@ public interface User {
 
     void setBirthdate(LocalDate birthdate);
 
+    void setLocation(String location);
+
     void setEmail(String email);
 
     void setPassword(String password);
