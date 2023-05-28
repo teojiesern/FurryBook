@@ -21,10 +21,9 @@ export function ProfilePosts() {
             ? "No Friends"
             : `${data.friendsId.length} Friends`;
 
-    async function handleSubmission(e) {
+    async function handleSubmission(e, hob, hobUpdates, jobUpdate, allJobs) {
         e.preventDefault();
 
-        // console.log(e.target.element.being.value);
         const updatedInfo = {
             name: e.target.elements.name.value,
             gender: e.target.elements.gender.value,
@@ -32,13 +31,19 @@ export function ProfilePosts() {
             relationshipStatus: e.target.elements.relationshipStatus.value,
             birthDate: e.target.elements.birthDate.value,
             location: e.target.elements.location.value,
+            hobbies: hob,
+            hobbiesUpdates: hobUpdates,
+            jobUpdates: jobUpdate,
+            jobs: allJobs,
         };
+
+        console.log(jobUpdate);
         const response = await axios.put(
             `http://localhost:3001/users/update/${data.id}`,
             updatedInfo
         );
         setData({ ...data, ...updatedInfo });
-        window.location.reload();
+        // window.location.reload();
     }
 
     return (

@@ -287,6 +287,7 @@ export function Posts({ userId, profilePic, datas }) {
                                     style={{
                                         height: "400px",
                                         width: "400px",
+                                        display: isOpen ? "none" : null,
                                     }}
                                 ></video>
                             ) : (

@@ -6,6 +6,7 @@ const StyledPopupBox = styled.div`
     background: #00000050;
     width: 100%;
     height: 100vh;
+    z-index: 99999;
     top: 0;
     left: 0;
 `;

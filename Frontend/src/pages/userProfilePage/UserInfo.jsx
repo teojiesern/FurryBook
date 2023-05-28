@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { css, styled } from "styled-components";
 import { HiGlobeAsiaAustralia } from "react-icons/hi2";
 import { FaBirthdayCake, FaUserFriends } from "react-icons/fa";
@@ -212,12 +212,24 @@ export function UserInfo({ data, friends, submit }) {
     const [gender, setGender] = React.useState(data.gender);
     const [location, setLocation] = React.useState(data.location);
     const [hob, setHob] = React.useState(data.hobbies);
+    const [hobUpdates, setHobUpdates] = React.useState([]);
+    const [allJobs, setAllJobs] = React.useState(data.jobs);
+    const [jobUpdate, setJobUpdate] = React.useState([]);
     const profilePic = data.profilePicturePath.split("/").pop();
     const coverPhoto = data.coverPhotoPath.split("/").pop();
+    const hobbiesRef = useRef(null);
+    const jobsRef = useRef(null);
     const hobbies =
         data.hobbies.length != 0
             ? data.hobbies.map((hobby, index) => (
                   <li key={index}>{<StyledInfo>{hobby}</StyledInfo>}</li>
+              ))
+            : null;
+
+    const jobs =
+        data.jobs.length != 0
+            ? data.jobs.map((job, index) => (
+                  <li key={index}>{<StyledInfo>{job}</StyledInfo>}</li>
               ))
             : null;
 
@@ -226,13 +238,19 @@ export function UserInfo({ data, friends, submit }) {
             ? hob.map((hobby, index) => {
                   return (
                       <StyledHobbiesContainer key={index}>
-                          <StyledInfo>{hobby}</StyledInfo>
+                          <StyledInfo style={{ marginLeft: "10px" }}>
+                              {hobby}
+                          </StyledInfo>
                           <StyledDeleteButton
                               onClick={(event) => {
                                   event.preventDefault();
                                   setHob((prevHob) =>
                                       prevHob.filter((h) => h !== hobby)
                                   );
+                                  setHobUpdates((prevHobUpdate) => {
+                                      prevHobUpdate?.push(hobby);
+                                      return prevHobUpdate;
+                                  });
                               }}
                           >
                               &times;
@@ -242,7 +260,45 @@ export function UserInfo({ data, friends, submit }) {
               })
             : null;
 
-    function addHobby() {}
+    const jobsForEdit =
+        allJobs.length != 0
+            ? allJobs.map((job, index) => {
+                  return (
+                      <StyledHobbiesContainer key={index}>
+                          <StyledInfo style={{ marginLeft: "10px" }}>
+                              {job}
+                          </StyledInfo>
+                          <StyledDeleteButton
+                              onClick={(event) => {
+                                  event.preventDefault();
+                                  setAllJobs((prevAllJobs) =>
+                                      prevAllJobs.filter((j) => j !== job)
+                                  );
+                                  setJobUpdate((prevJobUpdate) => {
+                                      prevJobUpdate?.unshift(job);
+                                      return prevJobUpdate;
+                                  });
+                              }}
+                          >
+                              &times;
+                          </StyledDeleteButton>
+                      </StyledHobbiesContainer>
+                  );
+              })
+            : null;
+
+    function addHobby() {
+        const newHobby = hobbiesRef.current.value;
+        hobbiesRef.current.value = "";
+        setHob([...hob, newHobby]);
+    }
+
+    function addJobUpdate() {
+        const newJobUpdate = jobsRef.current.value;
+        jobsRef.current.value = "";
+        setJobUpdate([...jobUpdate, newJobUpdate]);
+        setAllJobs([newJobUpdate, ...allJobs]);
+    }
 
     const togglePopup = () => {
         setIsOpen(!isOpen);
@@ -294,6 +350,12 @@ export function UserInfo({ data, friends, submit }) {
                 <StyledInfosContainer>
                     <StyledUL>{hobbies}</StyledUL>
                 </StyledInfosContainer>
+                <StyledName style={{ margin: "3vh 0 20px 0" }}>
+                    Past Job Experiences
+                </StyledName>
+                <StyledInfosContainer>
+                    <StyledUL>{jobs}</StyledUL>
+                </StyledInfosContainer>
                 <StyledEditButton
                     onClick={() => {
                         togglePopup();
@@ -343,7 +405,14 @@ export function UserInfo({ data, friends, submit }) {
                             <form
                                 style={formStyle}
                                 onSubmit={async (e) => {
-                                    await submit(e);
+                                    await submit(
+                                        e,
+                                        hob,
+                                        hobUpdates,
+                                        jobUpdate,
+                                        allJobs
+                                    );
+                                    setJobUpdate([]);
                                     setIsOpen(!isOpen);
                                 }}
                                 id="editDetailForm"
@@ -514,8 +583,15 @@ export function UserInfo({ data, friends, submit }) {
                                             alignItems: "end",
                                         }}
                                     >
-                                        <StyledInput type="text" />
-                                        <StyledAddSpan onClick={addHobby}>
+                                        <StyledInput
+                                            type="text"
+                                            id="hobbiesInput"
+                                            ref={hobbiesRef}
+                                        />
+                                        <StyledAddSpan
+                                            onClick={addHobby}
+                                            htmlFor="hobbiesInput"
+                                        >
                                             Add
                                         </StyledAddSpan>
                                     </div>
@@ -524,7 +600,25 @@ export function UserInfo({ data, friends, submit }) {
                                     <StyledDescription style={marginTop}>
                                         Jobs
                                     </StyledDescription>
-                                    <StyledInput type="text" />
+                                    {jobsForEdit}
+                                    <div
+                                        style={{
+                                            display: "flex",
+                                            alignItems: "end",
+                                        }}
+                                    >
+                                        <StyledInput
+                                            type="text"
+                                            id="jobsInput"
+                                            ref={jobsRef}
+                                        />
+                                        <StyledAddSpan
+                                            onClick={addJobUpdate}
+                                            htmlFor="jobsInput"
+                                        >
+                                            Add
+                                        </StyledAddSpan>
+                                    </div>
                                 </div>
                             </form>
                         </StyledEditDetailContainer>
