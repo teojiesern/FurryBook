@@ -1,5 +1,4 @@
-import React from "react";
-import { useActionData } from "react-router-dom";
+import React, { useRef } from "react";
 import { getTimeCreated } from "../Utils/getTimeCreated";
 import { LikePosts } from "../api/LikePosts";
 import { AllPosts } from "../api/AllPosts";
@@ -172,15 +171,8 @@ export function Posts({ userId, profilePic, datas }) {
         setIsOpen(!isOpen);
     };
 
-    const updateComments = (postId) => {
-        const updatedPosts = allPost.map((post) => {
-            if (post.id === postId) {
-                const newComment = [...post.comments, "mockComment"];
-                return { ...post, comments: newComment };
-            }
-            return post;
-        });
-        setAllPost(updatedPosts);
+    const updateComments = () => {
+        setData({ ...data, comments: "d" });
     };
 
     React.useEffect(() => {
@@ -189,7 +181,7 @@ export function Posts({ userId, profilePic, datas }) {
             setAllPost(temp);
         };
         getAllPost();
-    }, [userId]);
+    }, [userId, data]);
 
     async function toggleComments(comments) {
         if (comments.length !== 0) {
@@ -348,10 +340,7 @@ export function Posts({ userId, profilePic, datas }) {
                         style={inputStyle}
                         placeholder="Type a comment..."
                     ></input>
-                    <button
-                        style={submitButtonStyle}
-                        onClick={() => updateComments(post.id)}
-                    >
+                    <button style={submitButtonStyle} onClick={updateComments}>
                         Comment
                     </button>
                 </Form>
