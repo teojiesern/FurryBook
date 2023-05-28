@@ -1,7 +1,10 @@
 package com.furrybook.springmongo.model.User;
 
 import java.time.LocalDate;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
+import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 
@@ -19,13 +22,15 @@ public interface User {
 
     ArrayList<String> getHobbies();
 
-    Stack<String> getJobs();
+    ArrayList<String> getJobs();
 
     Set<String> getFriendsId();
 
     void setName(String name);
 
     void setBirthdate(LocalDate birthdate);
+
+    void setLocation(String location);
 
     void setEmail(String email);
 
@@ -45,5 +50,5 @@ public interface User {
 
     void setHobbies(ArrayList<String> hobbies);
 
-    void setJobs(Stack<String> jobs);
+    void setJobs(ArrayList<String> jobs);
 }

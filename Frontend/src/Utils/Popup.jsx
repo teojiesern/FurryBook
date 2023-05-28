@@ -6,17 +6,17 @@ const StyledPopupBox = styled.div`
     background: #00000050;
     width: 100%;
     height: 100vh;
+    z-index: 99999;
     top: 0;
     left: 0;
 `;
 
 const StyledBox = styled.div`
     position: relative;
-    width: 50%;
     margin: 0 auto;
     height: auto;
-    max-height: 70vh;
-    margin-top: calc(100vh - 85vh - 20px);
+    max-height: 95vh;
+    margin-top: calc(100vh - 95vh - 20px);
     background: #fff;
     background-color: #fafafa;
     border-radius: 20px;
@@ -33,8 +33,7 @@ const StyledClose = styled.span`
     content: "x";
     cursor: pointer;
     position: fixed;
-    right: calc(25% - 30px);
-    top: calc(100vh - 85vh - 33px);
+    top: calc(100vh - 95vh - 33px);
     background: #ededed;
     width: 25px;
     height: 25px;
@@ -55,10 +54,20 @@ const StyledCommentsTop = styled.div`
 export function Popup(props) {
     return (
         <StyledPopupBox>
-            <StyledBox>
-                <StyledClose onClick={props.handleClose}>&times;</StyledClose>
-                <StyledCommentsTop>{props.top}</StyledCommentsTop>
-                {props.content}
+            <StyledBox
+                style={{
+                    width: props.width,
+                    height: props.height ? props.height : "auto",
+                }}
+            >
+                <StyledClose
+                    onClick={props.handleClose}
+                    style={{ right: props.right }}
+                >
+                    &times;
+                </StyledClose>
+                <StyledCommentsTop>{props.topDisplay}</StyledCommentsTop>
+                {props.children}
             </StyledBox>
         </StyledPopupBox>
     );

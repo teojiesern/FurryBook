@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -124,7 +123,7 @@ public class UserService {
         return repository.save(user);
     }
 
-    public User updateBirthDate(String Id, LocalDate newBirthDate){
+    public User updateBirthDate(String Id, LocalDate newBirthDate) {
         User user = repository.findById(Id).get();
         user.setBirthdate(newBirthDate);
         return repository.save(user);
@@ -136,13 +135,11 @@ public class UserService {
         return repository.save(user);
     }
 
-    public User addJobs(String Id, String newJob) {
-        User user = repository.findById(Id).get();
-        user.getJobs().push(newJob);
-        return repository.save(user);
-    }
-
-    // public
+    // public User addJobs(String Id, String newJob) {
+    // User user = repository.findById(Id).get();
+    // user.getJobs().push(newJob);
+    // return repository.save(user);
+    // }
 
     public String deleteUser(String Id) {
         User user = repository.findById(Id).orElse(null);

@@ -132,6 +132,7 @@ export function TopNav() {
         setStyling((prevStyle) => (prevStyle === "none" ? "" : "none"));
     }
 
+
     function handleLogout() {
         localStorage.removeItem("userId");
         localStorage.removeItem("loggedIn");

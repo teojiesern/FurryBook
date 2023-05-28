@@ -1,4 +1,4 @@
-package com.furrybook.springmongo.model.Login;
+package com.furrybook.springmongo.model.extra;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

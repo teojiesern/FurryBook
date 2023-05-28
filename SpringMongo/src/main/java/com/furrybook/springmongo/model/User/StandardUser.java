@@ -6,10 +6,13 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
-import java.util.Stack;
 
 import org.springframework.data.annotation.Id;
 
@@ -19,7 +22,7 @@ import org.springframework.data.annotation.Id;
 public class StandardUser implements User {
     @Id
     private String id;
-    private String name, email, password, gender, phoneNumber, relationshipStatus;
+    private String name, email, password, gender, phoneNumber, relationshipStatus, location;
     private LocalDate birthDate;
     private int age;
     private String userType = "user";
@@ -29,9 +32,16 @@ public class StandardUser implements User {
     // to the arraylist and remove any hobbies that the user might decide to remove
     // by unchecking the checkboxes
     private ArrayList<String> hobbies = new ArrayList<>();
-    // the use of stack here is so that the latest jobs can be pushed to the top so
-    // we can easily access the latest jobs
-    private Stack<String> jobs = new Stack<>();
+    // the use of arraylist here is because of its ability to have the most recently
+    // added element to be the added to index 0 by using add(index, element) and it
+    // will return
+    // to me an array
+    // consisting of the elements arranged nicely since i would have to fetch the
+    // data from frontend, so it would be easier instead of using stack in which i
+    // would have to either use iterator or pop
+    // reason for not using linkedlist is because mongodb does not support
+    // linkedlist
+    private ArrayList<String> jobs = new ArrayList<>();
     private Set<String> friendsId = new HashSet<String>();
 
     @Override
