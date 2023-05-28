@@ -2,6 +2,7 @@ package com.furrybook.springmongo.model.extra;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 import lombok.Data;
 
@@ -13,6 +14,7 @@ public class UserUpdateRequest {
     private String relationshipStatus;
     private String location;
     private LocalDate birthDate;
-    private ArrayList<String> hobbies;
+    private ArrayList<String> hobbiesUpdates;
+    private List<String> jobUpdates;
 
 }

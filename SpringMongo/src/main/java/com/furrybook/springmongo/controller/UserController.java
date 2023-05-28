@@ -131,11 +131,11 @@ public class UserController {
         return ResponseEntity.ok(filePath);
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
-    @PutMapping
-    public User modifyUser(@RequestBody StandardUser user) {
-        return service.updateUser(user);
-    }
+    // @CrossOrigin(origins = "*", allowedHeaders = "*")
+    // @PutMapping
+    // public User modifyUser(@RequestBody StandardUser user) {
+    // return service.updateUser(user);
+    // }
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/{userId}/friends/{friendId}")
@@ -200,8 +200,23 @@ public class UserController {
             user.setBirthdate(request.getBirthDate());
         }
 
-        if (request.getHobbies() != null) {
-            user.setHobbies(request.getHobbies());
+        if (request.getHobbiesUpdates() != null) {
+            for (String hobbyUpdate : request.getHobbiesUpdates()) {
+                if (user.getHobbies().contains(hobbyUpdate))
+                    user.getHobbies().remove(hobbyUpdate);
+                else
+                    user.getHobbies().add(hobbyUpdate);
+            }
+            // user.setHobbies(request.getHobbies());
+        }
+
+        if (request.getJobUpdates() != null) {
+            for (String jobUpdate : request.getJobUpdates()) {
+                if (user.getJobs().contains(jobUpdate))
+                    user.getJobs().remove(jobUpdate);
+                else
+                    user.getJobs().add(0, jobUpdate);
+            }
         }
 
         return userRepository.save(user);
