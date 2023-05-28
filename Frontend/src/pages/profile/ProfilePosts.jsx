@@ -37,7 +37,6 @@ export function ProfilePosts() {
             jobs: allJobs,
         };
 
-        console.log(jobUpdate);
         const response = await axios.put(
             `http://localhost:3001/users/update/${data.id}`,
             updatedInfo
