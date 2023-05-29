@@ -48,7 +48,7 @@ export function ProfilePosts() {
     return (
         <StyledParentContainer>
             <UserInfo
-                data={data}
+                datas={data}
                 friends={friends}
                 submit={handleSubmission}
                 userId={userId}

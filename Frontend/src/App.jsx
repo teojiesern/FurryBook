@@ -29,6 +29,7 @@ import { Settings } from "./pages/Settings";
 import { currentUserData } from "./api/CurrentUserData";
 import { AllPosts } from "./api/AllPosts";
 import { PostCommentAction } from "./api/PostCommentAction";
+import { userProfilePage } from "./pages/userProfilePage/userProfilePage";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -85,13 +86,13 @@ const router = createBrowserRouter(
                         />
                     </Route>
                     <Route
-                        path="profile/user/:userId"
+                        path="user/:userId"
                         element={<ProfileLayout />}
                         loader={authentication}
                     >
                         <Route
                             index
-                            element={<ProfilePosts />}
+                            element={<userProfilePage />}
                             action={PostCommentAction}
                         />
                         <Route

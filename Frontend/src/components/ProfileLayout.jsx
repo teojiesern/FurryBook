@@ -11,9 +11,9 @@ import { styled } from "styled-components";
 import { IoSettingsSharp } from "react-icons/io5";
 import { Nav } from "react-bootstrap";
 import { StyledContainer } from "../Utils/StyledContainer";
-import { profilePageData } from "../api/profilePageData";
 import { AllPosts } from "../api/AllPosts";
 import { Search } from "../api/Search";
+import { UserData } from "../api/UserData";
 
 const StyledUserInfoContainer = styled.div`
     position: relative;
@@ -127,20 +127,20 @@ const CustomNavLink = ({ to, children }) => {
 };
 
 export function ProfileLayout() {
-    const [data, setData] = React.useState(useOutletContext());
+    const [datas, setDatas] = React.useState(useOutletContext());
     const { userId } = useParams();
-    const backgroundPhoto = data.coverPhotoPath?.split("/").pop();
-    const profilePic = data.profilePicturePath?.split("/").pop();
+    const backgroundPhoto = datas.coverPhotoPath?.split("/").pop();
+    const profilePic = datas.profilePicturePath?.split("/").pop();
     const url = useLocation().pathname.split("/").slice(0, 3).join("/");
     const friends =
-        data.friendsId.length == 0
+        datas.friendsId.length == 0
             ? "No Friends"
-            : `${data.friendsId.length} Friends`;
+            : `${datas.friendsId.length} Friends`;
 
     useEffect(() => {
         const getProfData = async () => {
-            const temp = await profilePageData(userId);
-            setData(temp);
+            const temp = await UserData(userId);
+            setDatas(temp);
         };
 
         getProfData();
@@ -160,7 +160,7 @@ export function ProfileLayout() {
                 ></StyledProfilePicture>
                 <StyledUserDetailContainer>
                     <StyledUserContainer>
-                        <StyledName>{data.name}</StyledName>
+                        <StyledName>{datas.name}</StyledName>
                         <IoSettingsSharp />
                     </StyledUserContainer>
                     <StyledFriendCount>{friends}</StyledFriendCount>
@@ -169,13 +169,13 @@ export function ProfileLayout() {
 
             <StyledNavigationContainer>
                 <StyledNavigation>
-                    <CustomNavLink as={Link} to={`${url}/${data.id}`}>
+                    <CustomNavLink as={Link} to={`${url}/${datas.id}`}>
                         Posts
                     </CustomNavLink>
-                    <CustomNavLink as={Link} to={`${url}/${data.id}/friends`}>
+                    <CustomNavLink as={Link} to={`${url}/${datas.id}/friends`}>
                         Friends
                     </CustomNavLink>
-                    <CustomNavLink as={Link} to={`${url}/${data.id}/photos`}>
+                    <CustomNavLink as={Link} to={`${url}/${datas.id}/photos`}>
                         Photos
                     </CustomNavLink>
                 </StyledNavigation>
@@ -188,7 +188,7 @@ export function ProfileLayout() {
                     // }}
                 ></StyledSearchBar>
             </StyledNavigationContainer>
-            <Outlet context={[profilePic, data]} />
+            <Outlet context={[profilePic, datas]} />
         </StyledContainer>
     );
 }
