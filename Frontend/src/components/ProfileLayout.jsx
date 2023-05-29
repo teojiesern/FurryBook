@@ -4,15 +4,12 @@ import {
     Outlet,
     useLocation,
     useOutletContext,
-    useMatch,
     useParams,
 } from "react-router-dom";
 import { styled } from "styled-components";
 import { IoSettingsSharp } from "react-icons/io5";
 import { Nav } from "react-bootstrap";
 import { StyledContainer } from "../Utils/StyledContainer";
-import { AllPosts } from "../api/AllPosts";
-import { Search } from "../api/Search";
 import { UserData } from "../api/UserData";
 
 const StyledUserInfoContainer = styled.div`
