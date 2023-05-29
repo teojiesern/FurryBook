@@ -21,16 +21,10 @@ const StyledSearchBar = styled.input`
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), -10px 0 #153fac;
     height: 50px;
     width: 300px;
-    transition: all 0.2s ease-out;
     outline: none;
 
     &::placeholder {
         text-align: center;
-    }
-
-    &:hover {
-        transform: scale(1.025);
-        transition: all 0.1s ease-out;
     }
 `;
 
@@ -119,6 +113,12 @@ const StyledSearchSelection = styled.div`
     flex-direction: column;
 `;
 
+const StyledName = styled.p`
+    margin: 0;
+    font-size: 15px;
+    font-family: "Montserrat", sans-serif;
+`;
+
 const searchIconStyle = {
     position: "absolute",
     top: "47px",
@@ -135,32 +135,54 @@ export function TopNav() {
     const [recommendedUser, setRecommendedUser] = React.useState([]);
     const data = useLoaderData();
     const bgImg = data.profilePicturePath.split("/").pop();
+    const [recommendations, setReccomendations] = React.useState([]);
 
     React.useEffect(() => {
-        const recommendations = recommendedUser.map((user) => {
-            return (
-                <StyledOption
-                    as={Link}
-                    to={`/FurryBook/profile/${user.id}`}
-                    onClick={handleClick}
-                >
-                    <StyledLeftPortion>
-                        <RiProfileFill style={marginRightStyle} />
-                        Profile
-                    </StyledLeftPortion>
-                </StyledOption>
+        const temp =
+            recommendedUser.length === 0 ? (
+                <p>Sorry, no record of this user in our system😢</p>
+            ) : (
+                recommendedUser.map((user) => {
+                    const profilePic = user.profilePicturePath
+                        ?.split("/")
+                        .pop();
+                    return (
+                        <StyledOption
+                            as={Link}
+                            to={`/FurryBook/profile/${user.id}`}
+                            onClick={() =>
+                                setCommentSelection((prevStyle) =>
+                                    prevStyle === "none" ? "" : "none"
+                                )
+                            }
+                        >
+                            <StyledLeftPortion>
+                                <StyledProfilePic
+                                    style={{
+                                        backgroundImage: `url("/assets/profile pictures/${profilePic}")`,
+                                    }}
+                                />
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        flexDirection: "column",
+                                    }}
+                                >
+                                    <StyledName>{user.name}</StyledName>
+                                    <StyledName>
+                                        {user.friendsId.length} friends
+                                    </StyledName>
+                                </div>
+                            </StyledLeftPortion>
+                        </StyledOption>
+                    );
+                })
             );
-        });
+        setReccomendations(temp);
     }, [recommendedUser]);
 
     function handleClick() {
         setStyling((prevStyle) => (prevStyle === "none" ? "" : "none"));
-    }
-
-    function handleSearchRecommendationClick() {
-        setCommentSelection((prevStyle) =>
-            prevStyle === "none" ? "" : "none"
-        );
     }
 
     function handleLogout() {
@@ -178,36 +200,28 @@ export function TopNav() {
                             type="search"
                             placeholder="Search..."
                             onKeyUp={async (e) => {
-                                setCommentSelection(true);
-                                console.log(e.target.value);
                                 const res = await Search(e.target.value);
-                                console.log(res);
+                                setRecommendedUser(res);
+                                if (e.target.value === "") {
+                                    setCommentSelection("none");
+                                } else {
+                                    setCommentSelection("");
+                                }
                             }}
                         />
                         <div>
                             <BiSearch style={searchIconStyle} />
                         </div>
                         <StyledOptionContainer
-                            style={{ display: commentSelection }}
+                            style={{
+                                display: commentSelection,
+                                borderRadius: "0 0 10px 10px",
+                                boxShadow: "0 5px 5px rgba(0, 0, 0, 0.2)",
+                                position: "absolute",
+                                top: "9.5%",
+                            }}
                         >
-                            <StyledOption
-                                as={Link}
-                                to={`/FurryBook/settings`}
-                                onClick={handleSearchRecommendationClick}
-                            >
-                                <StyledLeftPortion>
-                                    <IoSettingsSharp style={marginRightStyle} />
-                                    Settings
-                                </StyledLeftPortion>
-                                &rarr;
-                            </StyledOption>
-                            <StyledOption onClick={handleLogout}>
-                                <StyledLeftPortion>
-                                    <IoLogOut style={marginRightStyle} />
-                                    Logout
-                                </StyledLeftPortion>
-                                &rarr;
-                            </StyledOption>
+                            {recommendations}
                         </StyledOptionContainer>
                     </StyledSearchSelection>
                 </div>

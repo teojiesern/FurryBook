@@ -92,15 +92,9 @@ const StyledSearchBar = styled.input`
     border: none;
     padding: 10px;
     border-bottom: 1px solid black;
-    transition: all 0.2s ease-out;
     outline: none;
     height: 100%;
     font-family: "Montserrat", sans-serif;
-
-    &:hover {
-        transform: scale(1.025);
-        transition: all 0.1s ease-out;
-    }
 `;
 
 const StyledNavLink = styled(Nav.Link)`
@@ -196,11 +190,10 @@ export function ProfileLayout() {
                 <StyledSearchBar
                     type="search"
                     placeholder="Search"
-                    onKeyUp={async (e) => {
-                        console.log(e.target.value);
-                        const res = await Search(e.target.value);
-                        console.log(res);
-                    }}
+                    // onKeyUp={async (e) => {
+                    //     const res = await Search(e.target.value);
+                    //     console.log(res);
+                    // }}
                 ></StyledSearchBar>
             </StyledNavigationContainer>
             <Outlet context={[profilePic, data]} />
