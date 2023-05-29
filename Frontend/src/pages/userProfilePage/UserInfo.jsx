@@ -204,7 +204,7 @@ const marginTop = {
     marginTop: "10px",
 };
 
-export function UserInfo({ data, friends, submit }) {
+export function UserInfo({ data, friends, submit, userId }) {
     const [isOpen, setIsOpen] = React.useState(false);
     const [relationshipStatus, setRelationshipStatus] = React.useState(
         data.relationshipStatus
@@ -219,6 +219,7 @@ export function UserInfo({ data, friends, submit }) {
     const coverPhoto = data.coverPhotoPath.split("/").pop();
     const hobbiesRef = useRef(null);
     const jobsRef = useRef(null);
+    const currentLogin = localStorage.getItem("userId");
     const hobbies =
         data.hobbies.length != 0
             ? data.hobbies.map((hobby, index) => (
@@ -356,13 +357,15 @@ export function UserInfo({ data, friends, submit }) {
                 <StyledInfosContainer>
                     <StyledUL>{jobs}</StyledUL>
                 </StyledInfosContainer>
-                <StyledEditButton
-                    onClick={() => {
-                        togglePopup();
-                    }}
-                >
-                    Edit Details
-                </StyledEditButton>
+                {userId === currentLogin ? (
+                    <StyledEditButton
+                        onClick={() => {
+                            togglePopup();
+                        }}
+                    >
+                        Edit Details
+                    </StyledEditButton>
+                ) : null}
             </StyledPostContainer>
 
             {isOpen && (

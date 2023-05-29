@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -248,6 +249,24 @@ public class UserService {
     private void saveFile(MultipartFile file, String filePath) throws IOException {
         File dest = new File(filePath);
         file.transferTo(dest);
+    }
+
+    public List<User> search(String queryString) {
+        List<User> temp = repository.findAll();
+        ArrayList<User> everyone = new ArrayList<>(temp);
+        ArrayList<User> matchedQuery = new ArrayList<>();
+        for (User user : everyone) {
+            if (isMatch(queryString, user.getName()) || isMatch(queryString, user.getId())
+                    || isMatch(queryString, user.getEmail()) || isMatch(queryString, user.getPhoneNumber())) {
+                matchedQuery.add(user);
+            }
+        }
+        matchedQuery.sort(null);
+        return matchedQuery;
+    }
+
+    private boolean isMatch(String query, String name) {
+        return name.toLowerCase().contains(query.toLowerCase());
     }
 
     public void addFriend(User user, User friend) {

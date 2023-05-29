@@ -166,6 +166,7 @@ export function Posts({ userId, profilePic, datas }) {
     const [isOpen, setIsOpen] = React.useState(false);
     const [allComments, setAllComments] = React.useState([]);
     const currentLogin = localStorage.getItem("userId");
+    const postRef = useRef();
 
     const togglePopup = () => {
         setIsOpen(!isOpen);
@@ -253,7 +254,7 @@ export function Posts({ userId, profilePic, datas }) {
         function handleShare() {}
 
         return (
-            <StyledPostContainer key={post.id}>
+            <StyledPostContainer key={post.id} ref={postRef}>
                 <StyledPostSection>
                     <StyledProfilePicture
                         style={{

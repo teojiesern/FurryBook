@@ -2,9 +2,9 @@ import React, { useEffect } from "react";
 import {
     Link,
     Outlet,
-    useLoaderData,
     useLocation,
     useOutletContext,
+    useMatch,
     useParams,
 } from "react-router-dom";
 import { styled } from "styled-components";
@@ -13,6 +13,7 @@ import { Nav } from "react-bootstrap";
 import { StyledContainer } from "../Utils/StyledContainer";
 import { profilePageData } from "../api/profilePageData";
 import { AllPosts } from "../api/AllPosts";
+import { Search } from "../api/Search";
 
 const StyledUserInfoContainer = styled.div`
     position: relative;
@@ -91,15 +92,9 @@ const StyledSearchBar = styled.input`
     border: none;
     padding: 10px;
     border-bottom: 1px solid black;
-    transition: all 0.2s ease-out;
     outline: none;
     height: 100%;
     font-family: "Montserrat", sans-serif;
-
-    &:hover {
-        transform: scale(1.025);
-        transition: all 0.1s ease-out;
-    }
 `;
 
 const StyledNavLink = styled(Nav.Link)`
@@ -134,8 +129,9 @@ const CustomNavLink = ({ to, children }) => {
 export function ProfileLayout() {
     const [data, setData] = React.useState(useOutletContext());
     const { userId } = useParams();
-    const backgroundPhoto = data.coverPhotoPath.split("/").pop();
-    const profilePic = data.profilePicturePath.split("/").pop();
+    const backgroundPhoto = data.coverPhotoPath?.split("/").pop();
+    const profilePic = data.profilePicturePath?.split("/").pop();
+    const url = useLocation().pathname.split("/").slice(0, 3).join("/");
     const friends =
         data.friendsId.length == 0
             ? "No Friends"
@@ -173,28 +169,23 @@ export function ProfileLayout() {
 
             <StyledNavigationContainer>
                 <StyledNavigation>
-                    <CustomNavLink
-                        as={Link}
-                        to={`/FurryBook/profile/${data.id}`}
-                    >
+                    <CustomNavLink as={Link} to={`${url}/${data.id}`}>
                         Posts
                     </CustomNavLink>
-                    <CustomNavLink
-                        as={Link}
-                        to={`/FurryBook/profile/${data.name}/friends`}
-                    >
+                    <CustomNavLink as={Link} to={`${url}/${data.id}/friends`}>
                         Friends
                     </CustomNavLink>
-                    <CustomNavLink
-                        as={Link}
-                        to={`/FurryBook/profile/${data.name}/photos`}
-                    >
+                    <CustomNavLink as={Link} to={`${url}/${data.id}/photos`}>
                         Photos
                     </CustomNavLink>
                 </StyledNavigation>
                 <StyledSearchBar
                     type="search"
                     placeholder="Search"
+                    // onKeyUp={async (e) => {
+                    //     const res = await Search(e.target.value);
+                    //     console.log(res);
+                    // }}
                 ></StyledSearchBar>
             </StyledNavigationContainer>
             <Outlet context={[profilePic, data]} />
