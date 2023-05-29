@@ -45,6 +45,8 @@ export function ProfilePosts() {
         // window.location.reload();
     }
 
+    console.log("data from profile post", data);
+
     return (
         <StyledParentContainer>
             <UserInfo

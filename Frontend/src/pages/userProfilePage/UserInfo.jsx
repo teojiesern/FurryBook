@@ -229,7 +229,8 @@ export function UserInfo({ datas, friends, submit, userId }) {
             setData(temp);
         };
         getDataBasedOnId();
-    }, [userId]);
+        console.log("data from effect", data);
+    }, [userId, datas]);
 
     const hobbies =
         data.hobbies.length != 0
@@ -303,6 +304,7 @@ export function UserInfo({ datas, friends, submit, userId }) {
         const newHobby = hobbiesRef.current.value;
         hobbiesRef.current.value = "";
         setHob([...hob, newHobby]);
+        setHobUpdates([...hobUpdates, newHobby]);
     }
 
     function addJobUpdate() {
