@@ -4,7 +4,12 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -16,6 +21,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.furrybook.springmongo.exception.ExistingEmailException;
+import com.furrybook.springmongo.model.Friend.FriendMutual;
 import com.furrybook.springmongo.model.User.*;
 import com.furrybook.springmongo.repository.UserRepository;
 
@@ -257,7 +263,76 @@ public class UserService {
         repository.save(friend);
     }
 
+    public boolean removeFriend(User user, User friend) {
+        boolean removed = user.getFriendsId().remove(friend.getId());
+        friend.getFriendsId().remove(user.getId());
+    
+        if (removed) {
+            repository.save(user);
+            repository.save(friend);
+        }
+    
+        return removed;
+    }
+
     public Boolean checkFriend(User user, User friend) {
         return user.getFriendsId().contains(friend.getId());
     }
+
+    public List<String> getMutualFriends(String userId1, String userId2) {
+        Set<String> user1Friends = repository.findById(userId1).get().getFriendsId();
+        Set<String> user2Friends = repository.findById(userId2).get().getFriendsId();
+        
+        Set<String> mutualFriends = new HashSet<>(user1Friends);
+        mutualFriends.retainAll(user2Friends);
+        
+        return new ArrayList<>(mutualFriends);
+    }
+
+    public List<FriendMutual> getFriendsWithMutualFriends(String givenUserId) {
+        List<FriendMutual> mutualFriendsList = new ArrayList<>();
+        Set<String> visited = new HashSet<>();
+        Queue<String> queue = new LinkedList<>();
+
+        queue.add(givenUserId);
+        visited.add(givenUserId);
+
+        while(!queue.isEmpty()) {
+            User currentUser = repository.findById(queue.poll()).get();
+
+            for (String friend : currentUser.getFriendsId()) {
+                if (!visited.contains(friend)) {
+                    visited.add(friend);
+
+                    List<String> mutualFriends = getMutualFriends(givenUserId, friend);
+                    mutualFriendsList.add(new FriendMutual(repository.findById(friend).get(), mutualFriends));
+
+                    queue.add(friend);
+                }
+            }
+        }
+
+        return mutualFriendsList;
+    }
+
+    public List<FriendMutual> getFriendRecommendations(String userId) {
+        List<FriendMutual> friendRecommendations = new ArrayList<>();
+        Set<String> immediateFriends = repository.findById(userId).get().getFriendsId();
+
+        for (String immediateFriend: immediateFriends) {
+            Set<String> friendsOfFriend = repository.findById(immediateFriend).get().getFriendsId();
+            for (String friendOfFriend : friendsOfFriend) {
+                if (!immediateFriends.contains(friendOfFriend) && !friendOfFriend.equals(userId)) {
+                    List<String> mutualFriends = getMutualFriends(userId, friendOfFriend);
+                    friendRecommendations.add(new FriendMutual(repository.findById(friendOfFriend).get(), mutualFriends));
+                }
+            }
+        }
+
+        friendRecommendations.sort(Comparator.comparing(a -> a.getMutualFriends().size()));
+
+        return friendRecommendations;
+    }
+
+
 }

@@ -1,5 +1,6 @@
 package com.furrybook.springmongo.controller;
 
+import com.furrybook.springmongo.model.Friend.FriendMutual;
 import com.furrybook.springmongo.model.User.StandardUser;
 import com.furrybook.springmongo.model.User.User;
 import com.furrybook.springmongo.model.extra.LoginRequest;
@@ -138,7 +139,7 @@ public class UserController {
     // }
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
-    @PostMapping("/{userId}/friends/{friendId}")
+    @PostMapping("friend/{userId}/{friendId}")
     public ResponseEntity<String> addFriend(@PathVariable("userId") String userId,
             @PathVariable("friendId") String friendId) {
         User user = service.getUserbyId(userId);
@@ -154,7 +155,7 @@ public class UserController {
     }
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
-    @GetMapping("/{userId}/friends/{friendId}")
+    @GetMapping("friend/{userId}/{friendId}")
     public ResponseEntity<String> checkFriend(@PathVariable("userId") String userId,
             @PathVariable("friendId") String friendId) {
         User user = service.getUserbyId(userId);
@@ -221,4 +222,43 @@ public class UserController {
 
         return userRepository.save(user);
     }
+
+    // Getting friends of user alongside with the mutual friend list. 
+    // Can be used to show list of friends at the friend page.
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @GetMapping("friend/{userId}")
+    public List<FriendMutual> getFriends(@PathVariable String userId) {
+        List<FriendMutual> mutualFriends = service.getFriendsWithMutualFriends(userId);
+        return mutualFriends;
+    }
+
+    // Getting friend recommendations with the mutual friend list.
+    // Can be used to recommend potential friends at the friend page.
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @GetMapping("recommendation/{userId}")
+    public List<FriendMutual> getFriendRecommendation(@PathVariable String userId) {
+        List<FriendMutual> friendrecommendations = service.getFriendRecommendations(userId);
+        return friendrecommendations;
+    }
+
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @DeleteMapping("friend/{userId}/{friendId}")
+    public ResponseEntity<String> removeFriend(@PathVariable("userId") String userId,
+            @PathVariable("friendId") String friendId) {
+        User user = service.getUserbyId(userId);
+        User friend = service.getUserbyId(friendId);
+
+        if (user == null || friend == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        boolean removed = service.removeFriend(user, friend);
+
+        if (removed) {
+            return ResponseEntity.ok("Friend removed successfully");
+        } else {
+            return ResponseEntity.badRequest().body("Unable to remove friend");
+        }
+    }
+
 }
