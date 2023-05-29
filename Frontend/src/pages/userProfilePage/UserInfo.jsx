@@ -7,6 +7,7 @@ import { GiLovers } from "react-icons/gi";
 import { IoPersonOutline } from "react-icons/io5";
 import { TfiLocationPin } from "react-icons/tfi";
 import { Popup } from "../../Utils/Popup";
+import { UserData } from "../../api/UserData";
 
 const StyledPostContainer = styled.div`
     display: flex;
@@ -204,7 +205,8 @@ const marginTop = {
     marginTop: "10px",
 };
 
-export function UserInfo({ data, friends, submit, userId }) {
+export function UserInfo({ datas, friends, submit, userId }) {
+    const [data, setData] = React.useState(datas);
     const [isOpen, setIsOpen] = React.useState(false);
     const [relationshipStatus, setRelationshipStatus] = React.useState(
         data.relationshipStatus
@@ -220,6 +222,15 @@ export function UserInfo({ data, friends, submit, userId }) {
     const hobbiesRef = useRef(null);
     const jobsRef = useRef(null);
     const currentLogin = localStorage.getItem("userId");
+
+    React.useEffect(() => {
+        const getDataBasedOnId = async () => {
+            const temp = await UserData(userId);
+            setData(temp);
+        };
+        getDataBasedOnId();
+    }, [userId]);
+
     const hobbies =
         data.hobbies.length != 0
             ? data.hobbies.map((hobby, index) => (

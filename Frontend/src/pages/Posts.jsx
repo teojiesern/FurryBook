@@ -184,6 +184,14 @@ export function Posts({ userId, profilePic, datas }) {
         getAllPost();
     }, [userId, data]);
 
+    React.useEffect(() => {
+        const getDataBasedOnId = async () => {
+            const temp = await UserData(userId);
+            setData(temp);
+        };
+        getDataBasedOnId();
+    }, [userId]);
+
     async function toggleComments(comments) {
         if (comments.length !== 0) {
             const listOfComments = await Promise.all(

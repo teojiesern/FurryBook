@@ -149,7 +149,7 @@ export function TopNav() {
                     return (
                         <StyledOption
                             as={Link}
-                            to={`/FurryBook/user/profile/${user.id}`}
+                            to={`/FurryBook/profile/${user.id}`}
                             onClick={() =>
                                 setCommentSelection((prevStyle) =>
                                     prevStyle === "none" ? "" : "none"
