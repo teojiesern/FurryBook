@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { BiSearch } from "react-icons/bi";
 import { RiProfileFill } from "react-icons/ri";
 import { IoSettingsSharp, IoLogOut } from "react-icons/io5";
+import { Search } from "../api/Search";
 
 const StyledDiv = styled.div`
     display: flex;
@@ -113,6 +114,11 @@ const StyledLeftPortion = styled.div`
     justify-content: center;
 `;
 
+const StyledSearchSelection = styled.div`
+    display: flex;
+    flex-direction: column;
+`;
+
 const searchIconStyle = {
     position: "absolute",
     top: "47px",
@@ -125,13 +131,37 @@ const marginRightStyle = {
 
 export function TopNav() {
     const [styling, setStyling] = React.useState("none");
+    const [commentSelection, setCommentSelection] = React.useState("none");
+    const [recommendedUser, setRecommendedUser] = React.useState([]);
     const data = useLoaderData();
     const bgImg = data.profilePicturePath.split("/").pop();
+
+    React.useEffect(() => {
+        const recommendations = recommendedUser.map((user) => {
+            return (
+                <StyledOption
+                    as={Link}
+                    to={`/FurryBook/profile/${user.id}`}
+                    onClick={handleClick}
+                >
+                    <StyledLeftPortion>
+                        <RiProfileFill style={marginRightStyle} />
+                        Profile
+                    </StyledLeftPortion>
+                </StyledOption>
+            );
+        });
+    }, [recommendedUser]);
 
     function handleClick() {
         setStyling((prevStyle) => (prevStyle === "none" ? "" : "none"));
     }
 
+    function handleSearchRecommendationClick() {
+        setCommentSelection((prevStyle) =>
+            prevStyle === "none" ? "" : "none"
+        );
+    }
 
     function handleLogout() {
         localStorage.removeItem("userId");
@@ -143,10 +173,43 @@ export function TopNav() {
         <div>
             <StyledDiv>
                 <div style={{ margin: "auto" }}>
-                    <StyledSearchBar type="search" placeholder="Search..." />
-                    <div>
-                        <BiSearch style={searchIconStyle} />
-                    </div>
+                    <StyledSearchSelection>
+                        <StyledSearchBar
+                            type="search"
+                            placeholder="Search..."
+                            onKeyUp={async (e) => {
+                                setCommentSelection(true);
+                                console.log(e.target.value);
+                                const res = await Search(e.target.value);
+                                console.log(res);
+                            }}
+                        />
+                        <div>
+                            <BiSearch style={searchIconStyle} />
+                        </div>
+                        <StyledOptionContainer
+                            style={{ display: commentSelection }}
+                        >
+                            <StyledOption
+                                as={Link}
+                                to={`/FurryBook/settings`}
+                                onClick={handleSearchRecommendationClick}
+                            >
+                                <StyledLeftPortion>
+                                    <IoSettingsSharp style={marginRightStyle} />
+                                    Settings
+                                </StyledLeftPortion>
+                                &rarr;
+                            </StyledOption>
+                            <StyledOption onClick={handleLogout}>
+                                <StyledLeftPortion>
+                                    <IoLogOut style={marginRightStyle} />
+                                    Logout
+                                </StyledLeftPortion>
+                                &rarr;
+                            </StyledOption>
+                        </StyledOptionContainer>
+                    </StyledSearchSelection>
                 </div>
                 <StyledDropdown>
                     <StyledPrimaryChoice onClick={handleClick}>

@@ -11,8 +11,10 @@ import java.util.Stack;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "users")
-public interface User {
+public interface User extends Comparable<User> {
     String getId();
+
+    String getName();
 
     String getPassword();
 
@@ -51,4 +53,8 @@ public interface User {
     void setHobbies(ArrayList<String> hobbies);
 
     void setJobs(ArrayList<String> jobs);
+
+    String getEmail();
+
+    String getPhoneNumber();
 }

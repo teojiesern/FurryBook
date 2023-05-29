@@ -50,4 +50,20 @@ public class StandardUser implements User {
         this.age = Period.between(birthdate, LocalDate.now()).getYears();
     }
 
+    @Override
+    public int compareTo(User otherUser) {
+        String thisName = this.name.replaceAll("\\s+", "").toLowerCase();
+        String otherName = otherUser.getName().replaceAll("\\s+", "").toLowerCase();
+        int minLength = Math.min(thisName.length(), otherName.length());
+        for (int i = 0; i < minLength; i++) {
+            char thisChar = thisName.charAt(i);
+            char otherChar = otherName.charAt(i);
+            if (thisChar > otherChar)
+                return 1;
+            if (thisChar < otherChar)
+                return -1;
+        }
+        return 0;
+    }
+
 }

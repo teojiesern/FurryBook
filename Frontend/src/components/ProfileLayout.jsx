@@ -13,6 +13,7 @@ import { Nav } from "react-bootstrap";
 import { StyledContainer } from "../Utils/StyledContainer";
 import { profilePageData } from "../api/profilePageData";
 import { AllPosts } from "../api/AllPosts";
+import { Search } from "../api/Search";
 
 const StyledUserInfoContainer = styled.div`
     position: relative;
@@ -181,13 +182,13 @@ export function ProfileLayout() {
                     </CustomNavLink>
                     <CustomNavLink
                         as={Link}
-                        to={`/FurryBook/profile/${data.name}/friends`}
+                        to={`/FurryBook/profile/${data.id}/friends`}
                     >
                         Friends
                     </CustomNavLink>
                     <CustomNavLink
                         as={Link}
-                        to={`/FurryBook/profile/${data.name}/photos`}
+                        to={`/FurryBook/profile/${data.id}/photos`}
                     >
                         Photos
                     </CustomNavLink>
@@ -195,6 +196,11 @@ export function ProfileLayout() {
                 <StyledSearchBar
                     type="search"
                     placeholder="Search"
+                    onKeyUp={async (e) => {
+                        console.log(e.target.value);
+                        const res = await Search(e.target.value);
+                        console.log(res);
+                    }}
                 ></StyledSearchBar>
             </StyledNavigationContainer>
             <Outlet context={[profilePic, data]} />
