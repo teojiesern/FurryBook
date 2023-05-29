@@ -2,9 +2,9 @@ import React, { useEffect } from "react";
 import {
     Link,
     Outlet,
-    useLoaderData,
     useLocation,
     useOutletContext,
+    useMatch,
     useParams,
 } from "react-router-dom";
 import { styled } from "styled-components";
@@ -129,8 +129,9 @@ const CustomNavLink = ({ to, children }) => {
 export function ProfileLayout() {
     const [data, setData] = React.useState(useOutletContext());
     const { userId } = useParams();
-    const backgroundPhoto = data.coverPhotoPath.split("/").pop();
-    const profilePic = data.profilePicturePath.split("/").pop();
+    const backgroundPhoto = data.coverPhotoPath?.split("/").pop();
+    const profilePic = data.profilePicturePath?.split("/").pop();
+    const url = useLocation().pathname.split("/").slice(0, 3).join("/");
     const friends =
         data.friendsId.length == 0
             ? "No Friends"
@@ -168,22 +169,13 @@ export function ProfileLayout() {
 
             <StyledNavigationContainer>
                 <StyledNavigation>
-                    <CustomNavLink
-                        as={Link}
-                        to={`/FurryBook/profile/${data.id}`}
-                    >
+                    <CustomNavLink as={Link} to={`${url}/${data.id}`}>
                         Posts
                     </CustomNavLink>
-                    <CustomNavLink
-                        as={Link}
-                        to={`/FurryBook/profile/${data.id}/friends`}
-                    >
+                    <CustomNavLink as={Link} to={`${url}/${data.id}/friends`}>
                         Friends
                     </CustomNavLink>
-                    <CustomNavLink
-                        as={Link}
-                        to={`/FurryBook/profile/${data.id}/photos`}
-                    >
+                    <CustomNavLink as={Link} to={`${url}/${data.id}/photos`}>
                         Photos
                     </CustomNavLink>
                 </StyledNavigation>
