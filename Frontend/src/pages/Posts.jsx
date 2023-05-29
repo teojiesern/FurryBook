@@ -82,7 +82,7 @@ const StyledLikedAndCommented = styled.div`
 
 const StyledLikeAndCommentCount = styled.p`
     color: gray;
-    fontFamily: "Montserrat, sans-serif",
+    fontFamily: "Montserrat, sans-serif";
     font-size: 10px;
 `;
 

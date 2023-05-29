@@ -54,7 +54,7 @@ const CustomNavLink = ({ to, children }) => {
 
 CustomNavLink.propTypes = {
     to: PropTypes.string.isRequired,
-    children: PropTypes.string.isRequired,
+    children: PropTypes.array.isRequired,
 };
 
 const Icon = styled.div`
@@ -83,7 +83,7 @@ export function Navbar() {
                 </Icon>
                 Profile
             </CustomNavLink>
-            <CustomNavLink as={Link} to={`/FurryBook/friends`}>
+            <CustomNavLink as={Link} to={`/FurryBook/friends/${userData.id}`}>
                 <Icon>
                     <FaUserFriends />
                 </Icon>

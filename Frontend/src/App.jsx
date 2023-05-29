@@ -24,7 +24,7 @@ import { authentication, loginPageAuth } from "./Utils/authentication";
 import { TopNav } from "./components/TopNav";
 import { ProfileLayout } from "./components/ProfileLayout";
 import { ProfilePhotos } from "./pages/profile/ProfilePhotos";
-import { Friends } from "./pages/Friends";
+import Friends from "./pages/Friends";
 import { Settings } from "./pages/Settings";
 import { currentUserData } from "./api/CurrentUserData";
 import { AllPosts } from "./api/AllPosts";
@@ -54,7 +54,7 @@ const router = createBrowserRouter(
                         action={PostCommentAction}
                     />
                     <Route
-                        path="friends"
+                        path="friends/:userId"
                         element={<Friends />}
                         loader={authentication}
                     />
