@@ -16,5 +16,4 @@ public class UserUpdateRequest {
     private LocalDate birthDate;
     private ArrayList<String> hobbiesUpdates;
     private List<String> jobUpdates;
-
 }

@@ -1,4 +1,5 @@
 import React from "react";
+<<<<<<< HEAD
 import { useParams } from "react-router-dom";
 import { useState, useEffect, useMemo } from "react";
 import { styled } from "styled-components";
@@ -48,6 +49,10 @@ const Friends = () => {
         }));
     }, [friendData]);
 
+=======
+
+export function Friends() {
+>>>>>>> c558d596e06be7e1662f7f02901807cb13fcdc8f
     return (
         <div>
             {friendData.length > 0 ? (

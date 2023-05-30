@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
@@ -208,7 +209,6 @@ public class UserController {
                 else
                     user.getHobbies().add(hobbyUpdate);
             }
-            // user.setHobbies(request.getHobbies());
         }
 
         if (request.getJobUpdates() != null) {
@@ -259,6 +259,18 @@ public class UserController {
         } else {
             return ResponseEntity.badRequest().body("Unable to remove friend");
         }
+    }
+    // @CrossOrigin(origins = "*", allowedHeaders = "*")
+    // @PostMapping("/search")
+    // public List<User> search(@RequestBody String queryString) {
+    // return service.search(queryString);
+    // }
+
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @PostMapping("/search")
+    public List<User> search(@RequestBody Map<String, String> body) {
+        String queryString = body.get("query");
+        return service.search(queryString);
     }
 
 }

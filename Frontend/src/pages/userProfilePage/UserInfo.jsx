@@ -7,6 +7,7 @@ import { GiLovers } from "react-icons/gi";
 import { IoPersonOutline } from "react-icons/io5";
 import { TfiLocationPin } from "react-icons/tfi";
 import { Popup } from "../../Utils/Popup";
+import { UserData } from "../../api/UserData";
 
 const StyledPostContainer = styled.div`
     display: flex;
@@ -204,7 +205,8 @@ const marginTop = {
     marginTop: "10px",
 };
 
-export function UserInfo({ data, friends, submit }) {
+export function UserInfo({ datas, friends, submit, userId }) {
+    const [data, setData] = React.useState(datas);
     const [isOpen, setIsOpen] = React.useState(false);
     const [relationshipStatus, setRelationshipStatus] = React.useState(
         data.relationshipStatus
@@ -219,6 +221,17 @@ export function UserInfo({ data, friends, submit }) {
     const coverPhoto = data.coverPhotoPath.split("/").pop();
     const hobbiesRef = useRef(null);
     const jobsRef = useRef(null);
+    const currentLogin = localStorage.getItem("userId");
+
+    React.useEffect(() => {
+        const getDataBasedOnId = async () => {
+            const temp = await UserData(userId);
+            setData(temp);
+        };
+        getDataBasedOnId();
+        console.log("data from effect", data);
+    }, [userId, datas]);
+
     const hobbies =
         data.hobbies.length != 0
             ? data.hobbies.map((hobby, index) => (
@@ -291,6 +304,7 @@ export function UserInfo({ data, friends, submit }) {
         const newHobby = hobbiesRef.current.value;
         hobbiesRef.current.value = "";
         setHob([...hob, newHobby]);
+        setHobUpdates([...hobUpdates, newHobby]);
     }
 
     function addJobUpdate() {
@@ -356,13 +370,15 @@ export function UserInfo({ data, friends, submit }) {
                 <StyledInfosContainer>
                     <StyledUL>{jobs}</StyledUL>
                 </StyledInfosContainer>
-                <StyledEditButton
-                    onClick={() => {
-                        togglePopup();
-                    }}
-                >
-                    Edit Details
-                </StyledEditButton>
+                {userId === currentLogin ? (
+                    <StyledEditButton
+                        onClick={() => {
+                            togglePopup();
+                        }}
+                    >
+                        Edit Details
+                    </StyledEditButton>
+                ) : null}
             </StyledPostContainer>
 
             {isOpen && (

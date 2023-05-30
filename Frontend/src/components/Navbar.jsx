@@ -44,7 +44,10 @@ const activeStyle = {
 const CustomNavLink = ({ to, children }) => {
     const location = useLocation();
     const decodedPathname = decodeURIComponent(location.pathname);
-    const isActive = decodedPathname === to;
+    const isActive =
+        decodedPathname.split("/").slice(0, 4).join("/") ===
+        to.split("/").slice(0, 4).join("/");
+
     return (
         <StyledNavLink as={Link} to={to} style={isActive ? activeStyle : {}}>
             {children}

@@ -45,9 +45,16 @@ export function ProfilePosts() {
         // window.location.reload();
     }
 
+    console.log("data from profile post", data);
+
     return (
         <StyledParentContainer>
-            <UserInfo data={data} friends={friends} submit={handleSubmission} />
+            <UserInfo
+                datas={data}
+                friends={friends}
+                submit={handleSubmission}
+                userId={userId}
+            />
             <Posts userId={userId} profilePic={profilePic} datas={data} />
         </StyledParentContainer>
     );

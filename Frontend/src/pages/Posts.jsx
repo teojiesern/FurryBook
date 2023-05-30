@@ -166,6 +166,7 @@ export function Posts({ userId, profilePic, datas }) {
     const [isOpen, setIsOpen] = React.useState(false);
     const [allComments, setAllComments] = React.useState([]);
     const currentLogin = localStorage.getItem("userId");
+    const postRef = useRef();
 
     const togglePopup = () => {
         setIsOpen(!isOpen);
@@ -182,6 +183,14 @@ export function Posts({ userId, profilePic, datas }) {
         };
         getAllPost();
     }, [userId, data]);
+
+    React.useEffect(() => {
+        const getDataBasedOnId = async () => {
+            const temp = await UserData(userId);
+            setData(temp);
+        };
+        getDataBasedOnId();
+    }, [userId]);
 
     async function toggleComments(comments) {
         if (comments.length !== 0) {
@@ -253,7 +262,7 @@ export function Posts({ userId, profilePic, datas }) {
         function handleShare() {}
 
         return (
-            <StyledPostContainer key={post.id}>
+            <StyledPostContainer key={post.id} ref={postRef}>
                 <StyledPostSection>
                     <StyledProfilePicture
                         style={{
