@@ -284,65 +284,66 @@ public class UserService {
     public boolean removeFriend(User user, User friend) {
         boolean removed = user.getFriendsId().remove(friend.getId());
         friend.getFriendsId().remove(user.getId());
-    
+
         if (removed) {
             repository.save(user);
             repository.save(friend);
         }
-    
-        return removed;
-    }
 
-    public Boolean checkFriend(User user, User friend) {
-        return user.getFriendsId().contains(friend.getId());
+        return removed;
     }
 
     public List<String> getMutualFriends(String userId1, String userId2) {
         Set<String> user1Friends = repository.findById(userId1).get().getFriendsId();
         Set<String> user2Friends = repository.findById(userId2).get().getFriendsId();
-        
+
         Set<String> mutualFriends = new HashSet<>(user1Friends);
         mutualFriends.retainAll(user2Friends);
-        
+
         return new ArrayList<>(mutualFriends);
     }
 
     public List<FriendMutual> getFriendsWithMutualFriends(String givenUserId) {
         List<FriendMutual> mutualFriendsList = new ArrayList<>();
-        Set<String> visited = new HashSet<>();
-        Queue<String> queue = new LinkedList<>();
+        // Set<String> visited = new HashSet<>();
+        // Queue<String> queue = new LinkedList<>();
 
-        queue.add(givenUserId);
-        visited.add(givenUserId);
+        // queue.add(givenUserId);
+        // visited.add(givenUserId);
 
-        while(!queue.isEmpty()) {
-            User currentUser = repository.findById(queue.poll()).get();
+        // while(!queue.isEmpty()) {
+        User currentUser = repository.findById(givenUserId).get();
 
-            for (String friend : currentUser.getFriendsId()) {
-                if (!visited.contains(friend)) {
-                    visited.add(friend);
+        for (String friend : currentUser.getFriendsId()) {
+            // if (!visited.contains(friend)) {
+            // visited.add(friend);
 
-                    List<String> mutualFriends = getMutualFriends(givenUserId, friend);
-                    mutualFriendsList.add(new FriendMutual(repository.findById(friend).get(), mutualFriends));
+            List<String> mutualFriends = getMutualFriends(givenUserId, friend);
+            mutualFriendsList.add(new FriendMutual(repository.findById(friend).get(), mutualFriends));
 
-                    queue.add(friend);
-                }
-            }
+            // queue.add(friend);
+            // }
         }
+        // }
 
         return mutualFriendsList;
     }
 
     public List<FriendMutual> getFriendRecommendations(String userId) {
+        // Set<FriendMutual> friendRecommendations = new HashSet<>();
+        Set<String> visited = new HashSet<>();
         List<FriendMutual> friendRecommendations = new ArrayList<>();
         Set<String> immediateFriends = repository.findById(userId).get().getFriendsId();
 
-        for (String immediateFriend: immediateFriends) {
+        for (String immediateFriend : immediateFriends) {
             Set<String> friendsOfFriend = repository.findById(immediateFriend).get().getFriendsId();
             for (String friendOfFriend : friendsOfFriend) {
-                if (!immediateFriends.contains(friendOfFriend) && !friendOfFriend.equals(userId)) {
+                if (!immediateFriends.contains(friendOfFriend) && !friendOfFriend.equals(userId)
+                        && !visited.contains(friendOfFriend)) {
                     List<String> mutualFriends = getMutualFriends(userId, friendOfFriend);
-                    friendRecommendations.add(new FriendMutual(repository.findById(friendOfFriend).get(), mutualFriends));
+                    friendRecommendations
+                            .add(new FriendMutual(repository.findById(friendOfFriend).get(), mutualFriends));
+                    visited.add(friendOfFriend);
                 }
             }
         }
@@ -352,5 +353,77 @@ public class UserService {
         return friendRecommendations;
     }
 
+    public void sendFriendRequest(String senderId, String receiverId) {
+        User sender = repository.findById(senderId).get();
+        User receiver = repository.findById(receiverId).get();
 
+        // Add receiverId to the sentFriendRequests of the sender
+        sender.getSentFriendRequests().add(receiverId);
+        repository.save(sender);
+
+        // Add senderId to the receivedFriendRequests of the receiver
+        receiver.getReceivedFriendRequests().add(senderId);
+        repository.save(receiver);
+    }
+
+    public void declineFriendRequest(String receiverId, String senderId) {
+        User receiver = repository.findById(receiverId).get();
+        User sender = repository.findById(senderId).get();
+        receiver.getReceivedFriendRequests().remove(senderId);
+        repository.save(receiver);
+        sender.getSentFriendRequests().remove(receiverId);
+        repository.save(sender);
+    }
+
+    public void acceptFriendRequest(String receiverId, String senderId) {
+        User receiver = repository.findById(receiverId).get();
+        User sender = repository.findById(senderId).get();
+
+        // Add senderId to the friendsId of the receiver
+        receiver.getFriendsId().add(senderId);
+        repository.save(receiver);
+
+        // Add receiverId to the friendsId of the sender
+        sender.getFriendsId().add(receiverId);
+        repository.save(sender);
+
+        // Remove senderId from the receivedFriendRequests of the receiver
+        receiver.getReceivedFriendRequests().remove(senderId);
+        repository.save(receiver);
+
+        // Remove receiverId from the sentFriendRequests of the sender
+        sender.getSentFriendRequests().remove(receiverId);
+        repository.save(sender);
+    }
+
+    public Boolean checkFriend(User user, User friend) {
+        return user.getFriendsId().contains(friend.getId());
+    }
+
+    public boolean areFriends(String userId1, String userId2) {
+        User user1 = repository.findById(userId1).get();
+        // User user2 = repository.findById(userId2).get();
+
+        if (user1.getFriendsId().contains(userId2)) {
+            return true;
+        }
+
+        // if (user2.getFriendsId().contains(userId1)) {
+        // return true;
+        // }
+
+        return false;
+    }
+
+    public boolean hasPendingFriendRequest(String userId1, String userId2) {
+        User user1 = repository.findById(userId1).get();
+        User user2 = repository.findById(userId2).get();
+
+        if (user1.getReceivedFriendRequests().contains(userId2)
+                || user2.getReceivedFriendRequests().contains(userId1)) {
+            return true;
+        }
+
+        return false;
+    }
 }

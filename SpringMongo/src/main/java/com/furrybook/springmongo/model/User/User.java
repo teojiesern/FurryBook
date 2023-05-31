@@ -1,12 +1,8 @@
 package com.furrybook.springmongo.model.User;
 
 import java.time.LocalDate;
-import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Deque;
-import java.util.List;
 import java.util.Set;
-import java.util.Stack;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -57,4 +53,8 @@ public interface User extends Comparable<User> {
     String getEmail();
 
     String getPhoneNumber();
+
+    ArrayList<String> getSentFriendRequests();
+
+    ArrayList<String> getReceivedFriendRequests();
 }

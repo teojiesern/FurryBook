@@ -83,7 +83,7 @@ const StyledLikedAndCommented = styled.div`
 const StyledLikeAndCommentCount = styled.p`
     color: gray;
     fontFamily: "Montserrat, sans-serif";
-    font-size: 10px;
+    font-size: 15px;
 `;
 
 const StyledInteractionButton = styled.div`
@@ -198,7 +198,7 @@ export function Posts({ userId, profilePic, datas }) {
                 comments.map(async (c) => {
                     const displayTime = getTimeCreated(c);
                     const user = await UserData(c.userId);
-                    const profilePic = user.profilePicturePath.split("/").pop();
+                    const profilePic = user.profilePicturePath?.split("/").pop();
                     return (
                         <StyledCommentsContainer key={c.id}>
                             <StyledPostSection style={commentContainerStyle}>
@@ -304,7 +304,7 @@ export function Posts({ userId, profilePic, datas }) {
                 <StyledLikedAndCommented>
                     {post.likes?.length == 0
                         ? "Be the first one to like this post"
-                        : `${post.likes?.length} users liked this post`}{" "}
+                        : `${post.likes?.length} users liked this post`}
                     <StyledLikeAndCommentCount
                         style={pointer}
                         onClick={async () => {

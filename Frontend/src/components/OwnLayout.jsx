@@ -135,7 +135,7 @@ const StyledLogo = styled.div`
 export function OwnLayout() {
     const [styling, setStyling] = React.useState("none");
     const data = useLoaderData();
-    const bgImg = data.profilePicturePath.split("/").pop();
+    const bgImg = data.profilePicturePath?.split("/").pop();
 
     function handleClick() {
         setStyling((prevStyle) => (prevStyle === "none" ? "" : "none"));

@@ -43,6 +43,8 @@ public class StandardUser implements User {
     // linkedlist
     private ArrayList<String> jobs = new ArrayList<>();
     private Set<String> friendsId = new HashSet<String>();
+    private ArrayList<String> receivedFriendRequests = new ArrayList<>();
+    private ArrayList<String> sentFriendRequests = new ArrayList<>();
 
     @Override
     public void setBirthdate(LocalDate birthdate) {
@@ -65,5 +67,4 @@ public class StandardUser implements User {
         }
         return 0;
     }
-
 }

@@ -228,8 +228,8 @@ export function Login() {
                             return {
                                 userId,
                                 profilePicturePath: response.data
-                                    .split("/")
-                                    .pop(),
+                                    ?.split("/")
+                                    ?.pop(),
                                 name: userResponse.data.name,
                             };
                         })
