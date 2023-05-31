@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink, Outlet, useParams } from "react-router-dom";
+import { NavLink, Outlet, useLoaderData, useParams } from "react-router-dom";
 
 const navContainerStyle = {
     display: "flex",
@@ -26,6 +26,8 @@ const activeStyle = {
 const FriendsNav = () => {
     const userId = useParams().userId;
     const [friend, setFriend] = React.useState(true);
+    const userData = useLoaderData();
+
     return (
         <div>
             <nav style={navContainerStyle}>
@@ -46,7 +48,7 @@ const FriendsNav = () => {
                     People you might know
                 </NavLink>
             </nav>
-            <Outlet />
+            <Outlet context={userData}/>
         </div>
     );
 };

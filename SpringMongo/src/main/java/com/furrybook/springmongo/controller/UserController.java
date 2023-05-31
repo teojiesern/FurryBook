@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/users")
 public class UserController {
     @Autowired
@@ -318,6 +319,11 @@ public class UserController {
         } else {
             return ResponseEntity.ok("The two users are not friends and have no pending friend request");
         }
+    }
+
+    @PostMapping("/mutual-friends")
+    public List<String> getMutualBetweenTwoUsers(@RequestBody FriendRequestDto friendRequestDto) {
+        return service.getMutualFriends(friendRequestDto.getReceiverId(), friendRequestDto.getSenderId());
     }
 
 }

@@ -9,6 +9,11 @@ const StyledDiv = styled.div`
     justify-content: center;
     align-items: center;
     background-color: #fafafa;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
 `;
 
 const StyledRecentLoginDiv = styled.div`
@@ -285,7 +290,8 @@ export function Login() {
                 <StyledDescription>
                     These are all the past logins
                 </StyledDescription>
-                {JSON.parse(localStorage?.getItem("pastUserIds"))?.length == 0 ? (
+                {JSON.parse(localStorage?.getItem("pastUserIds"))?.length ==
+                0 ? (
                     <StyledLogo style={{ fontSize: "20px" }}>
                         No recent logins yet, 🌟 Sign in now to uncover
                         exclusive content

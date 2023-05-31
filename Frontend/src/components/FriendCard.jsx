@@ -1,12 +1,10 @@
 import { Link } from "react-router-dom";
 import { styled } from "styled-components";
 
-const CardBody = styled.div`
+export const CardBody = styled.div`
     font-family: "Montserrat", sans-serif;
     width: 100%;
-    background-color: #fff;
     border-radius: 15px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 16px;
     margin-top: 15px;
     display: flex;

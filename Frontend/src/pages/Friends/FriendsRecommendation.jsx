@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, useLoaderData } from "react-router-dom";
 import { styled } from "styled-components";
+import { SendFriendRequest } from "../../api/SendFriendRequest";
 
 const GridContainer = styled.div`
     display: grid;
@@ -42,9 +43,34 @@ const StyledProfilePic = styled.div`
     margin-right: 10px;
 `;
 
+const StyledButton = styled.button`
+    border: none;
+    background-color: #153fac;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+`;
+
+const StyledInteractionContainer = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+`;
+
 export function FriendsRecommendations() {
+    const [added, setAdded] = React.useState({});
     const recommendations = useLoaderData();
     console.log(recommendations);
+
+    async function handleAddFriend(id) {
+        const temp = await SendFriendRequest(id);
+        setAdded((prevAdded) => {
+            return { ...prevAdded, [id]: true };
+        });
+    }
 
     const recommendedUser = recommendations.map((recommendation) => {
         const profilePic = recommendation.friend.profilePicturePath
@@ -54,29 +80,52 @@ export function FriendsRecommendations() {
         const mutualFriends = recommendation.mutualFriends.length;
         const id = recommendation.friend.id;
         return (
-            <RecommendationStyle as={Link} to={`/FurryBook/profile/${id}`}>
-                <StyledLeftPortion>
-                    <StyledProfilePic
-                        style={{
-                            backgroundImage: `url("/assets/profile pictures/${profilePic}")`,
-                        }}
-                    />
-                    <div
-                        style={{
-                            display: "flex",
-                            flexDirection: "column",
-                        }}
-                    >
-                        <StyledName>{name}</StyledName>
-                        <StyledName>{mutualFriends} mutual friends</StyledName>
+            <div>
+                <RecommendationStyle>
+                    <div>
+                        <StyledLeftPortion>
+                            <StyledProfilePic
+                                style={{
+                                    backgroundImage: `url("/assets/profile pictures/${profilePic}")`,
+                                }}
+                            />
+                            <div
+                                style={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                }}
+                            >
+                                <StyledName>{name}</StyledName>
+                                <StyledName>
+                                    {mutualFriends} mutual friends
+                                </StyledName>
+                            </div>
+                        </StyledLeftPortion>
                     </div>
-                </StyledLeftPortion>
-            </RecommendationStyle>
+                    <StyledInteractionContainer>
+                        <StyledButton
+                            style={{
+                                backgroundColor: "#e4e6eb",
+                                color: "black",
+                            }}
+                            onClick={() =>
+                                (window.location.href = `/FurryBook/profile/${id}`)
+                            }
+                        >
+                            View Profile
+                        </StyledButton>
+                        <StyledButton
+                            onClick={() => handleAddFriend(id)}
+                            disabled={added[id]}
+                        >
+                            {added[id]
+                                ? "Friend Request Sent"
+                                : "Add as friend"}
+                        </StyledButton>
+                    </StyledInteractionContainer>
+                </RecommendationStyle>
+            </div>
         );
     });
-    return (
-        <GridContainer>
-            {recommendedUser}
-        </GridContainer>
-    );
+    return <GridContainer>{recommendedUser}</GridContainer>;
 }

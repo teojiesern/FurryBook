@@ -1,15 +1,16 @@
 import React from "react";
-import { useLoaderData, useParams } from "react-router-dom";
+import { useLoaderData, useOutletContext, useParams } from "react-router-dom";
 import { useState, useMemo } from "react";
 import { styled } from "styled-components";
 import FriendCard from "../../components/FriendCard";
 import { StyledContainer } from "../../Utils/StyledContainer";
+import { FriendRequest } from "./FriendRequest";
 
 const FriendList = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
+    display: grid;
+    grid-template-columns: 0.5fr 0.5fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 0 10px;
 `;
 
 const StyledRequestContainer = styled.div`
@@ -20,12 +21,16 @@ const StyledRequestContainer = styled.div`
 
 const FriendsContainer = styled.div`
     display: flex;
-    margin: 10px 20px 6% 20px;
+    margin: 10px 30px 6% 30px;
     padding: 20px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
 `;
 
 const Title = styled.h1`
     margin: 0;
+    font-size: 30px;
     font-family: Montserrat, sans-serif;
 `;
 
@@ -59,7 +64,7 @@ const FriendListContainer = ({ friends }) => {
 
 const Friends = () => {
     const [friendData, setFriendData] = useState(useLoaderData());
-    const { userId } = useParams();
+    const userData = useOutletContext();
 
     const friendDataWithMutualCount = useMemo(() => {
         return friendData?.map((friend) => ({
@@ -73,6 +78,7 @@ const Friends = () => {
             <FriendsContainer>
                 <StyledRequestContainer>
                     <Title>Friend Requests</Title>
+                    <FriendRequest userData={userData}></FriendRequest>
                 </StyledRequestContainer>
                 <StyledDividerContainer>
                     <StyledDividerLine></StyledDividerLine>

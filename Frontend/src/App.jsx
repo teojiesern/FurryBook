@@ -62,7 +62,11 @@ const router = createBrowserRouter(
                     <Route
                         path="friends/:userId"
                         element={<FriendsNav />}
-                        loader={authentication}
+                        loader={async () => {
+                            const authResult = await authentication();
+                            if (authResult) return authResult;
+                            return currentUserData();
+                        }}
                     >
                         <Route
                             index

@@ -12,6 +12,8 @@ import java.util.Stack;
 
 import org.springframework.data.annotation.Id;
 
+import com.furrybook.springmongo.model.Friend.FriendMutual;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
