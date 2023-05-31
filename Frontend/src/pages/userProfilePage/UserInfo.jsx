@@ -217,8 +217,8 @@ export function UserInfo({ datas, friends, submit, userId }) {
     const [hobUpdates, setHobUpdates] = React.useState([]);
     const [allJobs, setAllJobs] = React.useState(data.jobs);
     const [jobUpdate, setJobUpdate] = React.useState([]);
-    const profilePic = data.profilePicturePath.split("/").pop();
-    const coverPhoto = data.coverPhotoPath.split("/").pop();
+    const profilePic = data.profilePicturePath?.split("/").pop();
+    const coverPhoto = data.coverPhotoPath?.split("/").pop();
     const hobbiesRef = useRef(null);
     const jobsRef = useRef(null);
     const currentLogin = localStorage.getItem("userId");

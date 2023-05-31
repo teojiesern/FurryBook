@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import {
     Link,
     Outlet,
+    useLoaderData,
     useLocation,
     useOutletContext,
     useParams,
@@ -124,7 +125,7 @@ const CustomNavLink = ({ to, children }) => {
 };
 
 export function ProfileLayout() {
-    const [datas, setDatas] = React.useState(useOutletContext());
+    const [datas, setDatas] = React.useState(useLoaderData());
     const { userId } = useParams();
     const backgroundPhoto = datas.coverPhotoPath?.split("/").pop();
     const profilePic = datas.profilePicturePath?.split("/").pop();
@@ -142,6 +143,7 @@ export function ProfileLayout() {
 
         getProfData();
     }, [userId]);
+
     return (
         <StyledContainer>
             <StyledUserInfoContainer>

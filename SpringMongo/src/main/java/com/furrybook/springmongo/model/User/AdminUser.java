@@ -6,10 +6,13 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.Stack;
 
 import org.springframework.data.annotation.Id;
+
+import com.furrybook.springmongo.model.Friend.FriendMutual;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,6 +33,8 @@ public class AdminUser implements User {
     private ArrayList<String> hobbies = new ArrayList<>();
     private ArrayList<String> jobs = new ArrayList<>();
     private Set<String> friendsId = new HashSet<String>();
+    private ArrayList<String> receivedFriendRequests = new ArrayList<>();
+    private ArrayList<String> sentFriendRequests = new ArrayList<>();
 
     @Override
     public void setBirthdate(LocalDate birthdate) {

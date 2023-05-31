@@ -1,5 +1,7 @@
 package com.furrybook.springmongo.controller;
 
+import com.furrybook.springmongo.model.Friend.FriendMutual;
+import com.furrybook.springmongo.model.Friend.FriendRequestDto;
 import com.furrybook.springmongo.model.User.StandardUser;
 import com.furrybook.springmongo.model.User.User;
 import com.furrybook.springmongo.model.extra.LoginRequest;
@@ -17,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/users")
 public class UserController {
     @Autowired
@@ -139,40 +142,6 @@ public class UserController {
     // }
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
-    @PostMapping("/{userId}/friends/{friendId}")
-    public ResponseEntity<String> addFriend(@PathVariable("userId") String userId,
-            @PathVariable("friendId") String friendId) {
-        User user = service.getUserbyId(userId);
-        User friend = service.getUserbyId(friendId);
-
-        if (user == null || friend == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        service.addFriend(user, friend);
-
-        return ResponseEntity.ok("Friend added successfully");
-    }
-
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
-    @GetMapping("/{userId}/friends/{friendId}")
-    public ResponseEntity<String> checkFriend(@PathVariable("userId") String userId,
-            @PathVariable("friendId") String friendId) {
-        User user = service.getUserbyId(userId);
-        User friend = service.getUserbyId(friendId);
-
-        if (user == null || friend == null) {
-            return ResponseEntity.notFound().build();
-        }
-
-        if (service.checkFriend(user, friend)) {
-            return ResponseEntity.ok("Friend");
-        } else {
-            return ResponseEntity.ok("Not friends.");
-        }
-    }
-
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PutMapping("/update/{id}")
     public User updateUser(@PathVariable("id") String id, @RequestBody UserUpdateRequest request) {
         User user = service.getUserbyId(id);
@@ -222,17 +191,139 @@ public class UserController {
         return userRepository.save(user);
     }
 
-    // @CrossOrigin(origins = "*", allowedHeaders = "*")
-    // @PostMapping("/search")
-    // public List<User> search(@RequestBody String queryString) {
-    // return service.search(queryString);
-    // }
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @PostMapping("friend/{userId}/{friendId}")
+    public ResponseEntity<String> addFriend(@PathVariable("userId") String userId,
+            @PathVariable("friendId") String friendId) {
+        User user = service.getUserbyId(userId);
+        User friend = service.getUserbyId(friendId);
+
+        if (user == null || friend == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        service.addFriend(user, friend);
+
+        return ResponseEntity.ok("Friend added successfully");
+    }
+
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @GetMapping("friend/{userId}/{friendId}")
+    public ResponseEntity<String> checkFriend(@PathVariable("userId") String userId,
+            @PathVariable("friendId") String friendId) {
+        User user = service.getUserbyId(userId);
+        User friend = service.getUserbyId(friendId);
+
+        if (user == null || friend == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        if (service.checkFriend(user, friend)) {
+            return ResponseEntity.ok("Friend");
+        } else {
+            return ResponseEntity.ok("Not friends.");
+        }
+    }
+
+    // Getting friends of user alongside with the mutual friend list.
+    // Can be used to show list of friends at the friend page.
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @GetMapping("friend/{userId}")
+    public List<FriendMutual> getFriends(@PathVariable String userId) {
+        List<FriendMutual> mutualFriends = service.getFriendsWithMutualFriends(userId);
+        return mutualFriends;
+    }
+
+    // Getting friend recommendations with the mutual friend list.
+    // Can be used to recommend potential friends at the friend page.
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @GetMapping("recommendation/{userId}")
+    public List<FriendMutual> getFriendRecommendation(@PathVariable String userId) {
+        List<FriendMutual> friendrecommendations = service.getFriendRecommendations(userId);
+        return friendrecommendations;
+    }
+
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @DeleteMapping("friend/{userId}/{friendId}")
+    public ResponseEntity<String> removeFriend(@PathVariable("userId") String userId,
+            @PathVariable("friendId") String friendId) {
+        User user = service.getUserbyId(userId);
+        User friend = service.getUserbyId(friendId);
+
+        if (user == null || friend == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        boolean removed = service.removeFriend(user, friend);
+
+        if (removed) {
+            return ResponseEntity.ok("Friend removed successfully");
+        } else {
+            return ResponseEntity.badRequest().body("Unable to remove friend");
+        }
+    }
+
+    @PostMapping("/send-request")
+    public ResponseEntity<String> sendFriendRequest(@RequestBody FriendRequestDto friendRequestDto) {
+        service.sendFriendRequest(friendRequestDto.getSenderId(), friendRequestDto.getReceiverId());
+        return ResponseEntity.ok("Friend request sent successfully");
+    }
+
+    @PostMapping("/accept-request")
+    public ResponseEntity<String> acceptFriendRequest(@RequestBody FriendRequestDto friendRequestDto) {
+        service.acceptFriendRequest(friendRequestDto.getReceiverId(), friendRequestDto.getSenderId());
+        return ResponseEntity.ok("Friend request accepted successfully");
+    }
+
+    @PostMapping("/decline-request")
+    public ResponseEntity<String> declineFriendRequest(@RequestBody FriendRequestDto friendRequestDto) {
+        service.declineFriendRequest(friendRequestDto.getReceiverId(), friendRequestDto.getSenderId());
+        return ResponseEntity.ok("Friend request declined successfully");
+    }
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/search")
     public List<User> search(@RequestBody Map<String, String> body) {
         String queryString = body.get("query");
         return service.search(queryString);
+    }
+
+    // @GetMapping("/friendship-status")
+    // public ResponseEntity<String> getFriendshipStatus(@RequestParam String
+    // userId1, @RequestParam String userId2) {
+    // boolean areFriends = service.areFriends(userId1, userId2);
+    // boolean hasPendingRequest = service.hasPendingFriendRequest(userId1,
+    // userId2);
+
+    // if (areFriends) {
+    // return ResponseEntity.ok("The two users are friends");
+    // } else if (hasPendingRequest) {
+    // return ResponseEntity.ok("There is a pending friend request between the two
+    // users");
+    // } else {
+    // return ResponseEntity.ok("The two users are not friends and have no pending
+    // friend request");
+    // }
+    // }
+
+    @GetMapping("/friendship-status")
+    public ResponseEntity<String> getFriendshipStatus(@RequestBody FriendRequestDto friendRequestDto) {
+        boolean areFriends = service.areFriends(friendRequestDto.getSenderId(), friendRequestDto.getReceiverId());
+        boolean hasPendingRequest = service.hasPendingFriendRequest(friendRequestDto.getSenderId(),
+                friendRequestDto.getReceiverId());
+
+        if (areFriends) {
+            return ResponseEntity.ok("The two users are friends");
+        } else if (hasPendingRequest) {
+            return ResponseEntity.ok("There is a pending friend request between the two users");
+        } else {
+            return ResponseEntity.ok("The two users are not friends and have no pending friend request");
+        }
+    }
+
+    @PostMapping("/mutual-friends")
+    public List<String> getMutualBetweenTwoUsers(@RequestBody FriendRequestDto friendRequestDto) {
+        return service.getMutualFriends(friendRequestDto.getReceiverId(), friendRequestDto.getSenderId());
     }
 
 }

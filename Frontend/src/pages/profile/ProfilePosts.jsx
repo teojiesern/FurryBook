@@ -1,5 +1,5 @@
 import React from "react";
-import { useOutletContext, useParams } from "react-router-dom";
+import { useLoaderData, useOutletContext, useParams } from "react-router-dom";
 import { styled } from "styled-components";
 import { UserInfo } from "../userProfilePage/UserInfo";
 import { Posts } from "../Posts";
@@ -13,7 +13,7 @@ export const StyledParentContainer = styled.div`
 
 export function ProfilePosts() {
     const [profilePic, datas] = useOutletContext();
-    const [data, setData] = React.useState(datas);
+    const [data, setData] = React.useState(useLoaderData());
     const { userId } = useParams();
 
     const friends =

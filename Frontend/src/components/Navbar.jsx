@@ -45,8 +45,8 @@ const CustomNavLink = ({ to, children }) => {
     const location = useLocation();
     const decodedPathname = decodeURIComponent(location.pathname);
     const isActive =
-        decodedPathname.split("/").slice(0, 4).join("/") ===
-        to.split("/").slice(0, 4).join("/");
+        decodedPathname?.split("/").slice(0, 4).join("/") ===
+        to?.split("/")?.slice(0, 4).join("/");
 
     return (
         <StyledNavLink as={Link} to={to} style={isActive ? activeStyle : {}}>
@@ -57,7 +57,7 @@ const CustomNavLink = ({ to, children }) => {
 
 CustomNavLink.propTypes = {
     to: PropTypes.string.isRequired,
-    children: PropTypes.string.isRequired,
+    children: PropTypes.array.isRequired,
 };
 
 const Icon = styled.div`
@@ -86,7 +86,7 @@ export function Navbar() {
                 </Icon>
                 Profile
             </CustomNavLink>
-            <CustomNavLink as={Link} to={`/FurryBook/friends`}>
+            <CustomNavLink as={Link} to={`/FurryBook/friends/${userData.id}`}>
                 <Icon>
                     <FaUserFriends />
                 </Icon>

@@ -5,6 +5,7 @@ import { BiSearch } from "react-icons/bi";
 import { RiProfileFill } from "react-icons/ri";
 import { IoSettingsSharp, IoLogOut } from "react-icons/io5";
 import { Search } from "../api/Search";
+import { StyledContainer } from "../Utils/StyledContainer";
 
 const StyledDiv = styled.div`
     display: flex;
@@ -134,7 +135,7 @@ export function TopNav() {
     const [commentSelection, setCommentSelection] = React.useState("none");
     const [recommendedUser, setRecommendedUser] = React.useState([]);
     const data = useLoaderData();
-    const bgImg = data.profilePicturePath.split("/").pop();
+    const bgImg = data.profilePicturePath?.split("/").pop();
     const [recommendations, setReccomendations] = React.useState([]);
 
     React.useEffect(() => {
@@ -221,7 +222,7 @@ export function TopNav() {
                                 top: "9.5%",
                             }}
                         >
-                            {recommendations}
+                            <StyledContainer>{recommendations}</StyledContainer>
                         </StyledOptionContainer>
                     </StyledSearchSelection>
                 </div>
