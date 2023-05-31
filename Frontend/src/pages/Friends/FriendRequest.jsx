@@ -3,6 +3,8 @@ import React from "react";
 import { styled } from "styled-components";
 import { UserData } from "../../api/UserData";
 import { Link } from "react-router-dom";
+import { AcceptFriendRequest } from "../../api/AcceptFriendRequest";
+import { DeclineFriendRequest } from "../../api/DeclineFriendRequest";
 
 const RequestContainer = styled.div`
     display: flex;
@@ -54,6 +56,8 @@ const StyledButton = styled.button`
 export function FriendRequest({ userData }) {
     const [mutual, setMutual] = React.useState([]);
     const [sentRequestUserData, setSentRequestUserData] = React.useState([]);
+    const [accepted, setAccepted] = React.useState({});
+    const [declined, setDeclined] = React.useState({});
     const requestOfUser = userData.receivedFriendRequests;
 
     React.useEffect(() => {
@@ -79,8 +83,20 @@ export function FriendRequest({ userData }) {
         }
     }, []);
 
-    console.log(mutual);
-    console.log(sentRequestUserData);
+    async function handleAccept(request) {
+        const tempAccept = await AcceptFriendRequest(request);
+        setAccepted((prevAccepted) => {
+            return { ...prevAccepted, [request]: true };
+        });
+    }
+
+    async function handleDecline(request) {
+        const tempDecline = await DeclineFriendRequest(request);
+        setDeclined((prevDeclined) => {
+            return { ...prevDeclined, [request]: true };
+        });
+    }
+
     const allRequests =
         requestOfUser.length === 0 ? (
             <Name>No Friend Request for now</Name>
@@ -119,18 +135,29 @@ export function FriendRequest({ userData }) {
                             style={{
                                 display: "flex",
                                 flexDirection: "column",
-                                marginLeft: "20%",
+                                marginLeft: "16%",
                             }}
                         >
-                            <StyledButton>Accept</StyledButton>
+                            <StyledButton
+                                onClick={() => handleAccept(request)}
+                                disabled={
+                                    declined[request] || accepted[request]
+                                }
+                            >
+                                {accepted[request] ? "Accepted" : "Accept"}
+                            </StyledButton>
                             <StyledButton
                                 style={{
                                     backgroundColor: "#e4e6eb",
                                     color: "black",
                                     marginTop: "5px",
                                 }}
+                                onClick={() => handleDecline(request)}
+                                disabled={
+                                    declined[request] || accepted[request]
+                                }
                             >
-                                Decline
+                                {declined[request] ? "Declined" : "Decline"}
                             </StyledButton>
                         </div>
                     </FriendRequests>

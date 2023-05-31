@@ -4,12 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -55,8 +53,19 @@ public class UserService {
         return repository.save(user);
     }
 
+    // public List<User> findAllUsers() {
+    // return repository.findAll();
+    // }
+
     public List<User> findAllUsers() {
-        return repository.findAll();
+        List<User> allUsers = repository.findAll();
+
+        // Filter the users based on userType
+        List<User> filteredUsers = allUsers.stream()
+                .filter(user -> user.getUserType().equals("user"))
+                .collect(Collectors.toList());
+
+        return filteredUsers;
     }
 
     public List<User> findAllStUsers() {
@@ -351,7 +360,8 @@ public class UserService {
             }
         }
 
-        friendRecommendations.sort(Comparator.comparing(a -> a.getMutualFriends().size()));
+        // friendRecommendations.sort(Comparator.comparing(a ->
+        // a.getMutualFriends().size()));
 
         return friendRecommendations;
     }

@@ -4,7 +4,7 @@ import styled from "styled-components";
 import PropTypes from "prop-types";
 import { AiFillHome } from "react-icons/ai";
 import { FaUserFriends } from "react-icons/fa";
-import { RiProfileFill, RiSettings3Fill } from "react-icons/ri";
+import { RiProfileFill, RiSettings3Fill, RiAdminFill } from "react-icons/ri";
 
 const StyledLogo = styled.div`
     color: #153fac;
@@ -98,12 +98,14 @@ export function Navbar() {
                 </Icon>
                 Settings
             </CustomNavLink>
-            {/* <CustomNavLink as={Link} to="/FurryBook/login">
-                    Login
+            {userData.userType === "admin" ? (
+                <CustomNavLink as={Link} to={`/FurryBook/adminPage`}>
+                    <Icon>
+                        <RiAdminFill />
+                    </Icon>
+                    Admin
                 </CustomNavLink>
-                <CustomNavLink as={Link} to="/FurryBook/signup">
-                    Signup
-                </CustomNavLink> */}
+            ) : null}
         </StyledNav>
     );
 }

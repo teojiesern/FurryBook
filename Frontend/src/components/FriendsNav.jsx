@@ -1,5 +1,14 @@
 import React from "react";
-import { NavLink, Outlet, useLoaderData, useParams } from "react-router-dom";
+import { Nav } from "react-bootstrap";
+import {
+    Link,
+    NavLink,
+    Outlet,
+    useLoaderData,
+    useLocation,
+    useParams,
+} from "react-router-dom";
+import { styled } from "styled-components";
 
 const navContainerStyle = {
     display: "flex",
@@ -12,43 +21,53 @@ const navContainerStyle = {
     boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
 };
 
-const navLinkStyle = {
-    textDecoration: "none",
-    fontSize: "17px",
-};
-
 const activeStyle = {
     fontSize: "17px",
     textDecoration: "none",
     fontWeight: "bold",
 };
 
+const StyledNavLink = styled(Nav.Link)`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: "Montserrat", sans-serif;
+    font-weight: 400;
+    text-decoration: none;
+    width: 20%;
+`;
+
+const CustomNavLink = ({ to, children }) => {
+    const location = useLocation();
+    const decodedPathname = decodeURIComponent(location.pathname);
+    const isActive = decodedPathname === to;
+
+    return (
+        <StyledNavLink as={Link} to={to} style={isActive ? activeStyle : {}}>
+            {children}
+        </StyledNavLink>
+    );
+};
+
 const FriendsNav = () => {
     const userId = useParams().userId;
-    const [friend, setFriend] = React.useState(true);
     const userData = useLoaderData();
 
     return (
         <div>
             <nav style={navContainerStyle}>
-                <NavLink
+                <CustomNavLink
                     to={`/FurryBook/friends/${userId}`}
-                    activeClassName="active"
-                    style={friend ? activeStyle : navLinkStyle}
-                    onClick={() => setFriend(true)}
                 >
                     My Friends
-                </NavLink>
-                <NavLink
+                </CustomNavLink>
+                <CustomNavLink
                     to={`/FurryBook/friends/${userId}/recommendation`}
-                    activeClassName="active"
-                    style={friend ? navLinkStyle : activeStyle}
-                    onClick={() => setFriend(false)}
                 >
                     People you might know
-                </NavLink>
+                </CustomNavLink>
             </nav>
-            <Outlet context={userData}/>
+            <Outlet context={userData} />
         </div>
     );
 };

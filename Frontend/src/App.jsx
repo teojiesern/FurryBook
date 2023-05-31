@@ -29,12 +29,14 @@ import { Settings } from "./pages/Settings";
 import { currentUserData } from "./api/CurrentUserData";
 import { AllPosts } from "./api/AllPosts";
 import { PostCommentAction } from "./api/PostCommentAction";
-import { userProfilePage } from "./pages/userProfilePage/userProfilePage";
 import FriendsNav from "./components/FriendsNav";
 import { FriendsRecommendations } from "./pages/Friends/FriendsRecommendation";
 import { FriendsData } from "./api/Friends";
 import { UserData } from "./api/UserData";
 import { FriendsRecommendation } from "./api/FriendRecommendations";
+import { AdminPage } from "./pages/AdminPage";
+import { AdminFindUser } from "./api/AdminFindUser";
+import { AdminPageUserPosts } from "./pages/AdminPageUserPosts";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -96,6 +98,26 @@ const router = createBrowserRouter(
                         path="settings"
                         element={<Settings />}
                         loader={authentication}
+                    />
+                    <Route
+                        path="adminPage"
+                        element={<AdminPage />}
+                        loader={async () => {
+                            const authResult = await authentication();
+                            if (authResult) return authResult;
+                            const allUsers = await AdminFindUser();
+                            return allUsers;
+                        }}
+                    />
+                    <Route
+                        path="adminPage/:userId"
+                        element={<AdminPageUserPosts />}
+                        loader={async ({ params }) => {
+                            const authResult = await authentication();
+                            if (authResult) return authResult;
+                            const allPosts = await AllPosts(params.userId);
+                            return allPosts;
+                        }}
                     />
                     <Route
                         path="profile/:userId"
