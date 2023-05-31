@@ -55,6 +55,7 @@ export function FriendRequest({ userData }) {
     const [mutual, setMutual] = React.useState([]);
     const [sentRequestUserData, setSentRequestUserData] = React.useState([]);
     const requestOfUser = userData.receivedFriendRequests;
+
     React.useEffect(() => {
         if (requestOfUser.length != 0) {
             requestOfUser.forEach((id) => {
@@ -67,16 +68,19 @@ export function FriendRequest({ userData }) {
                         }
                     );
                     const tempUserData = await UserData(id);
-                    setMutual([...mutual, tempMutual.data]);
-                    setSentRequestUserData([
-                        ...sentRequestUserData,
+                    setMutual((prevMutual) => [tempMutual.data, ...prevMutual]);
+                    setSentRequestUserData((prevSentRequest) => [
                         tempUserData,
+                        ...prevSentRequest,
                     ]);
                 };
                 getMutual();
             });
         }
     }, []);
+
+    console.log(mutual);
+    console.log(sentRequestUserData);
     const allRequests =
         requestOfUser.length === 0 ? (
             <Name>No Friend Request for now</Name>
@@ -123,7 +127,7 @@ export function FriendRequest({ userData }) {
                                 style={{
                                     backgroundColor: "#e4e6eb",
                                     color: "black",
-                                    marginTop: "5px"
+                                    marginTop: "5px",
                                 }}
                             >
                                 Decline
