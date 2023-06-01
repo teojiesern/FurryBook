@@ -59,4 +59,6 @@ public interface User extends Comparable<User> {
     ArrayList<String> getSentFriendRequests();
 
     ArrayList<String> getReceivedFriendRequests();
+
+    Object getUserType();
 }

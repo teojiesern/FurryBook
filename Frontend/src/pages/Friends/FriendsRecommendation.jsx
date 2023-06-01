@@ -72,7 +72,7 @@ export function FriendsRecommendations() {
         });
     }
 
-    const recommendedUser = recommendations.map((recommendation) => {
+    const recommendedUser = recommendations?.map((recommendation) => {
         const profilePic = recommendation.friend.profilePicturePath
             ?.split("/")
             .pop();

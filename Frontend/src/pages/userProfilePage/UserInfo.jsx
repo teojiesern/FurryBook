@@ -229,7 +229,6 @@ export function UserInfo({ datas, friends, submit, userId }) {
             setData(temp);
         };
         getDataBasedOnId();
-        console.log("data from effect", data);
     }, [userId, datas]);
 
     const hobbies =

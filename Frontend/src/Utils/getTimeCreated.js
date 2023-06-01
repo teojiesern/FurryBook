@@ -1,5 +1,5 @@
 export function getTimeCreated(post){
-    const createdDate = new Date(post.created);
+    const createdDate = new Date(post?.created);
         const currentDate = new Date();
         let displayTime;
         const timeDiff = currentDate.getTime() - createdDate.getTime();

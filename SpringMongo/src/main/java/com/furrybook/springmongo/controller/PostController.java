@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/api/posts")
 public class PostController {
 
@@ -86,5 +87,11 @@ public class PostController {
     @DeleteMapping()
     public String clear() {
         return service.deleteAll();
+    }
+
+    @GetMapping("/user/{userId}/friends")
+    public ResponseEntity<List<Posts>> getPostsByUserFriends(@PathVariable String userId) {
+        List<Posts> friendPosts = service.getPostsByUserFriends(userId);
+        return ResponseEntity.ok(friendPosts);
     }
 }

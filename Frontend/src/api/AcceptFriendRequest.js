@@ -1,9 +1,9 @@
 import axios from "axios"
 
-export async function SendFriendRequest(receiverId){
+export async function AcceptFriendRequest(senderId){
     try{
-        const senderId = localStorage.getItem("userId")
-        const response = await axios.post(`http://localhost:3001/users/send-request`, {
+        const receiverId = localStorage.getItem("userId")
+        const response = await axios.post(`http://localhost:3001/users/accept-request`, {
             "senderId": senderId,
             "receiverId": receiverId
           }

@@ -47,9 +47,11 @@ const StyledDividerLine = styled.div`
 `;
 
 const FriendListContainer = ({ friends }) => {
-    return (
+    return friends.length === 0 ? (
+        <p style={{ marginTop: "20px", fontWeight: "400" }}>No friends</p>
+    ) : (
         <FriendList>
-            {friends.map((friend) => (
+            {friends?.map((friend) => (
                 <FriendCard
                     key={friend.friend.id}
                     profilePicture={friend.friend.profilePicturePath}

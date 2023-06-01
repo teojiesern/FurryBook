@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/admin")
 public class AdminController {
     @Autowired
@@ -47,6 +48,10 @@ public class AdminController {
         if (result.equals("User not found.")) {
             return ResponseEntity.notFound().build();
         }
+
+        service.removeUserFromFriendsId(Id);
+        service.removeUserFromSentFriendRequest(Id);
+        service.removeUserFromReceivedFriendRequest(Id);
 
         return ResponseEntity.ok(result);
     }
