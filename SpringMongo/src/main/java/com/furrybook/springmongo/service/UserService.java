@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -314,28 +316,36 @@ public class UserService {
 
     public List<FriendMutual> getFriendsWithMutualFriends(String givenUserId) {
         List<FriendMutual> mutualFriendsList = new ArrayList<>();
-        // Set<String> visited = new HashSet<>();
-        // Queue<String> queue = new LinkedList<>();
 
-        // queue.add(givenUserId);
-        // visited.add(givenUserId);
+        Optional<User> currentUserOptional = repository.findById(givenUserId);
+        User currentUser = currentUserOptional.orElse(null);
 
-        // while(!queue.isEmpty()) {
-        User currentUser = repository.findById(givenUserId).get();
+        if (currentUser != null) {
+            for (String friend : currentUser.getFriendsId()) {
+                Optional<User> friendOptional = repository.findById(friend);
+                User friendUser = friendOptional.orElse(null);
 
-        for (String friend : currentUser.getFriendsId()) {
-            // if (!visited.contains(friend)) {
-            // visited.add(friend);
+                if (friendUser != null) {
+                    List<String> mutualFriends = getMutualFriends(givenUserId, friend);
+                    mutualFriendsList.add(new FriendMutual(friendUser, mutualFriends));
+                }
+            }
 
-            List<String> mutualFriends = getMutualFriends(givenUserId, friend);
-            mutualFriendsList.add(new FriendMutual(repository.findById(friend).get(), mutualFriends));
-
-            // queue.add(friend);
-            // }
         }
-        // }
-
         return mutualFriendsList;
+    }
+
+    public String getFriendshipStatus(String senderId, String receiverId) {
+        User user = repository.findById(senderId).get();
+        if (user.getFriendsId().contains(receiverId)) {
+            return "friends";
+        } else if (user.getSentFriendRequests().contains(receiverId)) {
+            return "Friend request sent";
+        } else if (user.getReceivedFriendRequests().contains(receiverId)) {
+            return "Accept";
+        } else {
+            return "Add Friend";
+        }
     }
 
     public List<FriendMutual> getFriendRecommendations(String userId) {
@@ -438,6 +448,35 @@ public class UserService {
         }
 
         return false;
+    }
+
+    public void removeUserFromFriendsId(String userId) {
+        // Iterate over each user and remove the given user from their friends list
+        List<User> users = repository.findAll();
+        for (User user : users) {
+            user.getFriendsId().remove(userId);
+            repository.save(user);
+        }
+    }
+
+    public void removeUserFromReceivedFriendRequest(String userId) {
+        // Iterate over each user and remove the given user from their received friend
+        // requests
+        List<User> users = repository.findAll();
+        for (User user : users) {
+            user.getReceivedFriendRequests().remove(userId);
+            repository.save(user);
+        }
+    }
+
+    public void removeUserFromSentFriendRequest(String userId) {
+        // Iterate over each user and remove the given user from their sent friend
+        // requests
+        List<User> users = repository.findAll();
+        for (User user : users) {
+            user.getSentFriendRequests().remove(userId);
+            repository.save(user);
+        }
     }
 
     // public void sendFriendRequest(String senderId, String receiverId) {

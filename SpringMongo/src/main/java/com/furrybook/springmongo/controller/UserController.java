@@ -306,19 +306,10 @@ public class UserController {
     // }
     // }
 
-    @GetMapping("/friendship-status")
+    @PostMapping("/friendship-status")
     public ResponseEntity<String> getFriendshipStatus(@RequestBody FriendRequestDto friendRequestDto) {
-        boolean areFriends = service.areFriends(friendRequestDto.getSenderId(), friendRequestDto.getReceiverId());
-        boolean hasPendingRequest = service.hasPendingFriendRequest(friendRequestDto.getSenderId(),
-                friendRequestDto.getReceiverId());
-
-        if (areFriends) {
-            return ResponseEntity.ok("The two users are friends");
-        } else if (hasPendingRequest) {
-            return ResponseEntity.ok("There is a pending friend request between the two users");
-        } else {
-            return ResponseEntity.ok("The two users are not friends and have no pending friend request");
-        }
+        return ResponseEntity
+                .ok(service.getFriendshipStatus(friendRequestDto.getSenderId(), friendRequestDto.getReceiverId()));
     }
 
     @PostMapping("/mutual-friends")

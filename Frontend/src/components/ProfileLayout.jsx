@@ -12,6 +12,8 @@ import { IoSettingsSharp } from "react-icons/io5";
 import { Nav } from "react-bootstrap";
 import { StyledContainer } from "../Utils/StyledContainer";
 import { UserData } from "../api/UserData";
+import { GetFriendshipStatus } from "../api/GetFriendshipStatus";
+import { SendFriendRequest } from "../api/SendFriendRequest";
 
 const StyledUserInfoContainer = styled.div`
     position: relative;
@@ -113,6 +115,15 @@ const activeStyle = {
     color: "#153FAC",
 };
 
+const FriendStatus = styled.button`
+    border: none;
+    border-radius: 10px;
+    margin-top: 10px;
+    background-color: #153fac;
+    color: white;
+    padding: 10px 20px;
+`;
+
 const CustomNavLink = ({ to, children }) => {
     const location = useLocation();
     const decodedPathname = decodeURIComponent(location.pathname);
@@ -126,7 +137,9 @@ const CustomNavLink = ({ to, children }) => {
 
 export function ProfileLayout() {
     const [datas, setDatas] = React.useState(useLoaderData());
+    const [friendshipStatus, setFriendshipStatus] = React.useState("");
     const { userId } = useParams();
+    const ownId = localStorage.getItem("userId");
     const backgroundPhoto = datas.coverPhotoPath?.split("/").pop();
     const profilePic = datas.profilePicturePath?.split("/").pop();
     const url = useLocation().pathname.split("/").slice(0, 3).join("/");
@@ -141,6 +154,12 @@ export function ProfileLayout() {
             setDatas(temp);
         };
 
+        const getFriendshipStatus = async () => {
+            const temp = await GetFriendshipStatus(userId);
+            setFriendshipStatus(temp);
+        };
+
+        getFriendshipStatus();
         getProfData();
     }, [userId]);
 
@@ -163,6 +182,29 @@ export function ProfileLayout() {
                         <IoSettingsSharp />
                     </StyledUserContainer>
                     <StyledFriendCount>{friends}</StyledFriendCount>
+                    {userId === ownId ? null : (
+                        <div>
+                            <FriendStatus
+                                disabled={
+                                    friendshipStatus === "friends" ||
+                                    friendshipStatus === "Friend request sent"
+                                }
+                                onClick={async () => {
+                                    if (FriendStatus === "Add Friend") {
+                                        const temp = await SendFriendRequest(
+                                            userId
+                                        );
+                                        setFriendshipStatus(
+                                            "Friend request sent"
+                                        );
+                                    } else {
+                                    }
+                                }}
+                            >
+                                {friendshipStatus}
+                            </FriendStatus>
+                        </div>
+                    )}
                 </StyledUserDetailContainer>
             </StyledUserInfoContainer>
 
@@ -181,10 +223,6 @@ export function ProfileLayout() {
                 <StyledSearchBar
                     type="search"
                     placeholder="Search"
-                    // onKeyUp={async (e) => {
-                    //     const res = await Search(e.target.value);
-                    //     console.log(res);
-                    // }}
                 ></StyledSearchBar>
             </StyledNavigationContainer>
             <Outlet context={[profilePic, datas]} />

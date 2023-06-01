@@ -49,6 +49,10 @@ public class AdminController {
             return ResponseEntity.notFound().build();
         }
 
+        service.removeUserFromFriendsId(Id);
+        service.removeUserFromSentFriendRequest(Id);
+        service.removeUserFromReceivedFriendRequest(Id);
+
         return ResponseEntity.ok(result);
     }
 
