@@ -215,7 +215,7 @@ public class PostService {
         }
 
         // Sort the combined posts by date posted (most recent first)
-        Collections.sort(friendPosts);
+        Collections.sort(friendPosts, Comparator.comparing(Posts::getCreated).reversed());
 
         return friendPosts;
     }

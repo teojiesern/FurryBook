@@ -258,7 +258,6 @@ export function Login() {
             const pastUserIds = JSON.parse(localStorage.getItem("pastUserIds"));
             const updatedUserIds = pastUserIds.filter((id) => id !== userId);
             localStorage.setItem("pastUserIds", JSON.stringify(updatedUserIds));
-            window.location.reload();
         };
 
         return (
@@ -290,14 +289,21 @@ export function Login() {
                 <StyledDescription>
                     These are all the past logins
                 </StyledDescription>
-                {JSON.parse(localStorage?.getItem("pastUserIds"))?.length ==
-                0 ? (
+                {JSON.parse(localStorage?.getItem("pastUserIds")) ? (
+                    JSON.parse(localStorage?.getItem("pastUserIds"))?.length !=
+                    0 ? (
+                        <PastLoginCards />
+                    ) : (
+                        <StyledLogo style={{ fontSize: "20px" }}>
+                            No recent logins yet, 🌟 Sign in now to uncover
+                            exclusive content
+                        </StyledLogo>
+                    )
+                ) : (
                     <StyledLogo style={{ fontSize: "20px" }}>
                         No recent logins yet, 🌟 Sign in now to uncover
                         exclusive content
                     </StyledLogo>
-                ) : (
-                    <PastLoginCards />
                 )}
             </StyledRecentLoginDiv>
             <LoginForm />

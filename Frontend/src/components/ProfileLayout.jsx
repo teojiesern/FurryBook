@@ -14,6 +14,8 @@ import { StyledContainer } from "../Utils/StyledContainer";
 import { UserData } from "../api/UserData";
 import { GetFriendshipStatus } from "../api/GetFriendshipStatus";
 import { SendFriendRequest } from "../api/SendFriendRequest";
+import { AcceptFriendRequest } from "../api/AcceptFriendRequest";
+import { DeclineFriendRequest } from "../api/DeclineFriendRequest";
 
 const StyledUserInfoContainer = styled.div`
     position: relative;
@@ -163,6 +165,21 @@ export function ProfileLayout() {
         getProfData();
     }, [userId]);
 
+    async function handleClick() {
+        if (friendshipStatus === "Add Friend") {
+            const temp = await SendFriendRequest(userId);
+            setFriendshipStatus("Friend request sent");
+        } else {
+            const tempAccept = await AcceptFriendRequest(userId);
+            setFriendshipStatus("friends");
+        }
+    }
+
+    async function handleDecline() {
+        const tempDecline = await DeclineFriendRequest(userId);
+        setFriendshipStatus("Add Friend");
+    }
+
     return (
         <StyledContainer>
             <StyledUserInfoContainer>
@@ -189,20 +206,23 @@ export function ProfileLayout() {
                                     friendshipStatus === "friends" ||
                                     friendshipStatus === "Friend request sent"
                                 }
-                                onClick={async () => {
-                                    if (FriendStatus === "Add Friend") {
-                                        const temp = await SendFriendRequest(
-                                            userId
-                                        );
-                                        setFriendshipStatus(
-                                            "Friend request sent"
-                                        );
-                                    } else {
-                                    }
-                                }}
+                                onClick={handleClick}
                             >
                                 {friendshipStatus}
                             </FriendStatus>
+                            {friendshipStatus === "Accept" ? (
+                                <FriendStatus
+                                    disabled={
+                                        friendshipStatus === "friends" ||
+                                        friendshipStatus ===
+                                            "Friend request sent"
+                                    }
+                                    onClick={handleDecline}
+                                    style={{ marginLeft: "20px" }}
+                                >
+                                    Decline
+                                </FriendStatus>
+                            ) : null}
                         </div>
                     )}
                 </StyledUserDetailContainer>

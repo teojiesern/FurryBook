@@ -37,6 +37,7 @@ import { FriendsRecommendation } from "./api/FriendRecommendations";
 import { AdminPage } from "./pages/AdminPage";
 import { AdminFindUser } from "./api/AdminFindUser";
 import { AdminPageUserPosts } from "./pages/AdminPageUserPosts";
+import { HomePageFetchPosts } from "./api/HomePageFetchPosts";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -58,7 +59,12 @@ const router = createBrowserRouter(
                     <Route
                         index
                         element={<Home />}
-                        loader={authentication}
+                        loader={async () => {
+                            const authResult = await authentication();
+                            if (authResult) return authResult;
+                            const temp = await HomePageFetchPosts();
+                            return temp;
+                        }}
                         action={PostCommentAction}
                     />
                     <Route
