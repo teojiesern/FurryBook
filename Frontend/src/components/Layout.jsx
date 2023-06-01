@@ -1,7 +1,6 @@
 import { Outlet } from "react-router-dom";
 import styled from 'styled-components';
 import { Navbar } from "./Navbar";
-import "./components.css"
 
 const Container = styled.div`
   display: grid;
