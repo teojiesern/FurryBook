@@ -24,34 +24,11 @@ const UserCard = styled.div`
     font-family: "Montserrat", sans-serif;
 `;
 
-const Value = styled.div`
-    font-size: 16px;
-    color: #50577a;
-    margin: 0;
-    margin-left: 10px;
-`;
-
-const Key = styled.h2`
-    font-size: 18px;
-    color: black;
-    margin: 0;
-`;
-
 const InformationContainer = styled.div`
     display: flex;
     justify-content: center;
     width: 80%;
     padding: 2px 0;
-`;
-
-const StyledButton = styled.button`
-    border: none;
-    background-color: #153fac;
-    color: white;
-    padding: 13px 50px;
-    border-radius: 10px;
-    font-size: 13px;
-    font-weight: 600;
 `;
 
 const StyledCaption = styled.p`

@@ -3,7 +3,6 @@ import {
     useLoaderData,
     useLocation,
     useOutletContext,
-    useParams,
 } from "react-router-dom";
 import { useState, useMemo } from "react";
 import { styled } from "styled-components";

@@ -1,11 +1,3 @@
-// reference to more than one loader functions
-// loader={async () => {
-//     const authResult = await authentication();
-//     if (authResult) return authResult;
-
-//     return await profilePageData();
-// }}
-
 import {
     Navigate,
     Route,
