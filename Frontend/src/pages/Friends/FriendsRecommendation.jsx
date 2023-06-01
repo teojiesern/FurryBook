@@ -1,7 +1,8 @@
 import React from "react";
-import { Link, useLoaderData } from "react-router-dom";
+import { Link, useLoaderData, useLocation } from "react-router-dom";
 import { styled } from "styled-components";
 import { SendFriendRequest } from "../../api/SendFriendRequest";
+import { TrackSession } from "../../api/trackSession";
 
 const GridContainer = styled.div`
     display: grid;
@@ -63,7 +64,15 @@ const StyledInteractionContainer = styled.div`
 export function FriendsRecommendations() {
     const [added, setAdded] = React.useState({});
     const recommendations = useLoaderData();
-    console.log(recommendations);
+    const session = useLocation().pathname;
+
+    React.useEffect(() => {
+        const tracking = async () => {
+            const tempSession = await TrackSession(session);
+        };
+
+        tracking();
+    }, []);
 
     async function handleAddFriend(id) {
         const temp = await SendFriendRequest(id);
@@ -80,7 +89,7 @@ export function FriendsRecommendations() {
         const mutualFriends = recommendation.mutualFriends.length;
         const id = recommendation.friend.id;
         return (
-            <div>
+            <div key={recommendation.friend.id}>
                 <RecommendationStyle>
                     <div>
                         <StyledLeftPortion>

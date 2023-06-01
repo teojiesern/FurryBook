@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -21,6 +22,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.furrybook.springmongo.exception.ExistingEmailException;
+import com.furrybook.springmongo.model.Content.Session;
 import com.furrybook.springmongo.model.Friend.FriendMutual;
 import com.furrybook.springmongo.model.User.*;
 import com.furrybook.springmongo.repository.UserRepository;
@@ -479,85 +481,14 @@ public class UserService {
         }
     }
 
-    // public void sendFriendRequest(String senderId, String receiverId) {
-    // User sender = repository.findById(senderId).get();
-    // User receiver = repository.findById(receiverId).get();
-    // List<String> mutualFriends = getMutualFriends(senderId, receiverId);
+    Session currentSession = new Session();
 
-    // FriendMutual senderFriend = new FriendMutual(sender, mutualFriends);
-    // FriendMutual receiverFriend = new FriendMutual(receiver, mutualFriends);
+    public void traceSession(String session) {
+        currentSession.getSessionStorage().addFirst(session);
+    }
 
-    // // Add receiverFriend to the sentFriendRequests of the sender
-    // sender.getSentFriendRequests().add(receiverFriend);
-    // repository.save(sender);
-
-    // // Add senderFriend to the receivedFriendRequests of the receiver
-    // receiver.getReceivedFriendRequests().add(senderFriend);
-    // repository.save(receiver);
-    // }
-
-    // public void declineFriendRequest(String receiverId, String senderId) {
-    // User receiver = repository.findById(receiverId).get();
-    // User sender = repository.findById(senderId).get();
-    // List<String> mutualFriends = getMutualFriends(receiverId, senderId);
-
-    // FriendMutual senderFriend = new FriendMutual(sender, mutualFriends);
-    // FriendMutual receiverFriend = new FriendMutual(receiver, mutualFriends);
-
-    // receiver.getReceivedFriendRequests().remove(senderFriend);
-    // repository.save(receiver);
-    // sender.getSentFriendRequests().remove(receiverFriend);
-    // repository.save(sender);
-    // }
-
-    // public void acceptFriendRequest(String receiverId, String senderId) {
-    // User receiver = repository.findById(receiverId).get();
-    // User sender = repository.findById(senderId).get();
-    // List<String> mutualFriends = getMutualFriends(receiverId, senderId);
-
-    // FriendMutual senderFriend = new FriendMutual(sender, mutualFriends);
-    // FriendMutual receiverFriend = new FriendMutual(receiver, mutualFriends);
-
-    // // Add senderFriend to the friendsId of the receiver
-    // receiver.getFriendsId().add(senderId);
-    // repository.save(receiver);
-
-    // // Add receiverFriend to the friendsId of the sender
-    // sender.getFriendsId().add(receiverId);
-    // repository.save(sender);
-
-    // // Remove senderFriend from the receivedFriendRequests of the receiver
-    // receiver.getReceivedFriendRequests().remove(senderFriend);
-    // repository.save(receiver);
-
-    // // Remove receiverFriend from the sentFriendRequests of the sender
-    // sender.getSentFriendRequests().remove(receiverFriend);
-    // repository.save(sender);
-    // }
-
-    // // public boolean areFriends(String userId1, String userId2) {
-    // // User user1 = repository.findById(userId1).get();
-
-    // // for (FriendMutual friendMutual : user1.getFriendsId()) {
-    // // if (friendMutual.getFriend().getId().equals(userId2)) {
-    // // return true;
-    // // }
-    // // }
-    // // return false;
-    // // }
-
-    // public boolean hasPendingFriendRequest(String userId1, String userId2) {
-    // User user1 = repository.findById(userId1).get();
-    // User user2 = repository.findById(userId2).get();
-
-    // FriendMutual user1Friend = new FriendMutual(user1, new ArrayList<>());
-    // FriendMutual user2Friend = new FriendMutual(user2, new ArrayList<>());
-
-    // if (user1.getReceivedFriendRequests().contains(user2Friend)
-    // || user2.getReceivedFriendRequests().contains(user1Friend)) {
-    // return true;
-    // }
-    // return false;
-    // }
+    public LinkedList<String> getSession(){
+        return currentSession.getSessionStorage();
+    }
 
 }

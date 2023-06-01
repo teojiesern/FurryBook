@@ -16,8 +16,6 @@ import java.util.Set;
 
 import org.springframework.data.annotation.Id;
 
-import com.furrybook.springmongo.model.Friend.FriendMutual;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

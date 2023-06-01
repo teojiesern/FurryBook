@@ -164,12 +164,14 @@ const StyledUL = styled.ul`
     padding-left: 20px;
 `;
 
-const StyledAddSpan = styled.span`
+const StyledAddSpan = styled.button`
+    border: none;
     font-size: 15px;
     margin-left: 20px;
     color: #153fac;
-    cursor: pointer;
     font-family: Montserrat, sans-serif;
+    border-radius: 200px;
+    background-color: white;
 `;
 
 const changeStyle = {
@@ -217,6 +219,8 @@ export function UserInfo({ datas, friends, submit, userId }) {
     const [hobUpdates, setHobUpdates] = React.useState([]);
     const [allJobs, setAllJobs] = React.useState(data.jobs);
     const [jobUpdate, setJobUpdate] = React.useState([]);
+    const [hobbiesInput, setHobbiesInput] = React.useState("");
+    const [jobInput, setJobInput] = React.useState("");
     const profilePic = data.profilePicturePath?.split("/").pop();
     const coverPhoto = data.coverPhotoPath?.split("/").pop();
     const hobbiesRef = useRef(null);
@@ -468,7 +472,7 @@ export function UserInfo({ datas, friends, submit, userId }) {
                                             onChange={(e) => {
                                                 setLocation(e.target.value);
                                             }}
-                                            defaultValue={location}
+                                            defaultValue={location || ""}
                                         >
                                             <option value="Johor">Johor</option>
                                             <option value="Kedah">Kedah</option>
@@ -602,10 +606,17 @@ export function UserInfo({ datas, friends, submit, userId }) {
                                             type="text"
                                             id="hobbiesInput"
                                             ref={hobbiesRef}
+                                            onChange={(e) => {
+                                                setHobbiesInput(e.target.value);
+                                            }}
                                         />
                                         <StyledAddSpan
-                                            onClick={addHobby}
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                addHobby();
+                                            }}
                                             htmlFor="hobbiesInput"
+                                            disabled={hobbiesInput === ""}
                                         >
                                             Add
                                         </StyledAddSpan>
@@ -626,10 +637,17 @@ export function UserInfo({ datas, friends, submit, userId }) {
                                             type="text"
                                             id="jobsInput"
                                             ref={jobsRef}
+                                            onChange={(e) =>
+                                                setJobInput(e.target.value)
+                                            }
                                         />
                                         <StyledAddSpan
-                                            onClick={addJobUpdate}
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                addJobUpdate();
+                                            }}
                                             htmlFor="jobsInput"
+                                            disabled={jobInput === ""}
                                         >
                                             Add
                                         </StyledAddSpan>

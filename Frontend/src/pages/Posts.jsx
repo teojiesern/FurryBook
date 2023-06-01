@@ -82,7 +82,7 @@ const StyledLikedAndCommented = styled.div`
 
 const StyledLikeAndCommentCount = styled.p`
     color: gray;
-    fontFamily: "Montserrat, sans-serif";
+    fontfamily: "Montserrat, sans-serif";
     font-size: 15px;
 `;
 
@@ -164,6 +164,7 @@ export function Posts({ userId, profilePic, datas }) {
     const [data, setData] = React.useState(datas);
     const [allPost, setAllPost] = React.useState([]);
     const [isOpen, setIsOpen] = React.useState(false);
+    const [inputValue, setInputValue] = React.useState("");
     const [allComments, setAllComments] = React.useState([]);
     const currentLogin = localStorage.getItem("userId");
     const postRef = useRef();
@@ -172,8 +173,21 @@ export function Posts({ userId, profilePic, datas }) {
         setIsOpen(!isOpen);
     };
 
-    const updateComments = () => {
-        setData({ ...data, comments: "d" });
+    const updateComments = (postId, val) => {
+        const now = new Date();
+        setAllPost((prevData) =>
+            prevData.map((a) => {
+                if (a.id === postId) {
+                    a.comments.unshift({
+                        body: val,
+                        userId: currentLogin,
+                        id: 2,
+                        created: now.toISOString(),
+                    });
+                }
+                return a;
+            })
+        );
     };
 
     React.useEffect(() => {
@@ -198,7 +212,9 @@ export function Posts({ userId, profilePic, datas }) {
                 comments.map(async (c) => {
                     const displayTime = getTimeCreated(c);
                     const user = await UserData(c.userId);
-                    const profilePic = user.profilePicturePath?.split("/").pop();
+                    const profilePic = user.profilePicturePath
+                        ?.split("/")
+                        .pop();
                     return (
                         <StyledCommentsContainer key={c.id}>
                             <StyledPostSection style={commentContainerStyle}>
@@ -348,8 +364,13 @@ export function Posts({ userId, profilePic, datas }) {
                         name="comment"
                         style={inputStyle}
                         placeholder="Type a comment..."
+                        onChange={(e) => setInputValue(e.target.value)}
                     ></input>
-                    <button style={submitButtonStyle} onClick={updateComments}>
+                    <button
+                        style={submitButtonStyle}
+                        onClick={() => updateComments(post.id, inputValue)}
+                        disabled={inputValue === ""}
+                    >
                         Comment
                     </button>
                 </Form>

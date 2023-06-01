@@ -22,7 +22,7 @@ const StyledWelcome = styled.div`
 
 const StyledBanner = styled.div`
     position: absolute;
-    top: 10%;
+    top: 2%;
     left: 12%;
     display: flex;
     flex-direction: column;
@@ -45,7 +45,7 @@ const StyledText = styled.div`
 
 const SignUpContainer = styled.div`
   position: absolute;
-  top: 12%;
+  top: 6%;
   left: 56%;
   font-family: 'Montserrat', sans-serif;
   background-color: #FFFFFF;

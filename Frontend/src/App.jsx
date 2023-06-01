@@ -25,7 +25,6 @@ import { TopNav } from "./components/TopNav";
 import { ProfileLayout } from "./components/ProfileLayout";
 import { ProfilePhotos } from "./pages/profile/ProfilePhotos";
 import Friends from "./pages/Friends/Friends";
-import { Settings } from "./pages/Settings";
 import { currentUserData } from "./api/CurrentUserData";
 import { AllPosts } from "./api/AllPosts";
 import { PostCommentAction } from "./api/PostCommentAction";
@@ -38,6 +37,8 @@ import { AdminPage } from "./pages/AdminPage";
 import { AdminFindUser } from "./api/AdminFindUser";
 import { AdminPageUserPosts } from "./pages/AdminPageUserPosts";
 import { HomePageFetchPosts } from "./api/HomePageFetchPosts";
+import { History } from "./pages/History";
+import { GetSession } from "./api/getSession";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -101,9 +102,14 @@ const router = createBrowserRouter(
                         />
                     </Route>
                     <Route
-                        path="settings"
-                        element={<Settings />}
-                        loader={authentication}
+                        path="history"
+                        element={<History />}
+                        loader={async () => {
+                            const authResult = await authentication();
+                            if (authResult) return authResult;
+                            const temp = await GetSession();
+                            return temp;
+                        }}
                     />
                     <Route
                         path="adminPage"
@@ -149,7 +155,14 @@ const router = createBrowserRouter(
                         <Route
                             path="friends"
                             element={<ProfileFriends />}
-                            loader={authentication}
+                            loader={async ({ params }) => {
+                                const result = await authentication();
+                                if (result) return result;
+                                const friendsData = await FriendsData(
+                                    params.userId
+                                );
+                                return friendsData;
+                            }}
                         />
                         <Route
                             path="photos"

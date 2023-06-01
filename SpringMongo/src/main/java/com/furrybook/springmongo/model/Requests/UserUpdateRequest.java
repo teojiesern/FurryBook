@@ -1,4 +1,4 @@
-package com.furrybook.springmongo.model.extra;
+package com.furrybook.springmongo.model.Requests;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

@@ -1,6 +1,6 @@
 import React from "react";
 import { StyledContainer } from "../Utils/StyledContainer";
-import { Form, useLoaderData } from "react-router-dom";
+import { Form, useLoaderData, useLocation, useParams } from "react-router-dom";
 import { getTimeCreated } from "../Utils/getTimeCreated";
 import { styled } from "styled-components";
 import { ReadMore } from "../Utils/ReadMore";
@@ -10,6 +10,8 @@ import { BiLike, BiComment } from "react-icons/bi";
 import { TbShare3 } from "react-icons/tb";
 import { LikePosts } from "../api/LikePosts";
 import { Popup } from "../Utils/Popup";
+import { UserData } from "../api/UserData";
+import { TrackSession } from "../api/trackSession";
 
 const UserCard = styled.div`
     display: flex;
@@ -198,26 +200,82 @@ export function Home() {
     const [friendsData, setFriendsData] = React.useState([]);
     const [isOpen, setIsOpen] = React.useState(false);
     const [allComments, setAllComments] = React.useState([]);
+    const [inputValue, setInputValue] = React.useState("");
     const currentUser = localStorage.getItem("userId");
+    const session = useLocation().pathname;
 
     React.useEffect(() => {
         const getFriendsData = async () => {
             const temp = await FriendsData(currentUser);
+            const tempSession = await TrackSession(session);
             setFriendsData(temp);
         };
+
         getFriendsData();
     }, []);
+
+    async function toggleComments(comments) {
+        if (comments.length !== 0) {
+            const listOfComments = await Promise.all(
+                comments.map(async (c) => {
+                    const displayTime = getTimeCreated(c);
+                    const user = await UserData(c.userId);
+                    const profilePic = user.profilePicturePath
+                        ?.split("/")
+                        .pop();
+                    return (
+                        <StyledCommentsContainer key={c.id}>
+                            <StyledPostSection style={commentContainerStyle}>
+                                <StyledProfilePicture
+                                    style={{
+                                        backgroundImage: `url("/assets/profile pictures/${profilePic}")`,
+                                    }}
+                                ></StyledProfilePicture>
+                                <StyledContentSection>
+                                    <StyledInformations>
+                                        <StyledName>{user.name}</StyledName>
+                                        <StyledPosted>
+                                            {displayTime}
+                                        </StyledPosted>
+                                        <StyledCaption>
+                                            <p
+                                                style={{
+                                                    wordBreak: "break-word",
+                                                }}
+                                            >
+                                                <ReadMore maxLines={2}>
+                                                    {c.body}
+                                                </ReadMore>
+                                            </p>
+                                        </StyledCaption>
+                                    </StyledInformations>
+                                </StyledContentSection>
+                            </StyledPostSection>
+                        </StyledCommentsContainer>
+                    );
+                })
+            );
+            setAllComments(listOfComments);
+        } else {
+            setAllComments([]);
+        }
+    }
 
     const togglePopup = () => {
         setIsOpen(!isOpen);
     };
-    
-    const updateComments = (postId) => {
+
+    const updateComments = (postId, val) => {
+        const now = new Date();
         setData((prevData) =>
             prevData.map((a) => {
-                console.log(a);
                 if (a.id === postId) {
-                    a.comments.push("s");
+                    a.comments.unshift({
+                        body: val,
+                        userId: currentUser,
+                        id: 2,
+                        created: now.toISOString(),
+                    });
                 }
                 return a;
             })
@@ -248,55 +306,6 @@ export function Home() {
             });
             setData(updatedPosts);
         };
-
-        async function toggleComments(comments) {
-            if (comments.length !== 0) {
-                const listOfComments = await Promise.all(
-                    comments.map(async (c) => {
-                        // const displayTime = getTimeCreated(c);
-                        // const user = await UserData(c.userId);
-                        // const profilePic = user.profilePicturePath
-                        //     ?.split("/")
-                        //     .pop();
-                        return (
-                            <StyledCommentsContainer key={c.id}>
-                                <StyledPostSection
-                                    style={commentContainerStyle}
-                                >
-                                    <StyledProfilePicture
-                                        style={{
-                                            backgroundImage: `url("/assets/profile pictures/${profilePic}")`,
-                                        }}
-                                    ></StyledProfilePicture>
-                                    <StyledContentSection>
-                                        <StyledInformations>
-                                            <StyledName>{user.name}</StyledName>
-                                            <StyledPosted>
-                                                {displayTime}
-                                            </StyledPosted>
-                                            <StyledCaption>
-                                                <p
-                                                    style={{
-                                                        wordBreak: "break-word",
-                                                    }}
-                                                >
-                                                    <ReadMore maxLines={2}>
-                                                        {c.body}
-                                                    </ReadMore>
-                                                </p>
-                                            </StyledCaption>
-                                        </StyledInformations>
-                                    </StyledContentSection>
-                                </StyledPostSection>
-                            </StyledCommentsContainer>
-                        );
-                    })
-                );
-                setAllComments(listOfComments);
-            } else {
-                setAllComments([]);
-            }
-        }
 
         function handleShare() {}
         return (
@@ -403,10 +412,12 @@ export function Home() {
                             name="comment"
                             style={inputStyle}
                             placeholder="Type a comment..."
+                            onChange={(e) => setInputValue(e.target.value)}
                         ></input>
                         <button
                             style={submitButtonStyle}
-                            onClick={() => updateComments(post.id)}
+                            onClick={() => updateComments(post.id, inputValue)}
+                            disabled={inputValue === ""}
                         >
                             Comment
                         </button>
