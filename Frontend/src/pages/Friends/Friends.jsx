@@ -1,10 +1,15 @@
 import React from "react";
-import { useLoaderData, useOutletContext, useParams } from "react-router-dom";
+import {
+    useLoaderData,
+    useLocation,
+    useOutletContext,
+} from "react-router-dom";
 import { useState, useMemo } from "react";
 import { styled } from "styled-components";
 import FriendCard from "../../components/FriendCard";
 import { StyledContainer } from "../../Utils/StyledContainer";
 import { FriendRequest } from "./FriendRequest";
+import { TrackSession } from "../../api/trackSession";
 
 const FriendList = styled.div`
     display: grid;
@@ -67,6 +72,7 @@ const FriendListContainer = ({ friends }) => {
 const Friends = () => {
     const [friendData, setFriendData] = useState(useLoaderData());
     const userData = useOutletContext();
+    const session = useLocation().pathname;
 
     const friendDataWithMutualCount = useMemo(() => {
         return friendData?.map((friend) => ({
@@ -74,6 +80,14 @@ const Friends = () => {
             mutualFriends: friend.mutualFriends.length,
         }));
     }, [friendData]);
+
+    React.useEffect(() => {
+        const tracking = async () => {
+            const tempSession = await TrackSession(session);
+        };
+
+        tracking();
+    }, []);
 
     return (
         <StyledContainer>

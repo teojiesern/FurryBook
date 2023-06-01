@@ -6,7 +6,6 @@ import java.util.Set;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import com.furrybook.springmongo.model.Friend.FriendMutual;
 
 @Document(collection = "users")
 public interface User extends Comparable<User> {

@@ -92,6 +92,9 @@ public class PostController {
     @GetMapping("/user/{userId}/friends")
     public ResponseEntity<List<Posts>> getPostsByUserFriends(@PathVariable String userId) {
         List<Posts> friendPosts = service.getPostsByUserFriends(userId);
+        for (Posts post : friendPosts) {
+            post.getComments().sort(Collections.reverseOrder());
+        }
         return ResponseEntity.ok(friendPosts);
     }
 }

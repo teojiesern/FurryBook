@@ -1,9 +1,15 @@
 import React from "react";
-import { useLoaderData, useOutletContext, useParams } from "react-router-dom";
+import {
+    useLoaderData,
+    useLocation,
+    useOutletContext,
+    useParams,
+} from "react-router-dom";
 import { styled } from "styled-components";
 import { UserInfo } from "../userProfilePage/UserInfo";
 import { Posts } from "../Posts";
 import axios from "axios";
+import { TrackSession } from "../../api/trackSession";
 
 export const StyledParentContainer = styled.div`
     display: flex;
@@ -15,6 +21,15 @@ export function ProfilePosts() {
     const [profilePic, datas] = useOutletContext();
     const [data, setData] = React.useState(useLoaderData());
     const { userId } = useParams();
+    const session = useLocation().pathname;
+
+    React.useEffect(() => {
+        const tracking = async () => {
+            const tempSession = await TrackSession(session);
+        };
+
+        tracking();
+    }, []);
 
     const friends =
         data.friendsId.length == 0

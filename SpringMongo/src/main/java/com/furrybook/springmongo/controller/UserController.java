@@ -2,10 +2,10 @@ package com.furrybook.springmongo.controller;
 
 import com.furrybook.springmongo.model.Friend.FriendMutual;
 import com.furrybook.springmongo.model.Friend.FriendRequestDto;
+import com.furrybook.springmongo.model.Requests.LoginRequest;
+import com.furrybook.springmongo.model.Requests.UserUpdateRequest;
 import com.furrybook.springmongo.model.User.StandardUser;
 import com.furrybook.springmongo.model.User.User;
-import com.furrybook.springmongo.model.extra.LoginRequest;
-import com.furrybook.springmongo.model.extra.UserUpdateRequest;
 import com.furrybook.springmongo.repository.UserRepository;
 import com.furrybook.springmongo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -288,24 +289,6 @@ public class UserController {
         return service.search(queryString);
     }
 
-    // @GetMapping("/friendship-status")
-    // public ResponseEntity<String> getFriendshipStatus(@RequestParam String
-    // userId1, @RequestParam String userId2) {
-    // boolean areFriends = service.areFriends(userId1, userId2);
-    // boolean hasPendingRequest = service.hasPendingFriendRequest(userId1,
-    // userId2);
-
-    // if (areFriends) {
-    // return ResponseEntity.ok("The two users are friends");
-    // } else if (hasPendingRequest) {
-    // return ResponseEntity.ok("There is a pending friend request between the two
-    // users");
-    // } else {
-    // return ResponseEntity.ok("The two users are not friends and have no pending
-    // friend request");
-    // }
-    // }
-
     @PostMapping("/friendship-status")
     public ResponseEntity<String> getFriendshipStatus(@RequestBody FriendRequestDto friendRequestDto) {
         return ResponseEntity
@@ -315,6 +298,16 @@ public class UserController {
     @PostMapping("/mutual-friends")
     public List<String> getMutualBetweenTwoUsers(@RequestBody FriendRequestDto friendRequestDto) {
         return service.getMutualFriends(friendRequestDto.getReceiverId(), friendRequestDto.getSenderId());
+    }
+
+    @PostMapping("/trackSession")
+    public void trackSession(@RequestBody String session) {
+        service.traceSession(session);
+    }
+
+    @GetMapping("/getSession")
+    public LinkedList<String> getSession() {
+        return service.getSession();
     }
 
 }

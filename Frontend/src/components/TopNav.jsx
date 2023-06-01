@@ -3,7 +3,8 @@ import { Link, Outlet, useLoaderData } from "react-router-dom";
 import styled from "styled-components";
 import { BiSearch } from "react-icons/bi";
 import { RiProfileFill } from "react-icons/ri";
-import { IoSettingsSharp, IoLogOut } from "react-icons/io5";
+import { IoLogOut } from "react-icons/io5";
+import { FaHistory } from "react-icons/fa";
 import { Search } from "../api/Search";
 import { StyledContainer } from "../Utils/StyledContainer";
 
@@ -252,12 +253,12 @@ export function TopNav() {
                         </StyledOption>
                         <StyledOption
                             as={Link}
-                            to={`/FurryBook/settings`}
+                            to={`/FurryBook/history`}
                             onClick={handleClick}
                         >
                             <StyledLeftPortion>
-                                <IoSettingsSharp style={marginRightStyle} />
-                                Settings
+                                <FaHistory style={marginRightStyle} />
+                                History
                             </StyledLeftPortion>
                             &rarr;
                         </StyledOption>
