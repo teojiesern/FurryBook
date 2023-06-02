@@ -139,7 +139,7 @@ export function FriendsRecommendations() {
     });
     return (
         <StyledContainer>
-            <GridContainer>{recommendedUser}</GridContainer>;
+            <GridContainer>{recommendedUser}</GridContainer>
         </StyledContainer>
     );
 }

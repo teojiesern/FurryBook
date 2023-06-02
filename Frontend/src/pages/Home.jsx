@@ -1,6 +1,6 @@
 import React from "react";
 import { StyledContainer } from "../Utils/StyledContainer";
-import { Form, useLoaderData, useLocation, useParams } from "react-router-dom";
+import { Form, useLoaderData, useLocation } from "react-router-dom";
 import { getTimeCreated } from "../Utils/getTimeCreated";
 import { styled } from "styled-components";
 import { ReadMore } from "../Utils/ReadMore";
@@ -43,13 +43,6 @@ const StyledPost = styled.div`
     background-size: cover;
     background-position: center;
 `;
-
-const linkStyle = {
-    textDecoration: "none",
-    marginLeft: "20px",
-    fontSize: "30px",
-    color: "black",
-};
 
 const StyledProfilePicture = styled.div`
     height: 70px;
@@ -302,6 +295,9 @@ export function Home() {
                             flexDirection: "column",
                         }}
                     >
+                        <div>
+                            <StyledName>{user?.name}</StyledName>
+                        </div>
                         <div>
                             <StyledPosted>{displayTime}</StyledPosted>
                         </div>

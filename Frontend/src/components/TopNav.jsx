@@ -224,7 +224,9 @@ export function TopNav() {
                                 top: "9.5%",
                             }}
                         >
-                            <StyledContainer>{recommendations}</StyledContainer>
+                            <StyledContainer style={{ maxHeight: "240px" }}>
+                                {recommendations}
+                            </StyledContainer>
                         </StyledOptionContainer>
                     </StyledSearchSelection>
                 </div>
