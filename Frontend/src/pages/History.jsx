@@ -12,7 +12,7 @@ export function History() {
     const session = useLoaderData();
     console.log(session);
 
-    const allSession = session.map((s, index) => (
+    const allSession = session?.map((s, index) => (
         <TimelineItem>
             <TimelineSeparator>
                 <TimelineDot />

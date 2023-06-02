@@ -10,9 +10,9 @@ const PhotosContainer = styled.div`
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-rows: 2fr 2fr 2fr;
     padding: 20px;
-    gap: 10px;
+    gap: 30px 0;
 `;
 
 const PhotoCard = styled.div`

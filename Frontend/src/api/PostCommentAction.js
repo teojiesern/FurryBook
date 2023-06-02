@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Const } from "../Const";
 
 export async function PostCommentAction({ request }) {
     const formData = await request.formData();
@@ -8,7 +9,7 @@ export async function PostCommentAction({ request }) {
 
     try {
         const response = await axios.post(
-            `http://localhost:3001/comments/${user}`,
+            `http://${Const}:3001/comments/${user}`,
             {
                 commentBody: comment,
                 postId: postId,

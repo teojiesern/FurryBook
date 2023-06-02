@@ -2,6 +2,7 @@ import React from "react";
 import { Form, Link, redirect, useActionData } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
+import { Const } from "../Const";
 
 const StyledDiv = styled.div`
     display: flex;
@@ -157,7 +158,7 @@ export async function action({ request }) {
     const enteredPassword = formData.get("password");
 
     try {
-        const response = await axios.post("http://localhost:3001/users/login", {
+        const response = await axios.post(`http://${Const}:3001/users/login`, {
             email: enteredEmail,
             password: enteredPassword,
         });
@@ -225,10 +226,10 @@ export function Login() {
                     const cardData = await Promise.all(
                         pastLogin.map(async (userId) => {
                             const response = await axios.get(
-                                `http://localhost:3001/users/${userId}/profile-picture`
+                                `http://${Const}:3001/users/${userId}/profile-picture`
                             );
                             const userResponse = await axios.get(
-                                `http://localhost:3001/users/${userId}`
+                                `http://${Const}:3001/users/${userId}`
                             );
                             return {
                                 userId,

@@ -1,8 +1,9 @@
 import axios from "axios"
+import { Const } from "../Const";
 
 export async function GetSession() {
   try {
-    const response = await axios.get("http://localhost:3001/users/getSession");
+    const response = await axios.get(`http://${Const}:3001/users/getSession`);
     const decodedSession = decodeURIComponent(response.data);
     const sessionUrls = decodedSession.split(",");
 

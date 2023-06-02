@@ -10,6 +10,7 @@ import { UserInfo } from "../userProfilePage/UserInfo";
 import { Posts } from "../Posts";
 import axios from "axios";
 import { TrackSession } from "../../api/trackSession";
+import { Const } from "../../Const";
 
 export const StyledParentContainer = styled.div`
     display: flex;
@@ -53,7 +54,7 @@ export function ProfilePosts() {
         };
 
         const response = await axios.put(
-            `http://localhost:3001/users/update/${data.id}`,
+            `http://${Const}:3001/users/update/${data.id}`,
             updatedInfo
         );
         setData({ ...data, ...updatedInfo });

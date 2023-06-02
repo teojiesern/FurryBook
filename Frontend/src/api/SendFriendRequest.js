@@ -1,9 +1,10 @@
 import axios from "axios"
+import { Const } from "../Const"
 
 export async function SendFriendRequest(receiverId){
     try{
         const senderId = localStorage.getItem("userId")
-        const response = await axios.post(`http://localhost:3001/users/send-request`, {
+        const response = await axios.post(`http://${Const}:3001/users/send-request`, {
             "senderId": senderId,
             "receiverId": receiverId
           }
