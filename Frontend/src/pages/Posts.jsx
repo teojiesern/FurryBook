@@ -72,6 +72,7 @@ const StyledPost = styled.div`
     width: 200px;
     background-size: cover;
     background-position: center;
+    border-radius: 15px;
 `;
 
 const StyledLikedAndCommented = styled.div`
@@ -304,6 +305,7 @@ export function Posts({ userId, profilePic, datas }) {
                                     style={{
                                         height: "400px",
                                         width: "400px",
+                                        borderRadius: "15px",
                                         display: isOpen ? "none" : null,
                                     }}
                                 ></video>

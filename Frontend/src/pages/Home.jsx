@@ -407,7 +407,7 @@ export function Home() {
     return (
         <StyledContainer>
             {data.length === 0 ? (
-                <p>This user has yet to post anything</p>
+                <p>Add friends to see more posts</p>
             ) : (
                 <Masonry columns={2} spacing={2} sx={{ paddingLeft: "20px" }}>
                     {allPosts}
