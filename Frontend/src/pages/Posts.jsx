@@ -68,8 +68,8 @@ const StyledCaption = styled.p`
 `;
 
 const StyledPost = styled.div`
-    height: 200px;
-    width: 200px;
+    height: 300px;
+    width: 300px;
     background-size: cover;
     background-position: center;
     border-radius: 15px;

@@ -3,13 +3,14 @@ import { Link, useLoaderData, useLocation } from "react-router-dom";
 import { styled } from "styled-components";
 import { SendFriendRequest } from "../../api/SendFriendRequest";
 import { TrackSession } from "../../api/trackSession";
+import { StyledContainer } from "../../Utils/StyledContainer";
 
 const GridContainer = styled.div`
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
     gap: 20px 10px;
-    margin: 20px 30px;
+    margin: 20px 30px 40px 30px;
 `;
 
 const RecommendationStyle = styled.div`
@@ -136,5 +137,9 @@ export function FriendsRecommendations() {
             </div>
         );
     });
-    return <GridContainer>{recommendedUser}</GridContainer>;
+    return (
+        <StyledContainer>
+            <GridContainer>{recommendedUser}</GridContainer>
+        </StyledContainer>
+    );
 }

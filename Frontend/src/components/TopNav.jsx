@@ -141,15 +141,16 @@ export function TopNav() {
 
     React.useEffect(() => {
         const temp =
-            recommendedUser.length === 0 ? (
+            recommendedUser?.length === 0 ? (
                 <p>Sorry, no record of this user in our system😢</p>
             ) : (
-                recommendedUser.map((user) => {
+                recommendedUser?.map((user) => {
                     const profilePic = user.profilePicturePath
                         ?.split("/")
                         .pop();
                     return (
                         <StyledOption
+                            key={user.id}
                             as={Link}
                             to={`/FurryBook/profile/${user.id}`}
                             onClick={() =>
@@ -223,7 +224,9 @@ export function TopNav() {
                                 top: "9.5%",
                             }}
                         >
-                            <StyledContainer>{recommendations}</StyledContainer>
+                            <StyledContainer style={{ maxHeight: "240px" }}>
+                                {recommendations}
+                            </StyledContainer>
                         </StyledOptionContainer>
                     </StyledSearchSelection>
                 </div>

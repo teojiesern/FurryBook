@@ -5,6 +5,7 @@ import { UserData } from "../../api/UserData";
 import { Link } from "react-router-dom";
 import { AcceptFriendRequest } from "../../api/AcceptFriendRequest";
 import { DeclineFriendRequest } from "../../api/DeclineFriendRequest";
+import { Const } from "../../Const";
 
 const RequestContainer = styled.div`
     display: flex;
@@ -65,7 +66,7 @@ export function FriendRequest({ userData }) {
             requestOfUser.forEach((id) => {
                 const getMutual = async () => {
                     const tempMutual = await axios.post(
-                        `http://localhost:3001/users/mutual-friends`,
+                        `http://${Const}:3001/users/mutual-friends`,
                         {
                             senderId: id,
                             receiverId: userData.id,

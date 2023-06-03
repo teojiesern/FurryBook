@@ -28,7 +28,6 @@ public class AdminController {
         return service.findAllUsers();
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/email/{email}")
     public User getUserByEmail(@PathVariable String email) {
         return service.findUserByEmail(email);
@@ -40,7 +39,6 @@ public class AdminController {
         return service.addAdminUser(user);
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @DeleteMapping("/{Id}")
     public ResponseEntity<String> deleteUser(@PathVariable String Id) {
         String result = service.deleteUser(Id);
