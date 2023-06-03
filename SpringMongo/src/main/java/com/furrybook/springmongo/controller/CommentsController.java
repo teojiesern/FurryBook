@@ -21,19 +21,18 @@ import com.furrybook.springmongo.model.User.User;
 import com.furrybook.springmongo.service.CommentsService;
 
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/comments")
 public class CommentsController {
 
     @Autowired
     private CommentsService commentsService;
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping
     public List<Comments> getAllCommets() {
         return commentsService.findAllComments();
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/{commentId}/user")
     public ResponseEntity<User> getUserByComment(@PathVariable String commentId) {
         User user = commentsService.getUserByComment(commentId);
@@ -44,7 +43,6 @@ public class CommentsController {
         }
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/{userId}")
     public ResponseEntity<Comments> createComment(@RequestBody Map<String, String> payload,
             @PathVariable String userId) {
@@ -52,14 +50,7 @@ public class CommentsController {
                 commentsService.createComment(payload.get("commentBody"), payload.get("postId"), userId),
                 HttpStatus.OK);
     }
-    // this postMapping needs endpoint url of localhost:3001/comments/{userId}, and
-    // then a body of
-    // {
-    // "commentBody": {body},
-    // "postId": "{postId}"
-    // }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PutMapping("/{commentId}")
     public ResponseEntity<Void> updateCommentAndSyncWithPost(@PathVariable String commentId,
             @RequestBody Map<String, String> payload) {
@@ -67,29 +58,18 @@ public class CommentsController {
         commentsService.updateCommentAndSyncWithPost(commentId, newBody);
         return ResponseEntity.ok().build();
     }
-    // this putMapping needs endpoint url of localhost:3001/comments/{commentId},
-    // and then a body of
-    // {
-    // "newBody": {body}
-    // }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @DeleteMapping("/{commentId}/posts/{postId}")
     public ResponseEntity<Void> deleteCommentAndRemoveFromPost(@PathVariable String commentId,
             @PathVariable String postId) {
         commentsService.deleteCommentAndRemoveFromPost(commentId, postId);
         return ResponseEntity.ok().build();
     }
-    // this deleteMapping needs endpoint url of
-    // localhost:3001/comments/{commentId}/posts/{postId}
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @DeleteMapping("/posts/{postId}")
     public ResponseEntity<Void> deleteAllCommentsUnderPost(@PathVariable String postId) {
         commentsService.deleteAllCommentsUnderPost(postId);
         return ResponseEntity.ok().build();
     }
-    // this deleteMapping needs endpoint url of
-    // localhost:3001/comments/posts/{postId}
 
 }

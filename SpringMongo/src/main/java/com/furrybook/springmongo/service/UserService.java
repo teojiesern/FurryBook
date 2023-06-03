@@ -43,15 +43,6 @@ public class UserService {
         return repository.save(user);
     }
 
-    // probably can use if want encrypt
-    // public User addUser(StandardUser user) {
-    // BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-    // String encryptedPassword = passwordEncoder.encode(user.getPassword());
-    // user.setPassword(encryptedPassword);
-
-    // return repository.save(user);
-    // }
-
     public User addAdminUser(AdminUser user) {
         return repository.save(user);
     }
@@ -354,8 +345,8 @@ public class UserService {
         Set<String> visited = new HashSet<>();
         List<FriendMutual> friendRecommendations = new ArrayList<>();
         Set<String> immediateFriends = repository.findById(userId).get().getFriendsId();
-        List<String> sentRequest = repository.findById(userId).get().getSentFriendRequests();
-        List<String> receivedRequest = repository.findById(userId).get().getReceivedFriendRequests();
+        Set<String> sentRequest = repository.findById(userId).get().getSentFriendRequests();
+        Set<String> receivedRequest = repository.findById(userId).get().getReceivedFriendRequests();
 
         for (String immediateFriend : immediateFriends) {
             Set<String> friendsOfFriend = repository.findById(immediateFriend).get().getFriendsId();

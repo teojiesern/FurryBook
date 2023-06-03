@@ -38,9 +38,23 @@ public class StandardUser implements User {
     // reason for not using linkedlist is because mongodb does not support
     // linkedlist
     private ArrayList<String> jobs = new ArrayList<>();
+    // Using HashSet here is due to the ability of elimination of duplicates, this
+    // prevents the user from having friends which are the same person
     private Set<String> friendsId = new HashSet<String>();
-    private ArrayList<String> receivedFriendRequests = new ArrayList<>();
-    private ArrayList<String> sentFriendRequests = new ArrayList<>();
+    // Using HashSet here is due to the ability of elimination of duplicates, this
+    // prevents the user from having the same friend request more than once from the
+    // same user
+    // HashSet also provides for a faster element removal with linear time
+    // complexity (O(n)), since removing a friend request is often done, this can
+    // increase the performance of backend by a lot
+    private Set<String> receivedFriendRequests = new HashSet<>();
+    // Using HashSet here is due to the ability of elimination of duplicates, this
+    // prevents the user from being able to send more than one friend request to the
+    // same user
+    // HashSet also provides for a faster element removal with linear time
+    // complexity (O(n)), since removing a friend request is often done, this can
+    // increase the performance of backend by a lot
+    private Set<String> sentFriendRequests = new HashSet<>();
 
     @Override
     public void setBirthdate(LocalDate birthdate) {

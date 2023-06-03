@@ -10,8 +10,6 @@ import { StyledContainer } from "../Utils/StyledContainer";
 
 export function History() {
     const session = useLoaderData();
-    console.log(session);
-
     const allSession = session?.map((s, index) => (
         <TimelineItem>
             <TimelineSeparator>

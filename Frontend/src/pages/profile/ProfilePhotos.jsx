@@ -27,7 +27,6 @@ export function ProfilePhotos() {
     const [allPhotos, setAllPhotos] = React.useState();
     const userId = useParams().userId;
 
-    console.log(allPhotos);
     React.useEffect(() => {
         const getAllPost = async () => {
             const temp = await AllPosts(userId);
