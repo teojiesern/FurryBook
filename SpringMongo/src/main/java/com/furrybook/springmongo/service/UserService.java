@@ -486,7 +486,7 @@ public class UserService {
         currentSession.getSessionStorage().addFirst(session);
     }
 
-    public LinkedList<String> getSession(){
+    public LinkedList<String> getSession() {
         return currentSession.getSessionStorage();
     }
 

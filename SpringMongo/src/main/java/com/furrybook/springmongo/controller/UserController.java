@@ -29,32 +29,27 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping
     public List<User> getUsers() {
         return service.findAllExcludingPassword();
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/{Id}")
     public User getUser(@PathVariable String Id) {
         return service.getUserbyId(Id);
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/email/{email}")
     public User getUserByEmail(@PathVariable String email) {
         return service.findUserByEmail(email);
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User createUser(@RequestBody StandardUser user) {
         return service.addUser(user);
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/login")
     public ResponseEntity<String> loginUser(@RequestBody LoginRequest loginRequest) {
         User user = service.verifyLogin(loginRequest.getEmail(), loginRequest.getPassword());
@@ -66,7 +61,6 @@ public class UserController {
         }
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/{userId}/profile-picture")
     public ResponseEntity<String> uploadProfilePicture(@PathVariable String userId,
             @RequestParam("file") MultipartFile file) {
@@ -78,7 +72,6 @@ public class UserController {
         }
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/{userId}/cover-photo")
     public ResponseEntity<String> uploadCoverPhoto(@PathVariable String userId,
             @RequestParam("file") MultipartFile file) {
@@ -90,7 +83,6 @@ public class UserController {
         }
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/{userId}/update-profile-picture")
     public ResponseEntity<String> updateProfilePicture(@PathVariable String userId,
             @RequestParam("file") MultipartFile file) {
@@ -102,7 +94,6 @@ public class UserController {
         }
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/{userId}/update-cover-photo")
     public ResponseEntity<String> updateCoverPhoto(@PathVariable String userId,
             @RequestParam("file") MultipartFile file) {
@@ -114,7 +105,6 @@ public class UserController {
         }
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/{userId}/profile-picture")
     public ResponseEntity<String> getProfilePicture(@PathVariable String userId) {
         User user = service.getUserbyId(userId);
@@ -125,7 +115,6 @@ public class UserController {
         return ResponseEntity.ok(filePath);
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("/{userId}/cover-photo")
     public ResponseEntity<String> getCoverPhoto(@PathVariable String userId) {
         User user = service.getUserbyId(userId);
@@ -136,13 +125,6 @@ public class UserController {
         return ResponseEntity.ok(filePath);
     }
 
-    // @CrossOrigin(origins = "*", allowedHeaders = "*")
-    // @PutMapping
-    // public User modifyUser(@RequestBody StandardUser user) {
-    // return service.updateUser(user);
-    // }
-
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PutMapping("/update/{id}")
     public User updateUser(@PathVariable("id") String id, @RequestBody UserUpdateRequest request) {
         User user = service.getUserbyId(id);
@@ -192,7 +174,6 @@ public class UserController {
         return userRepository.save(user);
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("friend/{userId}/{friendId}")
     public ResponseEntity<String> addFriend(@PathVariable("userId") String userId,
             @PathVariable("friendId") String friendId) {
@@ -208,7 +189,6 @@ public class UserController {
         return ResponseEntity.ok("Friend added successfully");
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("friend/{userId}/{friendId}")
     public ResponseEntity<String> checkFriend(@PathVariable("userId") String userId,
             @PathVariable("friendId") String friendId) {
@@ -228,7 +208,6 @@ public class UserController {
 
     // Getting friends of user alongside with the mutual friend list.
     // Can be used to show list of friends at the friend page.
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("friend/{userId}")
     public List<FriendMutual> getFriends(@PathVariable String userId) {
         List<FriendMutual> mutualFriends = service.getFriendsWithMutualFriends(userId);
@@ -237,14 +216,12 @@ public class UserController {
 
     // Getting friend recommendations with the mutual friend list.
     // Can be used to recommend potential friends at the friend page.
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping("recommendation/{userId}")
     public List<FriendMutual> getFriendRecommendation(@PathVariable String userId) {
         List<FriendMutual> friendrecommendations = service.getFriendRecommendations(userId);
         return friendrecommendations;
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @DeleteMapping("friend/{userId}/{friendId}")
     public ResponseEntity<String> removeFriend(@PathVariable("userId") String userId,
             @PathVariable("friendId") String friendId) {
@@ -282,7 +259,6 @@ public class UserController {
         return ResponseEntity.ok("Friend request declined successfully");
     }
 
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/search")
     public List<User> search(@RequestBody Map<String, String> body) {
         String queryString = body.get("query");
