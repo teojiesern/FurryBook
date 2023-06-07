@@ -380,7 +380,7 @@ export function Posts({ userId, profilePic, datas }) {
         );
     });
     return (
-        <div style={{ width: "70%" }}>
+        <div style={{ width: "100%" }}>
             <div>{posts}</div>
             {isOpen && (
                 <Popup

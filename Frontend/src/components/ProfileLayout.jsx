@@ -16,6 +16,8 @@ import { GetFriendshipStatus } from "../api/GetFriendshipStatus";
 import { SendFriendRequest } from "../api/SendFriendRequest";
 import { AcceptFriendRequest } from "../api/AcceptFriendRequest";
 import { DeclineFriendRequest } from "../api/DeclineFriendRequest";
+import { Popup } from "../Utils/Popup";
+import DragDrop from "./DragDrop";
 
 const StyledUserInfoContainer = styled.div`
     position: relative;
@@ -140,6 +142,8 @@ const CustomNavLink = ({ to, children }) => {
 export function ProfileLayout() {
     const [datas, setDatas] = React.useState(useLoaderData());
     const [friendshipStatus, setFriendshipStatus] = React.useState("");
+    const [isOpen, setIsOpen] = React.useState(false);
+    const [type, setType] = React.useState("");
     const { userId } = useParams();
     const ownId = localStorage.getItem("userId");
     const backgroundPhoto = datas.coverPhotoPath?.split("/").pop();
@@ -180,6 +184,10 @@ export function ProfileLayout() {
         setFriendshipStatus("Add Friend");
     }
 
+    function togglePopup() {
+        setIsOpen((prevIsOpen) => !prevIsOpen);
+    }
+
     return (
         <StyledContainer>
             <StyledUserInfoContainer>
@@ -199,7 +207,27 @@ export function ProfileLayout() {
                         <IoSettingsSharp />
                     </StyledUserContainer>
                     <StyledFriendCount>{friends}</StyledFriendCount>
-                    {userId === ownId ? null : (
+                    {userId === ownId ? (
+                        <div>
+                            <FriendStatus
+                                onClick={() => {
+                                    togglePopup();
+                                    setType("profile");
+                                }}
+                            >
+                                Edit Profile Pic
+                            </FriendStatus>
+                            <FriendStatus
+                                onClick={() => {
+                                    togglePopup();
+                                    setType("cover");
+                                }}
+                                style={{ marginLeft: "20px" }}
+                            >
+                                Edit Cover Photo
+                            </FriendStatus>
+                        </div>
+                    ) : (
                         <div>
                             <FriendStatus
                                 disabled={
@@ -246,6 +274,20 @@ export function ProfileLayout() {
                 ></StyledSearchBar>
             </StyledNavigationContainer>
             <Outlet context={[profilePic, datas]} />
+            {isOpen && (
+                <Popup
+                    handleClose={togglePopup}
+                    topDisplay={"Edit Your Profile"}
+                    width="65%"
+                    height="95%"
+                    right="calc(17% - 30px)"
+                >
+                    <DragDrop
+                        changeType={type}
+                        userId={userId}
+                    />
+                </Popup>
+            )}
         </StyledContainer>
     );
 }

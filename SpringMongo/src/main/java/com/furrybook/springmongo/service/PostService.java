@@ -31,34 +31,6 @@ public class PostService {
 
     private final String FOLDER_PATH = "C:/Users/User/Documents/WIA1002 DS/FurryBook/Frontend/public/assets/post storage/";
 
-    // public String uploadPost(String Id, MultipartFile file) throws IOException {
-    // String filePath = FOLDER_PATH + file.getOriginalFilename();
-    // String contentType = file.getContentType();
-    // String fileType;
-
-    // if (contentType.startsWith("image/")) {
-    // fileType = "image";
-    // } else if (contentType.startsWith("video/")) {
-    // fileType = "video";
-    // } else {
-    // throw new IllegalArgumentException("Invalid file type");
-    // }
-    // Posts fileData = fileDataRepository.save(Posts.builder()
-    // .name(file.getOriginalFilename())
-    // .type(fileType)
-    // .filePath(filePath)
-    // .userId(Id)
-    // .created(LocalDateTime.now())
-    // .build());
-
-    // file.transferTo(new File(filePath));
-
-    // if (fileData != null) {
-    // return "file uploaded successfully : " + filePath;
-    // }
-    // return null;
-    // }
-
     public String uploadPost(String userId, String caption, MultipartFile file) throws IOException {
         if (file != null && !file.isEmpty()) {
             String filePath = FOLDER_PATH + file.getOriginalFilename();

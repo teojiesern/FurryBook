@@ -98,14 +98,6 @@ const StyledEditProfileAndCover = styled.div`
     padding: 10px;
 `;
 
-const StyledChangeText = styled.h4`
-    font-size: 20px;
-    font-family: Montserrat, sans-serif;
-    color: #153fac;
-    margin: 0;
-    cursor: pointer;
-`;
-
 const StyledDescription = styled.h1`
     font-size: 20px;
     margin: 0;
@@ -399,7 +391,6 @@ export function UserInfo({ datas, friends, submit, userId }) {
                                     <StyledDescription>
                                         Profile Picture
                                     </StyledDescription>
-                                    <StyledChangeText>Change</StyledChangeText>
                                 </StyledEditProfileAndCover>
                                 <StyledProfilePicture
                                     style={{
@@ -410,7 +401,6 @@ export function UserInfo({ datas, friends, submit, userId }) {
                                     <StyledDescription>
                                         Cover Photo
                                     </StyledDescription>
-                                    <StyledChangeText>Change</StyledChangeText>
                                 </StyledEditProfileAndCover>
                                 <StyledCoverPhoto
                                     style={{
