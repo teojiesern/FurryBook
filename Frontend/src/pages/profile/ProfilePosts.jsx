@@ -11,6 +11,9 @@ import { Posts } from "../Posts";
 import axios from "axios";
 import { TrackSession } from "../../api/trackSession";
 import { Const } from "../../Const";
+import { PostingRow } from "../../components/PostingRow";
+import { Popup } from "../../Utils/Popup";
+import { Postings } from "../../components/Postings";
 
 export const StyledParentContainer = styled.div`
     display: flex;
@@ -18,10 +21,20 @@ export const StyledParentContainer = styled.div`
     align-items: flex-start;
 `;
 
+const PostContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    flex: 10;
+    width: 100%;
+`;
+
 export function ProfilePosts() {
     const [profilePic, datas] = useOutletContext();
     const [data, setData] = React.useState(useLoaderData());
+    const [isOpen, setIsOpen] = React.useState(false);
     const { userId } = useParams();
+    const [file, setFile] = React.useState(null);
+    const currentLogin = localStorage.getItem("userId");
     const session = useLocation().pathname;
 
     React.useEffect(() => {
@@ -58,7 +71,14 @@ export function ProfilePosts() {
             updatedInfo
         );
         setData({ ...data, ...updatedInfo });
-        // window.location.reload();
+    }
+
+    function togglePopup() {
+        setIsOpen((prevIsOpen) => !prevIsOpen);
+    }
+
+    function getDataFromChild(file) {
+        setFile(file);
     }
 
     return (
@@ -69,7 +89,33 @@ export function ProfilePosts() {
                 submit={handleSubmission}
                 userId={userId}
             />
-            <Posts userId={userId} profilePic={profilePic} datas={data} />
+            <PostContainer>
+                {currentLogin === userId && (
+                    <PostingRow
+                        userId={userId}
+                        profilePic={profilePic}
+                        name={data.name}
+                        togglePopup={togglePopup}
+                        file={file}
+                    />
+                )}
+                <Posts userId={userId} profilePic={profilePic} datas={data} />
+            </PostContainer>
+            {isOpen && (
+                <Popup
+                    handleClose={togglePopup}
+                    topDisplay={"Edit Your Profile"}
+                    width="65%"
+                    height="95%"
+                    right="calc(17% - 30px)"
+                >
+                    <Postings
+                        userId={userId}
+                        togglePopup={togglePopup}
+                        getDataFromChild={getDataFromChild}
+                    />
+                </Popup>
+            )}
         </StyledParentContainer>
     );
 }

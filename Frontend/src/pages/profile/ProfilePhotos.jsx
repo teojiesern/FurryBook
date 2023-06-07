@@ -23,6 +23,12 @@ const PhotoCard = styled.div`
     height: 30vh;
 `;
 
+const Title = styled.h1`
+    margin: 0;
+    font-size: 30px;
+    font-family: Montserrat, sans-serif;
+`;
+
 export function ProfilePhotos() {
     const [allPhotos, setAllPhotos] = React.useState();
     const userId = useParams().userId;
