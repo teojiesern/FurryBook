@@ -7,6 +7,8 @@ import { IoLogOut } from "react-icons/io5";
 import { FaHistory } from "react-icons/fa";
 import { Search } from "../api/Search";
 import { StyledContainer } from "../Utils/StyledContainer";
+import axios from "axios";
+import { Const } from "../Const";
 
 const StyledDiv = styled.div`
     display: flex;
@@ -188,7 +190,8 @@ export function TopNav() {
         setStyling((prevStyle) => (prevStyle === "none" ? "" : "none"));
     }
 
-    function handleLogout() {
+    async function handleLogout() {
+        const res = await axios.post(`http://${Const}:3001/users/clearSession`);
         localStorage.removeItem("userId");
         localStorage.removeItem("loggedIn");
         window.location.reload();

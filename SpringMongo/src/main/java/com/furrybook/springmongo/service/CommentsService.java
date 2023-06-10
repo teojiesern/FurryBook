@@ -3,14 +3,12 @@ package com.furrybook.springmongo.service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
-
 import com.furrybook.springmongo.model.Content.Comments;
 import com.furrybook.springmongo.model.Content.Posts;
 import com.furrybook.springmongo.model.User.User;
@@ -80,17 +78,6 @@ public class CommentsService {
             return null;
         }
     }
-
-    // public User getCommentByUserId(String userId) {
-    //     Optional<Comments> optionalComment = commentsRepository.findById(commentId);
-    //     if (optionalComment.isPresent()) {
-    //         Comments comment = optionalComment.get();
-    //         String userId = comment.getUserId();
-    //         return userRepository.findById(userId).orElse(null);
-    //     } else {
-    //         return null;
-    //     }
-    // }
 
     public List<Comments> findAllComments() {
         return commentsRepository.findAll();

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,7 +20,6 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.furrybook.springmongo.exception.ExistingEmailException;
 import com.furrybook.springmongo.model.Content.Session;
 import com.furrybook.springmongo.model.Friend.FriendMutual;
@@ -47,14 +47,8 @@ public class UserService {
         return repository.save(user);
     }
 
-    // public List<User> findAllUsers() {
-    // return repository.findAll();
-    // }
-
     public List<User> findAllUsers() {
         List<User> allUsers = repository.findAll();
-
-        // Filter the users based on userType
         List<User> filteredUsers = allUsers.stream()
                 .filter(user -> user.getUserType().equals("user"))
                 .collect(Collectors.toList());
@@ -95,12 +89,6 @@ public class UserService {
         user.setName(name);
         return repository.save(user);
     }
-
-    // public User updateEmail(String Id) {
-    // User user = repository.findById(Id).get();
-    // user.setName(name);
-    // return repository.save(user);
-    // }
 
     public User updatePassword(String Id, String password) {
         User user = repository.findById(Id).get();
@@ -143,12 +131,6 @@ public class UserService {
         user.setHobbies(hobbies);
         return repository.save(user);
     }
-
-    // public User addJobs(String Id, String newJob) {
-    // User user = repository.findById(Id).get();
-    // user.getJobs().push(newJob);
-    // return repository.save(user);
-    // }
 
     public String deleteUser(String Id) {
         User user = repository.findById(Id).orElse(null);
@@ -273,8 +255,8 @@ public class UserService {
         return matchedQuery;
     }
 
-    private boolean isMatch(String query, String name) {
-        return name.toLowerCase().contains(query.toLowerCase());
+    private boolean isMatch(String query, String property) {
+        return property.toLowerCase().contains(query.toLowerCase());
     }
 
     public void addFriend(User user, User friend) {
@@ -297,13 +279,19 @@ public class UserService {
     }
 
     public List<String> getMutualFriends(String userId1, String userId2) {
-        Set<String> user1Friends = repository.findById(userId1).get().getFriendsId();
-        Set<String> user2Friends = repository.findById(userId2).get().getFriendsId();
+        Optional<User> user1Optional = repository.findById(userId1);
+        Optional<User> user2Optional = repository.findById(userId2);
 
-        Set<String> mutualFriends = new HashSet<>(user1Friends);
-        mutualFriends.retainAll(user2Friends);
+        if (user1Optional.isPresent() && user2Optional.isPresent()) {
+            Set<String> user1Friends = user1Optional.get().getFriendsId();
+            Set<String> user2Friends = user2Optional.get().getFriendsId();
 
-        return new ArrayList<>(mutualFriends);
+            Set<String> mutualFriends = new HashSet<>(user1Friends);
+            mutualFriends.retainAll(user2Friends);
+
+            return new ArrayList<>(mutualFriends);
+        }
+        return Collections.emptyList(); 
     }
 
     public List<FriendMutual> getFriendsWithMutualFriends(String givenUserId) {
@@ -322,7 +310,6 @@ public class UserService {
                     mutualFriendsList.add(new FriendMutual(friendUser, mutualFriends));
                 }
             }
-
         }
         return mutualFriendsList;
     }
@@ -341,7 +328,6 @@ public class UserService {
     }
 
     public List<FriendMutual> getFriendRecommendations(String userId) {
-        // Set<FriendMutual> friendRecommendations = new HashSet<>();
         Set<String> visited = new HashSet<>();
         List<FriendMutual> friendRecommendations = new ArrayList<>();
         Set<String> immediateFriends = repository.findById(userId).get().getFriendsId();
@@ -362,9 +348,6 @@ public class UserService {
             }
         }
 
-        // friendRecommendations.sort(Comparator.comparing(a ->
-        // a.getMutualFriends().size()));
-
         return friendRecommendations;
     }
 
@@ -372,11 +355,9 @@ public class UserService {
         User sender = repository.findById(senderId).get();
         User receiver = repository.findById(receiverId).get();
 
-        // Add receiverId to the sentFriendRequests of the sender
         sender.getSentFriendRequests().add(receiverId);
         repository.save(sender);
 
-        // Add senderId to the receivedFriendRequests of the receiver
         receiver.getReceivedFriendRequests().add(senderId);
         repository.save(receiver);
     }
@@ -394,19 +375,15 @@ public class UserService {
         User receiver = repository.findById(receiverId).get();
         User sender = repository.findById(senderId).get();
 
-        // Add senderId to the friendsId of the receiver
         receiver.getFriendsId().add(senderId);
         repository.save(receiver);
 
-        // Add receiverId to the friendsId of the sender
         sender.getFriendsId().add(receiverId);
         repository.save(sender);
 
-        // Remove senderId from the receivedFriendRequests of the receiver
         receiver.getReceivedFriendRequests().remove(senderId);
         repository.save(receiver);
 
-        // Remove receiverId from the sentFriendRequests of the sender
         sender.getSentFriendRequests().remove(receiverId);
         repository.save(sender);
     }
@@ -417,15 +394,9 @@ public class UserService {
 
     public boolean areFriends(String userId1, String userId2) {
         User user1 = repository.findById(userId1).get();
-        // User user2 = repository.findById(userId2).get();
-
         if (user1.getFriendsId().contains(userId2)) {
             return true;
         }
-
-        // if (user2.getFriendsId().contains(userId1)) {
-        // return true;
-        // }
 
         return false;
     }
@@ -443,7 +414,6 @@ public class UserService {
     }
 
     public void removeUserFromFriendsId(String userId) {
-        // Iterate over each user and remove the given user from their friends list
         List<User> users = repository.findAll();
         for (User user : users) {
             user.getFriendsId().remove(userId);
@@ -452,8 +422,6 @@ public class UserService {
     }
 
     public void removeUserFromReceivedFriendRequest(String userId) {
-        // Iterate over each user and remove the given user from their received friend
-        // requests
         List<User> users = repository.findAll();
         for (User user : users) {
             user.getReceivedFriendRequests().remove(userId);
@@ -462,8 +430,6 @@ public class UserService {
     }
 
     public void removeUserFromSentFriendRequest(String userId) {
-        // Iterate over each user and remove the given user from their sent friend
-        // requests
         List<User> users = repository.findAll();
         for (User user : users) {
             user.getSentFriendRequests().remove(userId);
@@ -479,6 +445,10 @@ public class UserService {
 
     public LinkedList<String> getSession() {
         return currentSession.getSessionStorage();
+    }
+
+    public void clearSession() {
+        currentSession.getSessionStorage().clear();
     }
 
 }

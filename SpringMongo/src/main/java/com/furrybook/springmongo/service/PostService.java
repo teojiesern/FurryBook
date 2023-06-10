@@ -4,12 +4,10 @@ import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.furrybook.springmongo.model.Content.Posts;
 import com.furrybook.springmongo.model.User.User;
 import com.furrybook.springmongo.repository.PostRepository;
 import com.furrybook.springmongo.repository.UserRepository;
-
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -169,26 +167,19 @@ public class PostService {
     }
 
     public List<Posts> getPostsByUserFriends(String userId) {
-        // Retrieve the user from the UserRepository
         User user = userRepository.findById(userId).orElse(null);
         if (user == null) {
-            // User not found
             return Collections.emptyList();
         }
 
-        // Retrieve the user's friends' IDs
         Set<String> friendsIds = user.getFriendsId();
-
-        // Retrieve posts for each friend
         List<Posts> friendPosts = new ArrayList<>();
         for (String friendId : friendsIds) {
             List<Posts> posts = fileDataRepository.findByUserId(friendId);
             friendPosts.addAll(posts);
         }
 
-        // Sort the combined posts by date posted (most recent first)
         Collections.sort(friendPosts, Comparator.comparing(Posts::getCreated).reversed());
-
         return friendPosts;
     }
 
