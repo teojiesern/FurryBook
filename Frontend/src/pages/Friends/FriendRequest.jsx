@@ -62,26 +62,31 @@ export function FriendRequest({ userData }) {
     const requestOfUser = userData.receivedFriendRequests;
 
     React.useEffect(() => {
-        if (requestOfUser.length != 0) {
-            requestOfUser.forEach((id) => {
-                const getMutual = async () => {
-                    const tempMutual = await axios.post(
-                        `http://${Const}:3001/users/mutual-friends`,
-                        {
-                            senderId: id,
-                            receiverId: userData.id,
-                        }
-                    );
-                    const tempUserData = await UserData(id);
-                    setMutual((prevMutual) => [tempMutual.data, ...prevMutual]);
-                    setSentRequestUserData((prevSentRequest) => [
-                        tempUserData,
-                        ...prevSentRequest,
-                    ]);
-                };
-                getMutual();
-            });
-        }
+        const getMutual = async (id) => {
+            const tempMutual = await axios.post(
+                `http://${Const}:3001/users/mutual-friends`,
+                {
+                    senderId: id,
+                    receiverId: userData.id,
+                }
+            );
+            const tempUserData = await UserData(id);
+            return { tempMutual: tempMutual.data, tempUserData };
+        };
+
+        const updateState = async () => {
+            if (requestOfUser.length !== 0) {
+                const results = await Promise.all(
+                    requestOfUser.map((id) => getMutual(id))
+                );
+                setMutual(results.map((result) => result.tempMutual));
+                setSentRequestUserData(
+                    results.map((result) => result.tempUserData)
+                );
+            }
+        };
+
+        updateState();
     }, []);
 
     async function handleAccept(request) {
@@ -109,7 +114,7 @@ export function FriendRequest({ userData }) {
                     ?.split("/")
                     .pop();
                 return (
-                    <FriendRequests>
+                    <FriendRequests key={request}>
                         <Link
                             to={`/FurryBook/profile/${request}`}
                             style={{ textDecoration: "none", display: "flex" }}
