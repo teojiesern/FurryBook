@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+
+/backgorund photos
+/post storage
+/profile pictures
