@@ -5,11 +5,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.furrybook.springmongo.model.Content.Posts;
 import com.furrybook.springmongo.model.User.User;
 import com.furrybook.springmongo.service.PostService;
-
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
@@ -30,8 +28,6 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(uploadImage);
     }
-    // this postMapping needs endpoint url of localhost:3001/api/posts/{userId}, and
-    // then a body of a file with the key "post" and "caption"
 
     @PostMapping("/{userId}/like/{postId}")
     public ResponseEntity<String> interactWithLikeButton(@PathVariable String postId, @PathVariable String userId) {

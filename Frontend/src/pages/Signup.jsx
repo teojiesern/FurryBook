@@ -135,23 +135,6 @@ const SignUpButton = styled.button`
   box-shadow: 0px 8px 24px -2px rgba(11, 47, 138, 0.6);
 `;
 
-// const LineBreak = styled.div`
-//   display: flex;
-//   align-items: center;
-//   text-align: center;
-//   margin-top: 20px;
-//   margin-bottom: 20px;
-//   width: 30rem;
-// `;
-
-// const Line = styled.hr`
-//   flex-grow: 1;
-//   margin-left: 10px;
-//   margin-right: 10px;
-//   color: #7374A7;
-//   border-width: 2px;
-// `;
-
 const Text = styled.span`
   font-size: 14px;
   color: #7374A7;
@@ -161,27 +144,6 @@ const Warning = styled.p`
     font-size: 14px;
     color: red;
 `
-
-// const ButtonContainer = styled.div`
-//   display: flex;
-//   align-items: center;
-// `;
-
-// const RoundButton = styled.button`
-//   width: 40px;
-//   height: 40px;
-//   border-radius: 50%;
-//   background-color: #FFF;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   padding: 0;
-//   cursor: pointer;
-//   border-width: 0;
-//   font-size: 35px;
-//   margin: 0 25px 25px 25px;
-//   box-shadow: 0px 8px 24px -2px rgba(69, 71, 76, 0.6);
-// `;
 
 const WhiteBox = styled.div`
   position: absolute;

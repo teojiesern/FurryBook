@@ -13,8 +13,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -214,6 +214,18 @@ public class UserController {
         return mutualFriends;
     }
 
+    @GetMapping("mutual/{user1}/{user2}")
+    public List<FriendMutual> getMutual(@PathVariable String user1, @PathVariable String user2) {
+        List<String> mutualFriends = service.getMutualFriends(user1, user2);
+        List<FriendMutual> detailedMutualFriend = new ArrayList<>();
+        for (String mutualFriend : mutualFriends) {
+            List<String> tempMutual = service.getMutualFriends(mutualFriend, user2);
+            User tempUser = service.getUserbyId(mutualFriend);
+            detailedMutualFriend.add(new FriendMutual(tempUser, tempMutual));
+        }
+        return detailedMutualFriend;
+    }
+
     // Getting friend recommendations with the mutual friend list.
     // Can be used to recommend potential friends at the friend page.
     @GetMapping("recommendation/{userId}")
@@ -284,6 +296,11 @@ public class UserController {
     @GetMapping("/getSession")
     public LinkedList<String> getSession() {
         return service.getSession();
+    }
+
+    @PostMapping("/clearSession")
+    public void clearSession() {
+        service.clearSession();
     }
 
 }

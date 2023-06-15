@@ -3,13 +3,11 @@ package com.furrybook.springmongo.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-
 import org.springframework.data.annotation.Id;
 
 @Data

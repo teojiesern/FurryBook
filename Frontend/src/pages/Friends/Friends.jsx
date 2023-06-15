@@ -51,7 +51,7 @@ const StyledDividerLine = styled.div`
     background-color: gray;
 `;
 
-const FriendListContainer = ({ friends }) => {
+export const FriendListContainer = ({ friends }) => {
     return friends.length === 0 ? (
         <p style={{ marginTop: "20px", fontWeight: "400" }}>No friends</p>
     ) : (

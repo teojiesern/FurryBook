@@ -104,7 +104,7 @@ export function ProfilePosts() {
             {isOpen && (
                 <Popup
                     handleClose={togglePopup}
-                    topDisplay={"Edit Your Profile"}
+                    topDisplay={"Upload something✌️✌️"}
                     width="65%"
                     height="95%"
                     right="calc(17% - 30px)"

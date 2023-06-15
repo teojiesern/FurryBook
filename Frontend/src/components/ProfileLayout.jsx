@@ -18,6 +18,8 @@ import { AcceptFriendRequest } from "../api/AcceptFriendRequest";
 import { DeclineFriendRequest } from "../api/DeclineFriendRequest";
 import { Popup } from "../Utils/Popup";
 import DragDrop from "./DragDrop";
+import { MutualFriends } from "../api/MutualFriends";
+import { FriendListContainer } from "../pages/Friends/Friends";
 
 const StyledUserInfoContainer = styled.div`
     position: relative;
@@ -143,6 +145,8 @@ export function ProfileLayout() {
     const [datas, setDatas] = React.useState(useLoaderData());
     const [friendshipStatus, setFriendshipStatus] = React.useState("");
     const [isOpen, setIsOpen] = React.useState(false);
+    const [mutualFriends, setMutualFriends] = React.useState([]);
+    const [isMutualPopup, setIsMutualPopup] = React.useState(false);
     const [type, setType] = React.useState("");
     const { userId } = useParams();
     const ownId = localStorage.getItem("userId");
@@ -165,9 +169,26 @@ export function ProfileLayout() {
             setFriendshipStatus(temp);
         };
 
+        const getMutualFriend = async () => {
+            if (userId !== ownId) {
+                const temp = await MutualFriends(userId, ownId);
+                setMutualFriends(temp);
+            }
+            return null;
+        };
+
+        getMutualFriend();
         getFriendshipStatus();
         getProfData();
+        setIsMutualPopup(false);
     }, [userId]);
+
+    const friendDataWithMutualCount = React.useMemo(() => {
+        return mutualFriends?.map((friend) => ({
+            ...friend,
+            mutualFriends: friend.mutualFriends.length,
+        }));
+    }, [mutualFriends]);
 
     async function handleClick() {
         if (friendshipStatus === "Add Friend") {
@@ -206,7 +227,38 @@ export function ProfileLayout() {
                         <StyledName>{datas.name}</StyledName>
                         <IoSettingsSharp />
                     </StyledUserContainer>
-                    <StyledFriendCount>{friends}</StyledFriendCount>
+                    <div style={{ display: "flex" }}>
+                        <StyledFriendCount>{friends}</StyledFriendCount>
+                        {userId !== ownId && (
+                            <StyledFriendCount
+                                style={{
+                                    margin: "0 10px",
+                                    fontSize: "50px",
+                                    lineHeight: "0.2",
+                                }}
+                            >
+                                .
+                            </StyledFriendCount>
+                        )}
+                        {userId !== ownId && (
+                            <button
+                                style={{
+                                    backgroundColor: "transparent",
+                                    border: "none",
+                                    margin: "none",
+                                }}
+                                disabled={mutualFriends.length === 0}
+                                onClick={() => setIsMutualPopup(true)}
+                            >
+                                <StyledFriendCount>
+                                    {mutualFriends.length === 0
+                                        ? "No "
+                                        : mutualFriends.length + " "}
+                                    Mutual Friends
+                                </StyledFriendCount>
+                            </button>
+                        )}
+                    </div>
                     {userId === ownId ? (
                         <div>
                             <FriendStatus
@@ -277,15 +329,27 @@ export function ProfileLayout() {
             {isOpen && (
                 <Popup
                     handleClose={togglePopup}
-                    topDisplay={"Edit Your Profile"}
+                    topDisplay={
+                        type === "profile"
+                            ? "Edit Your Profile Picture✌️✌️"
+                            : "Edit your Cover Photo✌️✌️"
+                    }
                     width="65%"
                     height="95%"
                     right="calc(17% - 30px)"
                 >
-                    <DragDrop
-                        changeType={type}
-                        userId={userId}
-                    />
+                    <DragDrop changeType={type} userId={userId} />
+                </Popup>
+            )}
+            {isMutualPopup && (
+                <Popup
+                    handleClose={() => setIsMutualPopup(false)}
+                    topDisplay={"Mutual Friends"}
+                    width="65%"
+                    height="auto"
+                    right="calc(17% - 30px)"
+                >
+                    <FriendListContainer friends={friendDataWithMutualCount} />
                 </Popup>
             )}
         </StyledContainer>

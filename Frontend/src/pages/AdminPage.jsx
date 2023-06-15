@@ -1,8 +1,9 @@
 import React from "react";
-import { redirect, useLoaderData } from "react-router-dom";
+import { redirect, useLoaderData, useLocation } from "react-router-dom";
 import { styled } from "styled-components";
 import { StyledContainer } from "../Utils/StyledContainer";
 import { AdminDeleteUser } from "../api/AdminDeleteUser";
+import { TrackSession } from "../api/trackSession";
 
 const CardContainer = styled.div`
     display: grid;
@@ -71,6 +72,14 @@ const StyledButton = styled.button`
 
 export function AdminPage() {
     const [allUsers, setAllUsers] = React.useState(useLoaderData());
+    const session = useLocation().pathname;
+    React.useEffect(() => {
+        const tracking = async () => {
+            const tempSession = await TrackSession(session);
+        };
+
+        tracking();
+    }, []);
 
     async function handleDeleteUser(userId) {
         const temp = await AdminDeleteUser(userId);
