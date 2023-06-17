@@ -82,6 +82,7 @@ const StyledPost = styled.div`
 `;
 
 export function PostingRow({ userId, profilePic, name, togglePopup, file }) {
+    const [temp, setTemp] = React.useState(false);
     const inputRef = useRef(null);
     const url = `http://${Const}:3001/api/posts/${userId}`;
 
@@ -118,6 +119,7 @@ export function PostingRow({ userId, profilePic, name, togglePopup, file }) {
                 <Input
                     placeholder={`What's happening, ${name}?`}
                     ref={inputRef}
+                    onChange={() => setTemp(!temp)}
                 />
             </CaptionContainer>
             {file ? (
@@ -171,7 +173,12 @@ export function PostingRow({ userId, profilePic, name, togglePopup, file }) {
                         </ButtonContent>
                     </SelectionButton>
                 </div>
-                <PostButton onClick={handleUpload}>Post</PostButton>
+                <PostButton
+                    onClick={handleUpload}
+                    disabled={inputRef.current?.value === "" && file === null}
+                >
+                    Post
+                </PostButton>
             </ButtonsContainer>
         </PostingContainer>
     );
