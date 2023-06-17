@@ -302,5 +302,4 @@ public class UserController {
     public void clearSession() {
         service.clearSession();
     }
-
 }

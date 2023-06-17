@@ -22,8 +22,3 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-
-
-public/assets/background photos/
-public/assets/post storage/
-public/assets/profile pictures/
