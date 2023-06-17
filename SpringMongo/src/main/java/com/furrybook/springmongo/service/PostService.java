@@ -103,9 +103,11 @@ public class PostService {
         if (optionalPost.isPresent()) {
             Posts post = optionalPost.get();
             String filePath = post.getFilePath();
-
-            File file = new File(filePath);
-            if (file.exists()) {
+            File file = null;
+            if (filePath != null) {
+                file = new File(filePath);
+            }
+            if (file != null) {
                 if (file.delete()) {
                     System.out.println("File deleted successfully.");
                 } else {
